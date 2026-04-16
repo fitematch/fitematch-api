@@ -7,12 +7,14 @@ import {
 } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
 import { ListUserController } from '@src/modules/user/adapters/http/controllers/list-user.controller';
 import { CreateUserController } from '@src/modules/user/adapters/http/controllers/create-user.controller';
-import { ReadUserController } from './adapters/http/controllers/read-user.controller';
+import { ReadUserController } from '@src/modules/user/adapters/http/controllers/read-user.controller';
+import { UpdateUserController } from '@src/modules/user/adapters/http/controllers/update-user.controller';
 
 const importedControllers = [
   ListUserController,
   CreateUserController,
   ReadUserController,
+  UpdateUserController,
 ];
 @Module({
   imports: [

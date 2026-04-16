@@ -1,5 +1,6 @@
 export enum ApplicationStatusEnum {
-  ACTIVE = 'active',
-  INACTIVE = 'inactive',
-  FREEZE = 'freeze',
+  APPLIED = 'applied',
+  SHORTLISTED = 'shortlisted',
+  REJECTED = 'rejected',
+  HIRED = 'hired',
 }
