@@ -1,8 +1,28 @@
-import { LeanUser } from '@src/modules/user/infrastructure/database/types/user-lean.type';
-import { ListUserRepositoryOutputDto } from '@src/modules/user/application/dto/output/list-user.repository-output.dto';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import type { Model } from 'mongoose';
+import type { ReadUserRepositoryInterface } from '@src/modules/user/application/contracts/repositories/read-user.repository.interface';
+import type { ReadUserInputDto } from '@src/modules/user/application/dto/input/read-user.input.dto';
+import type { ReadUserOutputDto } from '@src/modules/user/application/dto/output/read-user.output.dto';
+import {
+  UserSchema,
+  type UserDocument,
+} from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
 
-export class UserPersistenceMapper {
-  static toListOutput(this: void, user: LeanUser): ListUserRepositoryOutputDto {
+@Injectable()
+export class ReadUserRepository implements ReadUserRepositoryInterface {
+  constructor(
+    @InjectModel(UserSchema.name)
+    private readonly userModel: Model<UserDocument>,
+  ) {}
+
+  async read(input: ReadUserInputDto): Promise<ReadUserOutputDto | null> {
+    const user = await this.userModel.findById(input.id).lean().exec();
+
+    if (!user) {
+      return null;
+    }
+
     return {
       id: user._id.toString(),
       name: user.name,
@@ -52,11 +72,9 @@ export class UserPersistenceMapper {
             resumeUrl: user.media.resumeUrl,
           }
         : undefined,
-      status: user.status,
       productRole: user.productRole,
       adminRole: user.adminRole,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      status: user.status,
     };
   }
 }

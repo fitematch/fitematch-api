@@ -1,14 +1,18 @@
 import type { Provider } from '@nestjs/common';
 import {
-  CREATE_USER_REPOSITORY,
-  CREATE_USER_USE_CASE,
-  LIST_USER_REPOSITORY,
   LIST_USER_USE_CASE,
+  CREATE_USER_USE_CASE,
+  READ_USER_USE_CASE,
+  LIST_USER_REPOSITORY,
+  CREATE_USER_REPOSITORY,
+  READ_USER_REPOSITORY,
 } from '@src/modules/user/application/contracts/tokens/user.tokens';
-import { CreateUserUseCase } from '@src/modules/user/application/use-cases/create-user.use-case';
 import { ListUserUseCase } from '@src/modules/user/application/use-cases/list-user.use-case';
-import { CreateUserRepository } from '@src/modules/user/infrastructure/repositories/create-user.repository';
+import { CreateUserUseCase } from '@src/modules/user/application/use-cases/create-user.use-case';
+import { ReadUserUseCase } from '../../application/use-cases/read-user.use-case';
 import { ListUserRepository } from '@src/modules/user/infrastructure/repositories/list-user.repository';
+import { CreateUserRepository } from '@src/modules/user/infrastructure/repositories/create-user.repository';
+import { ReadUserRepository } from '../repositories/read-user.repository';
 
 export const userProviders: Provider[] = [
   {
@@ -16,15 +20,24 @@ export const userProviders: Provider[] = [
     useClass: ListUserUseCase,
   },
   {
-    provide: LIST_USER_REPOSITORY,
-    useClass: ListUserRepository,
-  },
-  {
     provide: CREATE_USER_USE_CASE,
     useClass: CreateUserUseCase,
   },
   {
+    provide: READ_USER_USE_CASE,
+    useClass: ReadUserUseCase,
+  },
+  {
+    provide: LIST_USER_REPOSITORY,
+    useClass: ListUserRepository,
+  },
+  {
     provide: CREATE_USER_REPOSITORY,
     useClass: CreateUserRepository,
+  },
+
+  {
+    provide: READ_USER_REPOSITORY,
+    useClass: ReadUserRepository,
   },
 ];

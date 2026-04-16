@@ -56,6 +56,6 @@ export class ListUserRepository implements ListUserRepositoryInterface {
       .lean()
       .exec()) as LeanUser[];
 
-    return users.map(UserPersistenceMapper.toListOutput);
+    return users.map((user) => UserPersistenceMapper.toListOutput(user));
   }
 }

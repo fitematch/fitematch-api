@@ -1,15 +1,13 @@
-import { LeanUser } from '@src/modules/user/infrastructure/database/types/user-lean.type';
-import { ListUserRepositoryOutputDto } from '@src/modules/user/application/dto/output/list-user.repository-output.dto';
+import type { ReadUserOutputDto } from '@src/modules/user/application/dto/output/read-user.output.dto';
+import type { ReadUserResponseDto } from '@src/modules/user/adapters/http/dto/response/read-user.response.dto';
 
-export class UserPersistenceMapper {
-  static toListOutput(this: void, user: LeanUser): ListUserRepositoryOutputDto {
+export class ReadUserMapper {
+  static toResponse(user: ReadUserOutputDto): ReadUserResponseDto {
     return {
-      id: user._id.toString(),
+      id: user.id,
       name: user.name,
       email: user.email,
-      birthday: user.birthday
-        ? new Date(user.birthday).toISOString().split('T')[0]
-        : undefined,
+      birthday: user.birthday,
       documents: user.documents
         ? {
             identityDocumentNumber: user.documents.identityDocumentNumber,
@@ -52,9 +50,9 @@ export class UserPersistenceMapper {
             resumeUrl: user.media.resumeUrl,
           }
         : undefined,
-      status: user.status,
       productRole: user.productRole,
       adminRole: user.adminRole,
+      status: user.status,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
