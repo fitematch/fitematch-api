@@ -12,7 +12,7 @@ export default class MetadataUtils {
    * @param {number} currentPage - Current page
    * @param {string} url - Base URL for constructing pagination links
    */
-  public getPaginationData(
+  getPaginationData(
     totalItems: number,
     itemCount: number,
     limit: number,

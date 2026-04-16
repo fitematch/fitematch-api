@@ -1,7 +1,6 @@
 export class MaskUtils {
   /**
    * Converts the input value to a string.
-   * @private
    * @param {string | number | null | undefined} value - The value to be converted to a string.
    * @returns {string} - The string representation of the input value.
    */
@@ -16,7 +15,6 @@ export class MaskUtils {
   /**
    * Removes all non-digit characters from the input.
    *
-   * @private
    * @param {string | number | null | undefined} value - The value to be processed.
    * @returns {string} - The string containing only digits.
    */
@@ -27,7 +25,6 @@ export class MaskUtils {
   /**
    * Removes all non-alphanumeric characters from the input.
    *
-   * @private
    * @param {string | number | null | undefined} value - The value to be processed.
    * @returns {string} - The string containing only alphanumeric characters.
    */

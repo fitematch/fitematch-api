@@ -9,7 +9,7 @@ export default class EncryptUtils {
    * @param {string} password The plain text password to encrypt.
    * @returns {Promise<string>} The encrypted password.
    */
-  public async encryptPassword(password: string): Promise<string> {
+  async encryptPassword(password: string): Promise<string> {
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(password, saltOrRounds);
 
@@ -23,7 +23,7 @@ export default class EncryptUtils {
    * @param {string} hashedPassword The hashed password to compare against.
    * @returns {Promise<boolean>} A boolean indicating whether the passwords match.
    */
-  public async comparePassword(
+  async comparePassword(
     password: string,
     hashedPassword: string,
   ): Promise<boolean> {
