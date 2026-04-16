@@ -121,9 +121,8 @@ export class UserSchema {
 
   @Prop({
     enum: Object.values(ProductRoleEnum),
-    required: true,
   })
-  productRole!: ProductRoleEnum;
+  productRole?: ProductRoleEnum;
 
   @Prop({
     enum: Object.values(AdminRoleEnum),

@@ -1,8 +1,9 @@
-import { ListUserOutputDto } from '@src/modules/user/application/dto/output/list-user.output.dto';
-import { ListUserResponseDto } from '@src/modules/user/adapters/http/dto/response/list-user.response.dto';
+import { CreateUserOutputDto } from '@src/modules/user/application/dto/output/create-user.output.dto';
+import { CreateUserResponseDto } from '@src/modules/user/adapters/http/dto/response/create-user.response.dto';
+import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 
-export class ListUserMapper {
-  static toResponse(user: ListUserOutputDto): ListUserResponseDto {
+export class CreateUserMapper {
+  static toResponse(user: CreateUserOutputDto): CreateUserResponseDto {
     return {
       id: user.id,
       name: user.name,
@@ -42,7 +43,7 @@ export class ListUserMapper {
       },
       productRole: user.productRole,
       adminRole: user.adminRole,
-      status: user.status,
+      status: user.status ?? UserStatusEnum.PENDING,
     };
   }
 }

@@ -20,7 +20,7 @@ export class ListUserUseCase implements ListUserUseCaseInterface {
       name: user.name,
       email: user.email,
       birthday: user.birthday,
-      document: user.document,
+      documents: user.documents,
       phone: user.phone,
       address: user.address,
       social: user.social,

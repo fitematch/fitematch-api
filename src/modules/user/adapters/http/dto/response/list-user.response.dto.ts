@@ -14,7 +14,7 @@ export class ListUserResponseDto {
   name?: string;
   email?: string;
   birthday?: string;
-  document?: DocumentsEntity;
+  documents?: DocumentsEntity;
   phone?: PhoneEntity;
   address?: AddressEntity;
   social?: SocialEntity;

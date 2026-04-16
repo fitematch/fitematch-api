@@ -85,25 +85,37 @@
     "@typescript-eslint/parser": "^8.58.0"
   },
   "jest": {
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/test"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.use-case.ts",
+      "**/utils.ts",
+      "!**/node_modules/**",
+      "!**/dist/**",
+      "!**/test/**"
+    ],
+    "coverageDirectory": "<rootDir>/test/coverage",
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
     ],
-    "rootDir": "./",
-    "testRegex": ".*\\.test\\.ts$",
+    "testEnvironment": "node",
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "testRegex": ".*\\.test\\.ts$",
     "moduleNameMapper": {
       "^@src/(.*)$": "<rootDir>/src/$1"
-    },
-    "collectCoverageFrom": [
-      "src/**/applications/use-cases/*.ts",
-      "src/shared/applications/utils/*.ts"
-    ],
-    "coverageProvider": "v8",
-    "coverageDirectory": "./test/coverage",
-    "testEnvironment": "node"
+    }
   }
 }
