@@ -11,9 +11,9 @@ import { ListUserQueryDto } from '@src/modules/user/adapters/http/dto/request/li
 import { ListUserResponseDto } from '@src/modules/user/adapters/http/dto/response/list-user.response.dto';
 import { ListUserMapper } from '@src/modules/user/adapters/http/mappers/list-user.mapper';
 
-@ApiTags('Users')
+@ApiTags('User')
 @ApiBearerAuth('JWT')
-@Controller('users')
+@Controller('user')
 export class ListUserController {
   constructor(
     @Inject(LIST_USER_USE_CASE)

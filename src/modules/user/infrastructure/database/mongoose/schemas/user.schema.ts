@@ -1,6 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
+import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
+import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 
 export type UserDocument = HydratedDocument<UserSchema>;
 
@@ -99,6 +101,9 @@ export class UserSchema {
   @Prop({ required: true })
   password!: string;
 
+  @Prop({ required: true })
+  birthday!: Date;
+
   @Prop({ type: DocumentsSchema })
   documents?: DocumentsSchema;
 
@@ -113,6 +118,17 @@ export class UserSchema {
 
   @Prop({ type: MediaSchema })
   media?: MediaSchema;
+
+  @Prop({
+    enum: Object.values(ProductRoleEnum),
+    required: true,
+  })
+  productRole!: ProductRoleEnum;
+
+  @Prop({
+    enum: Object.values(AdminRoleEnum),
+  })
+  adminRole?: AdminRoleEnum;
 
   @Prop({
     enum: Object.values(UserStatusEnum),

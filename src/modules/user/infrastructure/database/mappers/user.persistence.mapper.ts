@@ -7,6 +7,7 @@ export class UserPersistenceMapper {
       id: user._id.toString(),
       name: user.name,
       email: user.email,
+      birthday: user.birthday ? user.birthday.toISOString() : undefined,
       document: user.documents
         ? {
             identityDocumentNumber: user.documents.identityDocumentNumber,
@@ -50,6 +51,8 @@ export class UserPersistenceMapper {
           }
         : undefined,
       status: user.status,
+      productRole: user.productRole,
+      adminRole: user.adminRole,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };

@@ -1,3 +1,5 @@
+import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
+import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 
 export type LeanUser = {
@@ -5,6 +7,7 @@ export type LeanUser = {
   name: string;
   email: string;
   password: string;
+  birthday: Date;
   documents?: {
     identityDocumentNumber?: string;
     identityIssuer?: string;
@@ -37,6 +40,8 @@ export type LeanUser = {
   media?: {
     resumeUrl?: string;
   };
+  productRole?: ProductRoleEnum;
+  adminRole?: AdminRoleEnum;
   status: UserStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;

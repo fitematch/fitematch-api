@@ -7,6 +7,7 @@ export class ListUserMapper {
       id: user.id,
       name: user.name,
       email: user.email,
+      birthday: user.birthday,
       document: {
         identityDocumentNumber: user.document?.identityDocumentNumber,
         identityIssuer: user.document?.identityIssuer,
@@ -39,6 +40,8 @@ export class ListUserMapper {
       media: {
         resumeUrl: user.media?.resumeUrl,
       },
+      productRole: user.productRole,
+      adminRole: user.adminRole,
       status: user.status,
     };
   }
