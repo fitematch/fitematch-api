@@ -1,0 +1,57 @@
+import { LeanUser } from '@src/modules/user/infrastructure/database/types/user-lean.type';
+import { ListUserRepositoryOutputDto } from '@src/modules/user/application/dto/output/list-user.repository-output.dto';
+
+export class UserPersistenceMapper {
+  static toListOutput(this: void, user: LeanUser): ListUserRepositoryOutputDto {
+    return {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      document: user.documents
+        ? {
+            identityDocumentNumber: user.documents.identityDocumentNumber,
+            identityIssuer: user.documents.identityIssuer,
+            identityState: user.documents.identityState,
+            socialDocumentNumber: user.documents.socialDocumentNumber,
+          }
+        : undefined,
+      phone: user.phone
+        ? {
+            number: user.phone.number,
+            isWhatsapp: user.phone.isWhatsapp,
+            isTelegram: user.phone.isTelegram,
+          }
+        : undefined,
+      address: user.address
+        ? {
+            street: user.address.street,
+            number: user.address.number,
+            complement: user.address.complement,
+            neighborhood: user.address.neighborhood,
+            city: user.address.city,
+            state: user.address.state,
+            country: user.address.country,
+            zipCode: user.address.zipCode,
+          }
+        : undefined,
+      social: user.social
+        ? {
+            facebook: user.social.facebook,
+            instagram: user.social.instagram,
+            x: user.social.x,
+            youtube: user.social.youtube,
+            tiktok: user.social.tiktok,
+            linkedin: user.social.linkedin,
+          }
+        : undefined,
+      media: user.media
+        ? {
+            resumeUrl: user.media.resumeUrl,
+          }
+        : undefined,
+      status: user.status,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    };
+  }
+}

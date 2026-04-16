@@ -1,0 +1,2 @@
+export const LIST_USER_USE_CASE = Symbol('LIST_USER_USE_CASE');
+export const LIST_USER_REPOSITORY = Symbol('LIST_USER_REPOSITORY');

@@ -33,7 +33,7 @@ export interface SocialEntity {
   linkedin?: string;
 }
 
-export interface MidiaEntity {
+export interface MediaEntity {
   resumeUrl?: string;
 }
 
@@ -46,7 +46,7 @@ export interface UserEntity {
   phone?: PhoneEntity;
   address?: AddressEntity;
   social?: SocialEntity;
-  midia?: MidiaEntity;
+  media?: MediaEntity;
   status: UserStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;
