@@ -9,12 +9,14 @@ import { ListUserController } from '@src/modules/user/adapters/http/controllers/
 import { CreateUserController } from '@src/modules/user/adapters/http/controllers/create-user.controller';
 import { ReadUserController } from '@src/modules/user/adapters/http/controllers/read-user.controller';
 import { UpdateUserController } from '@src/modules/user/adapters/http/controllers/update-user.controller';
+import { DeleteUserController } from '@src/modules/user/adapters/http/controllers/delete-user.controller';
 
 const importedControllers = [
   ListUserController,
   CreateUserController,
   ReadUserController,
   UpdateUserController,
+  DeleteUserController,
 ];
 @Module({
   imports: [
