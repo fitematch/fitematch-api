@@ -1,0 +1,36 @@
+services:
+  database:
+    networks:
+      - fitematch
+    container_name: fitematch-database
+    image: mongo:latest
+    env_file:
+      - .env
+    restart: unless-stopped
+    volumes:
+      - ./.mongodb:/data/db
+    ports:
+      - ${DATABASE_BIND_PORT}:${DATABASE_PORT}
+    command: ['mongod', '--port', '${DATABASE_PORT}']
+
+  api:
+    depends_on:
+      - database
+    networks:
+      - fitematch
+    container_name: fitematch-api
+    build:
+      context: .
+    image: api
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    ports:
+      - ${APPLICATION_BIND_PORT}:${APPLICATION_PORT}
+
+networks:
+  fitematch:
+    driver: bridge
