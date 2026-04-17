@@ -24,33 +24,41 @@ describe('UpdateUserUseCase', () => {
           email: 'joao@email.com',
           birthday: '1995-08-15',
           documents: {
-            identityDocumentNumber: '123456789',
-            identityIssuer: 'SSP',
-            identityState: 'SP',
-            socialDocumentNumber: '12345678901',
+            rg: {
+              number: '123456789',
+              issuer: 'SSP',
+              state: 'SP',
+            },
+            cpf: {
+              number: '12345678901',
+            },
           },
-          phone: {
-            number: 11999999999,
-            isWhatsapp: true,
-            isTelegram: false,
-          },
-          address: {
-            street: 'Rua A',
-            number: 123,
-            complement: 'Apto 1',
-            neighborhood: 'Centro',
-            city: 'São Paulo',
-            state: 'SP',
-            country: 'Brasil',
-            zipCode: 12345678,
-          },
-          social: {
-            facebook: 'https://facebook.com/user',
-            instagram: 'https://instagram.com/user',
-            x: 'https://x.com/user',
-            youtube: 'https://youtube.com/user',
-            tiktok: 'https://tiktok.com/@user',
-            linkedin: 'https://linkedin.com/in/user',
+          contacts: {
+            phone: {
+              countryCode: '55',
+              areaCode: '11',
+              number: 11999999999,
+              isWhatsapp: true,
+              isTelegram: false,
+            },
+            address: {
+              street: 'Rua A',
+              number: 123,
+              complement: 'Apto 1',
+              neighborhood: 'Centro',
+              city: 'São Paulo',
+              state: 'SP',
+              country: 'Brasil',
+              zipCode: 12345678,
+            },
+            social: {
+              facebook: 'https://facebook.com/user',
+              instagram: 'https://instagram.com/user',
+              x: 'https://x.com/user',
+              youtube: 'https://youtube.com/user',
+              tiktok: 'https://tiktok.com/@user',
+              linkedin: 'https://linkedin.com/in/user',
+            },
           },
           media: {
             resumeUrl: 'https://example.com/resume.pdf',
@@ -68,8 +76,7 @@ describe('UpdateUserUseCase', () => {
 
         const result = await useCase.execute(input);
 
-        expect(repository.update.mock.calls).toHaveLength(1);
-        expect(repository.update.mock.calls[0]).toEqual([input]);
+        expect(repository.update).toHaveBeenCalledWith(input);
         expect(result).toEqual(output);
       });
     });
@@ -85,8 +92,7 @@ describe('UpdateUserUseCase', () => {
 
         const result = await useCase.execute(input);
 
-        expect(repository.update.mock.calls).toHaveLength(1);
-        expect(repository.update.mock.calls[0]).toEqual([input]);
+        expect(repository.update).toHaveBeenCalledWith(input);
         expect(result).toBeNull();
       });
     });
@@ -107,33 +113,51 @@ describe('UpdateUserRequestMapper', () => {
           password: '12345678',
           birthday: '1995-08-15',
           documents: {
-            identityDocumentNumber: '123456789',
-            identityIssuer: 'SSP',
-            identityState: 'SP',
-            socialDocumentNumber: '12345678901',
+            rg: {
+              number: '123456789',
+              issuer: 'SSP',
+              state: 'SP',
+            },
+            cpf: {
+              number: '12345678901',
+            },
+            cref: {
+              number: '98765',
+              category: 'SP',
+              isActive: true,
+            },
+            passport: {
+              number: 'AB123456',
+              country: 'Brasil',
+              expirationDate: '2030-01-01',
+            },
           },
-          phone: {
-            number: 11999999999,
-            isWhatsapp: true,
-            isTelegram: false,
-          },
-          address: {
-            street: 'Rua A',
-            number: 123,
-            complement: 'Apto 1',
-            neighborhood: 'Centro',
-            city: 'São Paulo',
-            state: 'SP',
-            country: 'Brasil',
-            zipCode: 12345678,
-          },
-          social: {
-            facebook: 'https://facebook.com/user',
-            instagram: 'https://instagram.com/user',
-            x: 'https://x.com/user',
-            youtube: 'https://youtube.com/user',
-            tiktok: 'https://tiktok.com/@user',
-            linkedin: 'https://linkedin.com/in/user',
+          contacts: {
+            phone: {
+              countryCode: '55',
+              areaCode: '11',
+              number: 11999999999,
+              isWhatsapp: true,
+              isTelegram: false,
+            },
+            address: {
+              street: 'Rua A',
+              number: 123,
+              complement: 'Apto 1',
+              neighborhood: 'Centro',
+              city: 'São Paulo',
+              state: 'SP',
+              country: 'Brasil',
+              zipCode: 12345678,
+            },
+            social: {
+              facebook: 'https://facebook.com/user',
+              instagram: 'https://instagram.com/user',
+              x: 'https://x.com/user',
+              youtube: 'https://youtube.com/user',
+              tiktok: 'https://tiktok.com/@user',
+              linkedin: 'https://linkedin.com/in/user',
+            },
           },
           media: {
             resumeUrl: 'https://example.com/resume.pdf',
@@ -152,33 +176,51 @@ describe('UpdateUserRequestMapper', () => {
           password: '12345678',
           birthday: '1995-08-15',
           documents: {
-            identityDocumentNumber: '123456789',
-            identityIssuer: 'SSP',
-            identityState: 'SP',
-            socialDocumentNumber: '12345678901',
+            rg: {
+              number: '123456789',
+              issuer: 'SSP',
+              state: 'SP',
+            },
+            cpf: {
+              number: '12345678901',
+            },
+            cref: {
+              number: '98765',
+              category: 'SP',
+              isActive: true,
+            },
+            passport: {
+              number: 'AB123456',
+              country: 'Brasil',
+              expirationDate: new Date('2030-01-01'),
+            },
           },
-          phone: {
-            number: 11999999999,
-            isWhatsapp: true,
-            isTelegram: false,
-          },
-          address: {
-            street: 'Rua A',
-            number: 123,
-            complement: 'Apto 1',
-            neighborhood: 'Centro',
-            city: 'São Paulo',
-            state: 'SP',
-            country: 'Brasil',
-            zipCode: 12345678,
-          },
-          social: {
-            facebook: 'https://facebook.com/user',
-            instagram: 'https://instagram.com/user',
-            x: 'https://x.com/user',
-            youtube: 'https://youtube.com/user',
-            tiktok: 'https://tiktok.com/@user',
-            linkedin: 'https://linkedin.com/in/user',
+          contacts: {
+            phone: {
+              countryCode: '55',
+              areaCode: '11',
+              number: 11999999999,
+              isWhatsapp: true,
+              isTelegram: false,
+            },
+            address: {
+              street: 'Rua A',
+              number: 123,
+              complement: 'Apto 1',
+              neighborhood: 'Centro',
+              city: 'São Paulo',
+              state: 'SP',
+              country: 'Brasil',
+              zipCode: 12345678,
+            },
+            social: {
+              facebook: 'https://facebook.com/user',
+              instagram: 'https://instagram.com/user',
+              x: 'https://x.com/user',
+              youtube: 'https://youtube.com/user',
+              tiktok: 'https://tiktok.com/@user',
+              linkedin: 'https://linkedin.com/in/user',
+            },
           },
           media: {
             resumeUrl: 'https://example.com/resume.pdf',
@@ -210,9 +252,7 @@ describe('UpdateUserRequestMapper', () => {
           password: undefined,
           birthday: undefined,
           documents: undefined,
-          phone: undefined,
-          address: undefined,
-          social: undefined,
+          contacts: undefined,
           media: undefined,
           productRole: undefined,
           adminRole: undefined,

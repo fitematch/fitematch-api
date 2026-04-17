@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsDateString,
   IsEmail,
   IsEnum,
@@ -14,33 +15,95 @@ import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enu
 import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 
+class CreateUserDocumentRGRequestDto {
+  @IsOptional()
+  @IsString()
+  number?: string;
+
+  @IsOptional()
+  @IsString()
+  issuer?: string;
+
+  @IsOptional()
+  @IsString()
+  state?: string;
+}
+
+class CreateUserDocumentCPFRequestDto {
+  @IsOptional()
+  @IsString()
+  number?: string;
+}
+
+class CreateUserDocumentCREFRequestDto {
+  @IsOptional()
+  @IsString()
+  number?: string;
+
+  @IsOptional()
+  @IsString()
+  category?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+}
+
+class CreateUserDocumentPassportRequestDto {
+  @IsOptional()
+  @IsString()
+  number?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+
+  @IsOptional()
+  @IsDateString()
+  expirationDate?: string;
+}
+
 class CreateUserDocumentsRequestDto {
   @IsOptional()
-  @IsString()
-  identityDocumentNumber?: string;
+  @ValidateNested()
+  @Type(() => CreateUserDocumentRGRequestDto)
+  rg?: CreateUserDocumentRGRequestDto;
 
   @IsOptional()
-  @IsString()
-  identityIssuer?: string;
+  @ValidateNested()
+  @Type(() => CreateUserDocumentCPFRequestDto)
+  cpf?: CreateUserDocumentCPFRequestDto;
 
   @IsOptional()
-  @IsString()
-  identityState?: string;
+  @ValidateNested()
+  @Type(() => CreateUserDocumentCREFRequestDto)
+  cref?: CreateUserDocumentCREFRequestDto;
 
   @IsOptional()
-  @IsString()
-  socialDocumentNumber?: string;
+  @ValidateNested()
+  @Type(() => CreateUserDocumentPassportRequestDto)
+  passport?: CreateUserDocumentPassportRequestDto;
 }
 
 class CreateUserPhoneRequestDto {
+  @IsOptional()
+  @IsString()
+  countryCode?: string;
+
+  @IsOptional()
+  @IsString()
+  areaCode?: string;
+
   @IsOptional()
   @IsNumber()
   number?: number;
 
   @IsOptional()
+  @IsBoolean()
   isWhatsapp?: boolean;
 
   @IsOptional()
+  @IsBoolean()
   isTelegram?: boolean;
 }
 
@@ -110,6 +173,23 @@ class CreateUserMediaRequestDto {
   resumeUrl?: string;
 }
 
+class CreateUserContactsRequestDto {
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateUserPhoneRequestDto)
+  phone?: CreateUserPhoneRequestDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateUserAddressRequestDto)
+  address?: CreateUserAddressRequestDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => CreateUserSocialRequestDto)
+  social?: CreateUserSocialRequestDto;
+}
+
 export class CreateUserRequestDto {
   @IsString()
   name!: string;
@@ -132,22 +212,9 @@ export class CreateUserRequestDto {
   documents?: CreateUserDocumentsRequestDto;
 
   @IsOptional()
-  @IsObject()
   @ValidateNested()
-  @Type(() => CreateUserPhoneRequestDto)
-  phone?: CreateUserPhoneRequestDto;
-
-  @IsOptional()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => CreateUserAddressRequestDto)
-  address?: CreateUserAddressRequestDto;
-
-  @IsOptional()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => CreateUserSocialRequestDto)
-  social?: CreateUserSocialRequestDto;
+  @Type(() => CreateUserContactsRequestDto)
+  contacts?: CreateUserContactsRequestDto;
 
   @IsOptional()
   @IsObject()

@@ -92,7 +92,7 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.use-case.ts",
-      "**/utils.ts",
+      "**/*.utils.ts",
       "!**/node_modules/**",
       "!**/dist/**",
       "!**/test/**"

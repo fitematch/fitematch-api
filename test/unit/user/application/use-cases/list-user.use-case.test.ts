@@ -14,42 +14,40 @@ describe('ListUserUseCase', () => {
 
   describe('execute', () => {
     it('should return a list of users', async () => {
-      const input = { name: 'any' };
+      const input = { search: 'any', page: 1, limit: 10 };
       const users = [
         {
           id: '1',
           name: 'John',
           email: 'john@mail.com',
           birthday: '2000-01-01',
+          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+          updatedAt: new Date('2024-01-02T00:00:00.000Z'),
         },
         {
           id: '2',
           name: 'Jane',
           email: 'jane@mail.com',
           birthday: '1990-01-01',
+          createdAt: new Date('2024-02-01T00:00:00.000Z'),
+          updatedAt: new Date('2024-02-02T00:00:00.000Z'),
         },
       ];
       listUserRepository.list.mockResolvedValue(users);
       const result = await useCase.execute(input);
-      expect(result).toEqual(
-        users.map((u) => ({
-          ...u,
-          createdAt: u.createdAt,
-          updatedAt: u.updatedAt,
-        })),
-      );
+      expect(result).toEqual(users);
       expect(listUserRepository.list).toHaveBeenCalledWith(input);
     });
 
     it('should return an empty array if no users found', async () => {
-      const input = { name: 'none' };
+      const input = { search: 'none' };
       listUserRepository.list.mockResolvedValue([]);
       const result = await useCase.execute(input);
       expect(result).toEqual([]);
     });
 
     it('should handle repository errors safely', async () => {
-      const input = { name: 'error' };
+      const input = { search: 'error' };
       const errorMessage = 'Repository error';
       listUserRepository.list.mockRejectedValue(new Error(errorMessage));
       await expect(useCase.execute(input)).rejects.toThrow(errorMessage);

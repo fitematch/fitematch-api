@@ -15,25 +15,85 @@ import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum'
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 
+class UpdateUserDocumentRGRequestDto {
+  @IsOptional()
+  @IsString()
+  number?: string;
+
+  @IsOptional()
+  @IsString()
+  issuer?: string;
+
+  @IsOptional()
+  @IsString()
+  state?: string;
+}
+
+class UpdateUserDocumentCPFRequestDto {
+  @IsOptional()
+  @IsString()
+  number?: string;
+}
+
+class UpdateUserDocumentCREFRequestDto {
+  @IsOptional()
+  @IsString()
+  number?: string;
+
+  @IsOptional()
+  @IsString()
+  category?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isActive?: boolean;
+}
+
+class UpdateUserDocumentPassportRequestDto {
+  @IsOptional()
+  @IsString()
+  number?: string;
+
+  @IsOptional()
+  @IsString()
+  country?: string;
+
+  @IsOptional()
+  @IsDateString()
+  expirationDate?: string;
+}
+
 class UpdateUserDocumentsRequestDto {
   @IsOptional()
-  @IsString()
-  identityDocumentNumber?: string;
+  @ValidateNested()
+  @Type(() => UpdateUserDocumentRGRequestDto)
+  rg?: UpdateUserDocumentRGRequestDto;
 
   @IsOptional()
-  @IsString()
-  identityIssuer?: string;
+  @ValidateNested()
+  @Type(() => UpdateUserDocumentCPFRequestDto)
+  cpf?: UpdateUserDocumentCPFRequestDto;
 
   @IsOptional()
-  @IsString()
-  identityState?: string;
+  @ValidateNested()
+  @Type(() => UpdateUserDocumentCREFRequestDto)
+  cref?: UpdateUserDocumentCREFRequestDto;
 
   @IsOptional()
-  @IsString()
-  socialDocumentNumber?: string;
+  @ValidateNested()
+  @Type(() => UpdateUserDocumentPassportRequestDto)
+  passport?: UpdateUserDocumentPassportRequestDto;
 }
 
 class UpdateUserPhoneRequestDto {
+  @IsOptional()
+  @IsString()
+  countryCode?: string;
+
+  @IsOptional()
+  @IsString()
+  areaCode?: string;
+
   @IsOptional()
   @IsNumber()
   number?: number;
@@ -113,6 +173,23 @@ class UpdateUserMediaRequestDto {
   resumeUrl?: string;
 }
 
+class UpdateUserContactsRequestDto {
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpdateUserPhoneRequestDto)
+  phone?: UpdateUserPhoneRequestDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpdateUserAddressRequestDto)
+  address?: UpdateUserAddressRequestDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UpdateUserSocialRequestDto)
+  social?: UpdateUserSocialRequestDto;
+}
+
 export class UpdateUserRequestDto {
   @IsOptional()
   @IsString()
@@ -138,22 +215,9 @@ export class UpdateUserRequestDto {
   documents?: UpdateUserDocumentsRequestDto;
 
   @IsOptional()
-  @IsObject()
   @ValidateNested()
-  @Type(() => UpdateUserPhoneRequestDto)
-  phone?: UpdateUserPhoneRequestDto;
-
-  @IsOptional()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => UpdateUserAddressRequestDto)
-  address?: UpdateUserAddressRequestDto;
-
-  @IsOptional()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => UpdateUserSocialRequestDto)
-  social?: UpdateUserSocialRequestDto;
+  @Type(() => UpdateUserContactsRequestDto)
+  contacts?: UpdateUserContactsRequestDto;
 
   @IsOptional()
   @IsObject()

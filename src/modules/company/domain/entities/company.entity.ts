@@ -1,50 +1,37 @@
 import { CompanyStatusEnum } from '@src/modules/company/domain/enums/company-status.enum';
+import { CompanyDocumentsEntity } from './company-documents.entity';
+import { CompanyMediaEntity } from './company-media.entity';
+import { PhoneEntity } from '@src/shared/domain/enums/entities/phone.entity';
+import { AddressEntity } from '@src/shared/domain/enums/entities/address.entity';
+import { SocialEntity } from '@src/shared/domain/enums/entities/social.entity';
 
-export interface DocumentsEntity {
-  socialDocumentNumber?: string;
+export interface ContactsEntity {
+  email: string;
+  website?: string;
+  phone: PhoneEntity;
+  address: AddressEntity;
 }
 
-export interface PhoneEntity {
-  number?: number;
-  isWhatsapp?: boolean;
-  isTelegram?: boolean;
+export interface CompanyAuditEntity {
+  createdByUserId?: string;
 }
 
-export interface AddressEntity {
-  street?: string;
-  number?: number;
-  complement?: string;
-  neighborhood?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  zipCode?: number;
-}
-
-export interface SocialEntity {
-  facebook?: string;
-  instagram?: string;
-  x?: string;
-  youtube?: string;
-  tiktok?: string;
-  linkedin?: string;
-}
-
-export interface MidiaEntity {
-  logoUrl?: string;
+export interface CompanyApprovalEntity {
+  approvedAt?: Date;
+  approvedByUserId?: string;
 }
 
 export interface CompanyEntity {
   id: string;
   slug: string;
-  name: string;
-  email?: string;
-  website?: string;
-  documents?: DocumentsEntity;
-  phone?: PhoneEntity;
-  address?: AddressEntity;
+  tradeName: string;
+  legalName?: string;
+  contacts: ContactsEntity;
+  documents: CompanyDocumentsEntity;
   social?: SocialEntity;
-  midia?: MidiaEntity;
+  media: CompanyMediaEntity;
+  audit?: CompanyAuditEntity;
+  approval?: CompanyApprovalEntity;
   status: CompanyStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;

@@ -9,33 +9,51 @@ export type LeanUser = {
   password: string;
   birthday: Date;
   documents?: {
-    identityDocumentNumber?: string;
-    identityIssuer?: string;
-    identityState?: string;
-    socialDocumentNumber?: string;
+    rg?: {
+      number?: string;
+      issuer?: string;
+      state?: string;
+    };
+    cpf?: {
+      number?: string;
+    };
+    cref?: {
+      number?: string;
+      category?: string;
+      isActive?: boolean;
+    };
+    passport?: {
+      number?: string;
+      country?: string;
+      expirationDate?: Date;
+    };
   };
-  phone?: {
-    number?: number;
-    isWhatsapp?: boolean;
-    isTelegram?: boolean;
-  };
-  address?: {
-    street?: string;
-    number?: number;
-    complement?: string;
-    neighborhood?: string;
-    city?: string;
-    state?: string;
-    country?: string;
-    zipCode?: number;
-  };
-  social?: {
-    facebook?: string;
-    instagram?: string;
-    x?: string;
-    youtube?: string;
-    tiktok?: string;
-    linkedin?: string;
+  contacts?: {
+    phone?: {
+      countryCode?: string;
+      areaCode?: string;
+      number?: number;
+      isWhatsapp?: boolean;
+      isTelegram?: boolean;
+    };
+    address?: {
+      street?: string;
+      number?: number;
+      complement?: string;
+      neighborhood?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+      zipCode?: number;
+    };
+    social?: {
+      facebook?: string;
+      instagram?: string;
+      x?: string;
+      youtube?: string;
+      tiktok?: string;
+      linkedin?: string;
+    };
   };
   media?: {
     resumeUrl?: string;

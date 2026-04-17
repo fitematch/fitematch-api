@@ -7,44 +7,56 @@ export class ReadUserResponseDto {
   name!: string;
   email!: string;
   birthday?: string;
-
   documents?: {
-    identityDocumentNumber?: string;
-    identityIssuer?: string;
-    identityState?: string;
-    socialDocumentNumber?: string;
+    rg?: {
+      number: string;
+      issuer: string;
+      state: string;
+    };
+    cpf?: {
+      number: string;
+    };
+    cref?: {
+      number: string;
+      category: string;
+      isActive: boolean;
+    };
+    passport?: {
+      number: string;
+      country: string;
+      expirationDate: string;
+    };
   };
-
-  phone?: {
-    number?: number | string;
-    isWhatsapp?: boolean;
-    isTelegram?: boolean;
+  contacts?: {
+    phone?: {
+      countryCode?: string;
+      areaCode?: string;
+      number?: number;
+      isWhatsapp?: boolean;
+      isTelegram?: boolean;
+    };
+    address?: {
+      street?: string;
+      number?: number;
+      complement?: string;
+      neighborhood?: string;
+      city?: string;
+      state?: string;
+      country?: string;
+      zipCode?: number;
+    };
+    social?: {
+      facebook?: string;
+      instagram?: string;
+      x?: string;
+      youtube?: string;
+      tiktok?: string;
+      linkedin?: string;
+    };
   };
-
-  address?: {
-    street?: string;
-    number?: number;
-    complement?: string;
-    neighborhood?: string;
-    city?: string;
-    state?: string;
-    country?: string;
-    zipCode?: number;
-  };
-
-  social?: {
-    facebook?: string;
-    instagram?: string;
-    x?: string;
-    youtube?: string;
-    tiktok?: string;
-    linkedin?: string;
-  };
-
   media?: {
     resumeUrl?: string;
   };
-
   productRole?: ProductRoleEnum;
   adminRole?: AdminRoleEnum;
   status!: UserStatusEnum;

@@ -1,42 +1,109 @@
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
+import { EthnicityTypeEnum } from '@src/shared/domain/enums/ethnicity-role.enum';
+import { GenderIdentityEnum } from '@src/shared/domain/enums/gender-identity.enum';
+import { SexualOrientationEnum } from '@src/shared/domain/enums/sexual-orientation.enum';
+import { ClothingSizeEnum } from '@src/shared/domain/enums/clothing-size.enum';
+import { AvailabilityShiftEnum } from '@src/shared/domain/enums/availability-shift.enum';
+import { ShoesSizeUnitEnum } from '@src/shared/domain/enums/shoes-size-unit.enum';
+import { CourseTypeEnum } from '@src/shared/domain/enums/course-type.enum';
+import { PhoneEntity } from '@src/shared/domain/enums/entities/phone.entity';
+import { AddressEntity } from '@src/shared/domain/enums/entities/address.entity';
+import { SocialEntity } from '@src/shared/domain/enums/entities/social.entity';
 
-export interface DocumentsEntity {
-  identityDocumentNumber?: string;
-  identityIssuer?: string;
-  identityState?: string;
-  socialDocumentNumber?: string;
+export interface ContactInfoEntity {
+  phone?: PhoneEntity;
+  address?: AddressEntity;
+  social?: SocialEntity;
+}
+export interface RGDocumentEntity {
+  number: string;
+  issuer: string;
+  state: string;
 }
 
-export interface PhoneEntity {
-  number?: number;
-  isWhatsapp?: boolean;
-  isTelegram?: boolean;
+export interface CPFDocumentEntity {
+  number: string;
 }
 
-export interface AddressEntity {
-  street?: string;
-  number?: number;
-  complement?: string;
-  neighborhood?: string;
-  city?: string;
-  state?: string;
-  country?: string;
-  zipCode?: number;
+export interface CNPJDocumentEntity {
+  number: string;
 }
 
-export interface SocialEntity {
-  facebook?: string;
-  instagram?: string;
-  x?: string;
-  youtube?: string;
-  tiktok?: string;
-  linkedin?: string;
+export interface CREFDocumentEntity {
+  number: string;
+  category: string;
+  isActive: boolean;
 }
 
-export interface MediaEntity {
+export interface PassportDocumentEntity {
+  number: string;
+  country: string;
+  expirationDate: Date;
+}
+
+export interface CandidateDocumentsEntity {
+  rg?: RGDocumentEntity;
+  cpf?: CPFDocumentEntity;
+  cref?: CREFDocumentEntity;
+  passport?: PassportDocumentEntity;
+}
+
+export interface CandidateMediaEntity {
   resumeUrl?: string;
+}
+
+export interface DiversityEntity {
+  genderIdentity?: GenderIdentityEnum;
+  sexualOrientation?: SexualOrientationEnum;
+}
+
+export interface PhysicalAttributesEntity {
+  height?: number;
+  weight?: number;
+}
+
+export interface UniformEntity {
+  tShirtSize?: ClothingSizeEnum;
+  jacketSize?: ClothingSizeEnum;
+  shortSize?: ClothingSizeEnum;
+  pantsSize?: ClothingSizeEnum;
+  shoeSize?: number;
+  shoeSizeUnit?: ShoesSizeUnitEnum;
+}
+
+export interface EducationEntity {
+  courseName: string;
+  institution: string;
+  startYear: number;
+  endYear?: number;
+  courseType: CourseTypeEnum;
+  isOngoing: boolean;
+}
+
+export interface ProfessionalExperienceEntity {
+  companyName: string;
+  role: string;
+  startYear: number;
+  endYear?: number;
+  isCurrent: boolean;
+}
+
+export interface CandidateProfileEntity {
+  documents?: CandidateDocumentsEntity;
+  ethnicity?: EthnicityTypeEnum;
+  diversity?: DiversityEntity;
+  physicalAttributes?: PhysicalAttributesEntity;
+  uniform?: UniformEntity;
+  educations?: EducationEntity[];
+  professionalExperiences?: ProfessionalExperienceEntity[];
+  availability?: AvailabilityShiftEnum[];
+}
+
+export interface RecruiterProfileEntity {
+  companyId?: string;
+  position?: string;
 }
 
 export interface UserEntity {
@@ -45,14 +112,14 @@ export interface UserEntity {
   email: string;
   password: string;
   birthday: string;
-  documents?: DocumentsEntity;
-  phone?: PhoneEntity;
-  address?: AddressEntity;
-  social?: SocialEntity;
-  media?: MediaEntity;
-  status: UserStatusEnum;
+  documents?: CandidateDocumentsEntity;
+  contacts: ContactInfoEntity;
+  media?: CandidateMediaEntity;
+  candidateProfile?: CandidateProfileEntity;
+  recruiterProfile?: RecruiterProfileEntity;
   productRole: ProductRoleEnum;
   adminRole?: AdminRoleEnum;
+  status: UserStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;
 }

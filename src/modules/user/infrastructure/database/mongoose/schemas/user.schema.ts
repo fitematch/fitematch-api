@@ -7,22 +7,70 @@ import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 export type UserDocument = HydratedDocument<UserSchema>;
 
 @Schema({ _id: false })
+class RGSchema {
+  @Prop()
+  number?: string;
+
+  @Prop()
+  issuer?: string;
+
+  @Prop()
+  state?: string;
+}
+
+@Schema({ _id: false })
+class CPFSchema {
+  @Prop()
+  number?: string;
+}
+
+@Schema({ _id: false })
+class CREFSchema {
+  @Prop()
+  number?: string;
+
+  @Prop()
+  category?: string;
+
+  @Prop()
+  isActive?: boolean;
+}
+
+@Schema({ _id: false })
+class PassportSchema {
+  @Prop()
+  number?: string;
+
+  @Prop()
+  country?: string;
+
+  @Prop()
+  expirationDate?: Date;
+}
+
+@Schema({ _id: false })
 class DocumentsSchema {
-  @Prop()
-  identityDocumentNumber?: string;
+  @Prop({ type: RGSchema })
+  rg?: RGSchema;
 
-  @Prop()
-  identityIssuer?: string;
+  @Prop({ type: CPFSchema })
+  cpf?: CPFSchema;
 
-  @Prop()
-  identityState?: string;
+  @Prop({ type: CREFSchema })
+  cref?: CREFSchema;
 
-  @Prop()
-  socialDocumentNumber?: string;
+  @Prop({ type: PassportSchema })
+  passport?: PassportSchema;
 }
 
 @Schema({ _id: false })
 class PhoneSchema {
+  @Prop()
+  countryCode?: string;
+
+  @Prop()
+  areaCode?: string;
+
   @Prop()
   number?: number;
 
@@ -82,6 +130,18 @@ class SocialSchema {
 }
 
 @Schema({ _id: false })
+class ContactsSchema {
+  @Prop({ type: PhoneSchema })
+  phone?: PhoneSchema;
+
+  @Prop({ type: AddressSchema })
+  address?: AddressSchema;
+
+  @Prop({ type: SocialSchema })
+  social?: SocialSchema;
+}
+
+@Schema({ _id: false })
 class MediaSchema {
   @Prop()
   resumeUrl?: string;
@@ -107,14 +167,8 @@ export class UserSchema {
   @Prop({ type: DocumentsSchema })
   documents?: DocumentsSchema;
 
-  @Prop({ type: PhoneSchema })
-  phone?: PhoneSchema;
-
-  @Prop({ type: AddressSchema })
-  address?: AddressSchema;
-
-  @Prop({ type: SocialSchema })
-  social?: SocialSchema;
+  @Prop({ type: ContactsSchema })
+  contacts?: ContactsSchema;
 
   @Prop({ type: MediaSchema })
   media?: MediaSchema;

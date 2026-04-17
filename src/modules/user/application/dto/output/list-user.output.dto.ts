@@ -1,9 +1,9 @@
 import {
-  DocumentsEntity,
-  AddressEntity,
-  PhoneEntity,
-  SocialEntity,
-  MediaEntity,
+  CandidateDocumentsEntity,
+  ContactInfoEntity,
+  CandidateMediaEntity,
+  CandidateProfileEntity,
+  RecruiterProfileEntity,
 } from '@src/modules/user/domain/entities/user.entity';
 import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
@@ -14,11 +14,11 @@ export class ListUserOutputDto {
   name?: string;
   email?: string;
   birthday?: string;
-  documents?: DocumentsEntity;
-  phone?: PhoneEntity;
-  address?: AddressEntity;
-  social?: SocialEntity;
-  media?: MediaEntity;
+  documents?: CandidateDocumentsEntity;
+  contacts?: ContactInfoEntity;
+  media?: CandidateMediaEntity;
+  candidateProfile?: CandidateProfileEntity;
+  recruiterProfile?: RecruiterProfileEntity;
   adminRole?: AdminRoleEnum;
   productRole?: ProductRoleEnum;
   status?: UserStatusEnum;
