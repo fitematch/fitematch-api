@@ -8,6 +8,10 @@ import {
   CompanySchema,
 } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 
+type LeanCompany = Omit<ListCompanyRepositoryOutputDto, 'id'> & {
+  _id: { toString(): string };
+};
+
 export class ListCompanyRepository implements ListCompanyRepositoryInterface {
   constructor(
     @InjectModel(CompanySchema.name)
@@ -35,14 +39,27 @@ export class ListCompanyRepository implements ListCompanyRepositoryInterface {
       ];
     }
 
-    const companies = await this.companyModel
+    const companies = (await this.companyModel
       .find(filters)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
-      .lean<ListCompanyRepositoryOutputDto[]>()
-      .exec();
+      .lean()
+      .exec()) as LeanCompany[];
 
-    return companies;
+    return companies.map((company) => ({
+      id: company._id.toString(),
+      slug: company.slug,
+      tradeName: company.tradeName,
+      legalName: company.legalName,
+      contacts: company.contacts,
+      documents: company.documents,
+      media: company.media,
+      audit: company.audit,
+      approval: company.approval,
+      status: company.status,
+      createdAt: company.createdAt,
+      updatedAt: company.updatedAt,
+    }));
   }
 }

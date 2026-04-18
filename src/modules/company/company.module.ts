@@ -7,8 +7,13 @@ import {
 } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import { ListCompanyController } from '@src/modules/company/adapters/http/controllers/list-company.controller';
 import { CreateCompanyController } from '@src/modules/company/adapters/http/controllers/create-company.controller';
+import { ReadCompanyController } from '@src/modules/company/adapters/http/controllers/read-company.controller';
 
-const importedControllers = [ListCompanyController, CreateCompanyController];
+const importedControllers = [
+  ListCompanyController,
+  CreateCompanyController,
+  ReadCompanyController,
+];
 @Module({
   imports: [
     MongooseModule.forFeature([
