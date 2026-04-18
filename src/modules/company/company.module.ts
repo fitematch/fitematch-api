@@ -6,9 +6,9 @@ import {
   CompanySchemaFactory,
 } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import { ListCompanyController } from '@src/modules/company/adapters/http/controllers/list-company.controller';
+import { CreateCompanyController } from '@src/modules/company/adapters/http/controllers/create-company.controller';
 
-const importedControllers = [ListCompanyController];
-
+const importedControllers = [ListCompanyController, CreateCompanyController];
 @Module({
   imports: [
     MongooseModule.forFeature([
