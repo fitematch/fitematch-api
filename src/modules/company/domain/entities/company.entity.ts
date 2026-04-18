@@ -10,6 +10,7 @@ export interface ContactsEntity {
   website?: string;
   phone: PhoneEntity;
   address: AddressEntity;
+  social?: SocialEntity;
 }
 
 export interface CompanyAuditEntity {
@@ -28,7 +29,6 @@ export interface CompanyEntity {
   legalName?: string;
   contacts: ContactsEntity;
   documents: CompanyDocumentsEntity;
-  social?: SocialEntity;
   media: CompanyMediaEntity;
   audit?: CompanyAuditEntity;
   approval?: CompanyApprovalEntity;
