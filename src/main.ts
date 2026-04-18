@@ -2,15 +2,15 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ApplicationExceptionFilter } from '@src/shared/presentation/http/filters/application-exception.filter';
-import { AppModule } from './app.module';
+import { ApplicationExceptionFilter } from '@src/shared/infrastructure/http/filters/application-exception.filter';
+import { AppModule } from '@src/app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('fitematch- API')
-    .setDescription('API for managing users, jobs and applications.')
+    .setTitle('bolao-copa- API')
+    .setDescription('API para gerenciar bolão da copa.')
     .setVersion('1.0')
     .addBearerAuth(
       {
@@ -32,7 +32,7 @@ async function bootstrap() {
   const configService = app.get<ConfigService>(ConfigService);
   const port = configService.get<number>('api.port', 3000);
   await app.listen(port ?? 3000);
-  Logger.log(`Server running on http://localhost:${port}/`, 'NestBootstrap');
+  Logger.log(`Server running on http://localhost:${4000}/`, 'NestBootstrap');
 }
 
 void bootstrap();

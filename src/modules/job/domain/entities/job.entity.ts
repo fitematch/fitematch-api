@@ -1,9 +1,27 @@
+import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
+import { LanguagesLevelEnum } from '@src/shared/domain/enums/languages-levels.enum';
+import { EducationLevelEnum } from '@src/shared/domain/enums/education-level.enum';
+import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
+import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 
+export interface LanguageRequirement {
+  name: LanguagesEnum;
+  level: LanguagesLevelEnum;
+}
 export interface RequirementsEntity {
-  educationLevel?: string;
-  experienceYears?: number;
-  skills?: string[];
+  educationLevel?: EducationLevelEnum[];
+  minExperienceYears?: number;
+  maxExperienceYears?: number;
+  languages?: LanguageRequirement[];
+  hardSkills?: {
+    required?: HardSkillsEnum[];
+    niceToHave?: HardSkillsEnum[];
+  };
+  softSkills?: {
+    required?: SoftSkillsEnum[];
+    niceToHave?: SoftSkillsEnum[];
+  };
 }
 
 export interface BenefitsEntity {
