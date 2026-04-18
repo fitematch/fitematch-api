@@ -8,6 +8,8 @@ import {
   READ_COMPANY_USE_CASE,
   UPDATE_COMPANY_REPOSITORY,
   UPDATE_COMPANY_USE_CASE,
+  DELETE_COMPANY_REPOSITORY,
+  DELETE_COMPANY_USE_CASE,
 } from '@src/modules/company/application/contracts/tokens/company.tokens';
 import { ListCompanyUseCase } from '@src/modules/company/application/use-cases/list-company.use-case';
 import { ListCompanyRepository } from '@src/modules/company/infrastructure/repositories/list-company.repository';
@@ -17,6 +19,8 @@ import { ReadCompanyUseCase } from '@src/modules/company/application/use-cases/r
 import { ReadCompanyRepository } from '@src/modules/company/infrastructure/repositories/read-company.repository';
 import { UpdateCompanyUseCase } from '@src/modules/company/application/use-cases/update-company.use-case';
 import { UpdateCompanyRepository } from '@src/modules/company/infrastructure/repositories/update-company.repository';
+import { DeleteCompanyUseCase } from '@src/modules/company/application/use-cases/delete-company.use-case';
+import { DeleteCompanyRepository } from '@src/modules/company/infrastructure/repositories/delete-company.repository';
 
 export const companyProviders: Provider[] = [
   {
@@ -50,5 +54,13 @@ export const companyProviders: Provider[] = [
   {
     provide: UPDATE_COMPANY_REPOSITORY,
     useClass: UpdateCompanyRepository,
+  },
+  {
+    provide: DELETE_COMPANY_USE_CASE,
+    useClass: DeleteCompanyUseCase,
+  },
+  {
+    provide: DELETE_COMPANY_REPOSITORY,
+    useClass: DeleteCompanyRepository,
   },
 ];

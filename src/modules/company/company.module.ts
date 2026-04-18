@@ -9,12 +9,14 @@ import { ListCompanyController } from '@src/modules/company/adapters/http/contro
 import { CreateCompanyController } from '@src/modules/company/adapters/http/controllers/create-company.controller';
 import { ReadCompanyController } from '@src/modules/company/adapters/http/controllers/read-company.controller';
 import { UpdateCompanyController } from '@src/modules/company/adapters/http/controllers/update-company.controller';
+import { DeleteCompanyController } from '@src/modules/company/adapters/http/controllers/delete-company.controller';
 
 const importedControllers = [
   ListCompanyController,
   CreateCompanyController,
   ReadCompanyController,
   UpdateCompanyController,
+  DeleteCompanyController,
 ];
 @Module({
   imports: [
