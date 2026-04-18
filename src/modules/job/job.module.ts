@@ -6,8 +6,9 @@ import {
   JobSchemaFactory,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
 import { ListJobController } from '@src/modules/job/adapters/http/controllers/list-job.controller';
+import { CreateJobController } from '@src/modules/job/adapters/http/controllers/create-job.controller';
 
-const importedControllers = [ListJobController];
+const importedControllers = [ListJobController, CreateJobController];
 
 @Module({
   imports: [
