@@ -7,6 +7,7 @@ import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 
 export class CreateJobResponseDto {
   id!: string;
+  slug!: string;
   companyId!: string;
   title!: string;
   description!: string;

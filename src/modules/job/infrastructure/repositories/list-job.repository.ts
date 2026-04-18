@@ -8,6 +8,10 @@ import {
   JobSchema,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
 
+type LeanJob = Omit<ListJobRepositoryOutputDto, 'id'> & {
+  _id: { toString(): string };
+};
+
 export class ListJobRepository implements ListJobRepositoryInterface {
   constructor(
     @InjectModel(JobSchema.name)
@@ -35,14 +39,26 @@ export class ListJobRepository implements ListJobRepositoryInterface {
       ];
     }
 
-    const jobs = await this.jobModel
+    const jobs = (await this.jobModel
       .find(filters)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
-      .lean<ListJobRepositoryOutputDto[]>()
-      .exec();
+      .lean()
+      .exec()) as LeanJob[];
 
-    return jobs;
+    return jobs.map((job) => ({
+      id: job._id.toString(),
+      slug: job.slug,
+      companyId: job.companyId,
+      title: job.title,
+      description: job.description,
+      slots: job.slots,
+      requirements: job.requirements,
+      benefits: job.benefits,
+      status: job.status,
+      createdAt: job.createdAt,
+      updatedAt: job.updatedAt,
+    }));
   }
 }

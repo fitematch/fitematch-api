@@ -33,6 +33,7 @@ describe('ListJobUseCase', () => {
         const jobs = [
           {
             id: 'job-1',
+            slug: 'personal-trainer-senior',
             companyId: 'company-1',
             title: 'Personal Trainer',
             description: 'Responsible for training and monitoring gym clients.',
@@ -75,6 +76,7 @@ describe('ListJobUseCase', () => {
           },
           {
             id: 'job-2',
+            slug: 'group-class-instructor',
             companyId: 'company-1',
             title: 'Group Class Instructor',
             description: 'Leads collective functional and HIIT classes.',
@@ -123,6 +125,7 @@ describe('ListJobUseCase', () => {
         listJobRepository.list.mockResolvedValue([
           {
             id: 'job-3',
+            slug: 'fitness-coordinator',
             companyId: 'company-2',
             title: 'Fitness Coordinator',
             description: 'Coordinates training planning and gym floor team.',
@@ -185,6 +188,7 @@ describe('ListJobUseCase', () => {
         expect(result).toEqual([
           {
             id: 'job-3',
+            slug: 'fitness-coordinator',
             companyId: 'company-2',
             title: 'Fitness Coordinator',
             description: 'Coordinates training planning and gym floor team.',

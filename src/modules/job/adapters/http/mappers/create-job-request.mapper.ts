@@ -4,6 +4,7 @@ import type { CreateJobRequestDto } from '@src/modules/job/adapters/http/dto/req
 export class CreateJobRequestMapper {
   static toInput(body: CreateJobRequestDto): CreateJobInputDto {
     return {
+      slug: body.slug,
       companyId: body.companyId,
       title: body.title,
       description: body.description,

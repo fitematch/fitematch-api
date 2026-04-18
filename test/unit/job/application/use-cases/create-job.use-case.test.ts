@@ -23,6 +23,7 @@ describe('CreateJobUseCase', () => {
     describe('when status is not provided', () => {
       it('should create a job with pending status by default', async () => {
         const input = {
+          slug: 'personal-trainer-senior',
           companyId: 'company-1',
           title: 'Personal Trainer',
           description: 'Responsible for training and monitoring gym clients.',
@@ -85,6 +86,7 @@ describe('CreateJobUseCase', () => {
     describe('when status is provided', () => {
       it('should use the informed status', async () => {
         const input = {
+          slug: 'fitness-coordinator',
           companyId: 'company-2',
           title: 'Fitness Coordinator',
           description: 'Coordinates training planning and gym floor team.',
@@ -151,6 +153,7 @@ describe('CreateJobUseCase', () => {
     describe('when repository throws an error', () => {
       it('should propagate the error', async () => {
         const input = {
+          slug: 'error-job',
           companyId: 'company-3',
           title: 'Error Job',
           description: 'Invalid job for error scenario.',

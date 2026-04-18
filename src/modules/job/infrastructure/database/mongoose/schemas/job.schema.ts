@@ -67,7 +67,7 @@ class BenefitsSchema {
 })
 export class JobSchema {
   @Prop({ required: true, unique: true })
-  id!: string;
+  slug!: string;
 
   @Prop({ required: true })
   companyId!: string;

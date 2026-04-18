@@ -5,6 +5,7 @@ export class ListJobMapper {
   static toResponse(job: ListJobOutputDto): ListJobResponseDto {
     return {
       id: job.id,
+      slug: job.slug,
       companyId: job.companyId,
       title: job.title,
       description: job.description,

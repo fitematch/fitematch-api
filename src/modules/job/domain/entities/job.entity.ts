@@ -34,6 +34,7 @@ export interface BenefitsEntity {
 
 export interface JobEntity {
   id: string;
+  slug: string;
   companyId: string;
   title: string;
   description: string;

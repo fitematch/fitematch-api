@@ -18,6 +18,7 @@ export class CreateJobRepository implements CreateJobRepositoryInterface {
 
   async create(input: CreateJobInputDto): Promise<CreateJobOutputDto> {
     const createdJob = await this.jobModel.create({
+      slug: input.slug,
       companyId: input.companyId,
       title: input.title,
       description: input.description,
@@ -34,6 +35,7 @@ export class CreateJobRepository implements CreateJobRepositoryInterface {
 
     return {
       id: createdJob._id.toString(),
+      slug: createdJob.slug,
       companyId: createdJob.companyId,
       title: createdJob.title,
       description: createdJob.description,

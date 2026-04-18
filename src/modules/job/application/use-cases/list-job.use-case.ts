@@ -17,6 +17,7 @@ export class ListJobUseCase implements ListJobUseCaseInterface {
 
     return jobs.map((job) => ({
       id: job.id,
+      slug: job.slug,
       companyId: job.companyId,
       title: job.title,
       description: job.description,
