@@ -34,13 +34,13 @@ export class ListUserRepository implements ListUserRepositoryInterface {
         { name: { $regex: input.search, $options: 'i' } },
         { email: { $regex: input.search, $options: 'i' } },
         {
-          'documents.rg.number': {
+          'candidateProfile.documents.rg.number': {
             $regex: input.search,
             $options: 'i',
           },
         },
         {
-          'documents.cpf.number': {
+          'candidateProfile.documents.cpf.number': {
             $regex: input.search,
             $options: 'i',
           },

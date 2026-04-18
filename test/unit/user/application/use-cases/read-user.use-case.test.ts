@@ -23,45 +23,47 @@ describe('ReadUserUseCase', () => {
         name: 'João Silva',
         email: 'joao@email.com',
         birthday: '1995-08-15',
-        documents: {
-          rg: {
-            number: '123456789',
-            issuer: 'SSP',
-            state: 'SP',
+        candidateProfile: {
+          documents: {
+            rg: {
+              number: '123456789',
+              issuer: 'SSP',
+              state: 'SP',
+            },
+            cpf: {
+              number: '12345678901',
+            },
           },
-          cpf: {
-            number: '12345678901',
+          contacts: {
+            phone: {
+              countryCode: '55',
+              areaCode: '11',
+              number: 11999999999,
+              isWhatsapp: true,
+              isTelegram: false,
+            },
+            address: {
+              street: 'Rua A',
+              number: 10,
+              complement: 'Casa',
+              neighborhood: 'Centro',
+              city: 'São Paulo',
+              state: 'SP',
+              country: 'Brasil',
+              zipCode: 12345678,
+            },
+            social: {
+              facebook: 'https://facebook.com/user',
+              instagram: 'https://instagram.com/user',
+              x: 'https://x.com/user',
+              youtube: 'https://youtube.com/user',
+              tiktok: 'https://tiktok.com/@user',
+              linkedin: 'https://linkedin.com/in/user',
+            },
           },
-        },
-        contacts: {
-          phone: {
-            countryCode: '55',
-            areaCode: '11',
-            number: 11999999999,
-            isWhatsapp: true,
-            isTelegram: false,
+          media: {
+            resumeUrl: 'https://example.com/resume.pdf',
           },
-          address: {
-            street: 'Rua A',
-            number: 10,
-            complement: 'Casa',
-            neighborhood: 'Centro',
-            city: 'São Paulo',
-            state: 'SP',
-            country: 'Brasil',
-            zipCode: 12345678,
-          },
-          social: {
-            facebook: 'https://facebook.com/user',
-            instagram: 'https://instagram.com/user',
-            x: 'https://x.com/user',
-            youtube: 'https://youtube.com/user',
-            tiktok: 'https://tiktok.com/@user',
-            linkedin: 'https://linkedin.com/in/user',
-          },
-        },
-        media: {
-          resumeUrl: 'https://example.com/resume.pdf',
         },
         status: UserStatusEnum.ACTIVE,
         createdAt: new Date('2024-01-01T00:00:00.000Z'),

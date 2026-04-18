@@ -7,16 +7,9 @@ export class ListUserMapper {
       id: user.id,
       name: user.name,
       email: user.email,
-      birthday: user.birthday
-        ? new Date(user.birthday).toISOString().split('T')[0]
-        : undefined,
-      documents: user.documents,
-      contacts: user.contacts,
-      media: user.media
-        ? {
-            resumeUrl: user.media.resumeUrl,
-          }
-        : undefined,
+      birthday: user.birthday,
+      candidateProfile: user.candidateProfile,
+      recruiterProfile: user.recruiterProfile,
       productRole: user.productRole,
       adminRole: user.adminRole,
       status: user.status,

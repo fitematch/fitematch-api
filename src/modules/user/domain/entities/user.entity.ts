@@ -12,42 +12,46 @@ import { PhoneEntity } from '@src/shared/domain/enums/entities/phone.entity';
 import { AddressEntity } from '@src/shared/domain/enums/entities/address.entity';
 import { SocialEntity } from '@src/shared/domain/enums/entities/social.entity';
 
-export interface ContactInfoEntity {
+export interface CandidateContactsEntity {
   phone?: PhoneEntity;
   address?: AddressEntity;
   social?: SocialEntity;
 }
-export interface RGDocumentEntity {
+
+export interface RecruiterContactsEntity {
+  phone?: PhoneEntity;
+}
+export interface CandidateDocumentRGEntity {
   number: string;
   issuer: string;
   state: string;
 }
 
-export interface CPFDocumentEntity {
+export interface CandidateDocumentCPFEntity {
   number: string;
 }
 
-export interface CNPJDocumentEntity {
+export interface CandidateDocumentCNPJEntity {
   number: string;
 }
 
-export interface CREFDocumentEntity {
+export interface CandidateDocumentCREFEntity {
   number: string;
   category: string;
   isActive: boolean;
 }
 
-export interface PassportDocumentEntity {
+export interface CandidateDocumentPassportEntity {
   number: string;
   country: string;
   expirationDate: Date;
 }
 
 export interface CandidateDocumentsEntity {
-  rg?: RGDocumentEntity;
-  cpf?: CPFDocumentEntity;
-  cref?: CREFDocumentEntity;
-  passport?: PassportDocumentEntity;
+  rg?: CandidateDocumentRGEntity;
+  cpf?: CandidateDocumentCPFEntity;
+  cref?: CandidateDocumentCREFEntity;
+  passport?: CandidateDocumentPassportEntity;
 }
 
 export interface CandidateMediaEntity {
@@ -92,6 +96,8 @@ export interface ProfessionalExperienceEntity {
 
 export interface CandidateProfileEntity {
   documents?: CandidateDocumentsEntity;
+  contacts?: CandidateContactsEntity;
+  media?: CandidateMediaEntity;
   ethnicity?: EthnicityTypeEnum;
   diversity?: DiversityEntity;
   physicalAttributes?: PhysicalAttributesEntity;
@@ -104,6 +110,7 @@ export interface CandidateProfileEntity {
 export interface RecruiterProfileEntity {
   companyId?: string;
   position?: string;
+  contacts?: RecruiterContactsEntity;
 }
 
 export interface UserEntity {
@@ -112,9 +119,6 @@ export interface UserEntity {
   email: string;
   password: string;
   birthday: string;
-  documents?: CandidateDocumentsEntity;
-  contacts: ContactInfoEntity;
-  media?: CandidateMediaEntity;
   candidateProfile?: CandidateProfileEntity;
   recruiterProfile?: RecruiterProfileEntity;
   productRole: ProductRoleEnum;

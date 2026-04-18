@@ -1,10 +1,10 @@
 export interface AddressEntity {
   street?: string;
-  number?: number;
+  number?: string;
   complement?: string;
   neighborhood?: string;
   city?: string;
   state?: string;
   country?: string;
-  zipCode?: number;
+  zipCode?: string;
 }

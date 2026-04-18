@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsBoolean,
   IsDateString,
   IsEmail,
@@ -11,11 +12,18 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
+import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
+import { EthnicityTypeEnum } from '@src/shared/domain/enums/ethnicity-role.enum';
+import { GenderIdentityEnum } from '@src/shared/domain/enums/gender-identity.enum';
+import { SexualOrientationEnum } from '@src/shared/domain/enums/sexual-orientation.enum';
+import { ClothingSizeEnum } from '@src/shared/domain/enums/clothing-size.enum';
+import { AvailabilityShiftEnum } from '@src/shared/domain/enums/availability-shift.enum';
+import { ShoesSizeUnitEnum } from '@src/shared/domain/enums/shoes-size-unit.enum';
+import { CourseTypeEnum } from '@src/shared/domain/enums/course-type.enum';
 
-class UpdateUserDocumentRGRequestDto {
+class CandidateDocumentRGRequestDto {
   @IsOptional()
   @IsString()
   number?: string;
@@ -29,13 +37,13 @@ class UpdateUserDocumentRGRequestDto {
   state?: string;
 }
 
-class UpdateUserDocumentCPFRequestDto {
+class CandidateDocumentCPFRequestDto {
   @IsOptional()
   @IsString()
   number?: string;
 }
 
-class UpdateUserDocumentCREFRequestDto {
+class CandidateDocumentCREFRequestDto {
   @IsOptional()
   @IsString()
   number?: string;
@@ -49,7 +57,7 @@ class UpdateUserDocumentCREFRequestDto {
   isActive?: boolean;
 }
 
-class UpdateUserDocumentPassportRequestDto {
+class CandidateDocumentPassportRequestDto {
   @IsOptional()
   @IsString()
   number?: string;
@@ -63,29 +71,29 @@ class UpdateUserDocumentPassportRequestDto {
   expirationDate?: string;
 }
 
-class UpdateUserDocumentsRequestDto {
+class CandidateDocumentsRequestDto {
   @IsOptional()
   @ValidateNested()
-  @Type(() => UpdateUserDocumentRGRequestDto)
-  rg?: UpdateUserDocumentRGRequestDto;
+  @Type(() => CandidateDocumentRGRequestDto)
+  rg?: CandidateDocumentRGRequestDto;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => UpdateUserDocumentCPFRequestDto)
-  cpf?: UpdateUserDocumentCPFRequestDto;
+  @Type(() => CandidateDocumentCPFRequestDto)
+  cpf?: CandidateDocumentCPFRequestDto;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => UpdateUserDocumentCREFRequestDto)
-  cref?: UpdateUserDocumentCREFRequestDto;
+  @Type(() => CandidateDocumentCREFRequestDto)
+  cref?: CandidateDocumentCREFRequestDto;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => UpdateUserDocumentPassportRequestDto)
-  passport?: UpdateUserDocumentPassportRequestDto;
+  @Type(() => CandidateDocumentPassportRequestDto)
+  passport?: CandidateDocumentPassportRequestDto;
 }
 
-class UpdateUserPhoneRequestDto {
+class PhoneRequestDto {
   @IsOptional()
   @IsString()
   countryCode?: string;
@@ -95,8 +103,8 @@ class UpdateUserPhoneRequestDto {
   areaCode?: string;
 
   @IsOptional()
-  @IsNumber()
-  number?: number;
+  @IsString()
+  number?: string;
 
   @IsOptional()
   @IsBoolean()
@@ -107,14 +115,14 @@ class UpdateUserPhoneRequestDto {
   isTelegram?: boolean;
 }
 
-class UpdateUserAddressRequestDto {
+class AddressRequestDto {
   @IsOptional()
   @IsString()
   street?: string;
 
   @IsOptional()
-  @IsNumber()
-  number?: number;
+  @IsString()
+  number?: string;
 
   @IsOptional()
   @IsString()
@@ -137,11 +145,11 @@ class UpdateUserAddressRequestDto {
   country?: string;
 
   @IsOptional()
-  @IsNumber()
-  zipCode?: number;
+  @IsString()
+  zipCode?: string;
 }
 
-class UpdateUserSocialRequestDto {
+class SocialRequestDto {
   @IsOptional()
   @IsString()
   facebook?: string;
@@ -167,27 +175,189 @@ class UpdateUserSocialRequestDto {
   linkedin?: string;
 }
 
-class UpdateUserMediaRequestDto {
+class CandidateContactsRequestDto {
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => PhoneRequestDto)
+  phone?: PhoneRequestDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => AddressRequestDto)
+  address?: AddressRequestDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => SocialRequestDto)
+  social?: SocialRequestDto;
+}
+
+class RecruiterContactsRequestDto {
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => PhoneRequestDto)
+  phone?: PhoneRequestDto;
+}
+
+class CandidateMediaRequestDto {
   @IsOptional()
   @IsString()
   resumeUrl?: string;
 }
 
-class UpdateUserContactsRequestDto {
+class DiversityRequestDto {
   @IsOptional()
+  @IsEnum(GenderIdentityEnum)
+  genderIdentity?: GenderIdentityEnum;
+
+  @IsOptional()
+  @IsEnum(SexualOrientationEnum)
+  sexualOrientation?: SexualOrientationEnum;
+}
+
+class PhysicalAttributesRequestDto {
+  @IsOptional()
+  @IsNumber()
+  height?: number;
+
+  @IsOptional()
+  @IsNumber()
+  weight?: number;
+}
+
+class UniformRequestDto {
+  @IsOptional()
+  @IsEnum(ClothingSizeEnum)
+  tShirtSize?: ClothingSizeEnum;
+
+  @IsOptional()
+  @IsEnum(ClothingSizeEnum)
+  jacketSize?: ClothingSizeEnum;
+
+  @IsOptional()
+  @IsEnum(ClothingSizeEnum)
+  shortSize?: ClothingSizeEnum;
+
+  @IsOptional()
+  @IsEnum(ClothingSizeEnum)
+  pantsSize?: ClothingSizeEnum;
+
+  @IsOptional()
+  @IsNumber()
+  shoeSize?: number;
+
+  @IsOptional()
+  @IsEnum(ShoesSizeUnitEnum)
+  shoeSizeUnit?: ShoesSizeUnitEnum;
+}
+
+class EducationRequestDto {
+  @IsString()
+  courseName!: string;
+
+  @IsString()
+  institution!: string;
+
+  @IsNumber()
+  startYear!: number;
+
+  @IsOptional()
+  @IsNumber()
+  endYear?: number;
+
+  @IsEnum(CourseTypeEnum)
+  courseType!: CourseTypeEnum;
+
+  @IsBoolean()
+  isOngoing!: boolean;
+}
+
+class ProfessionalExperienceRequestDto {
+  @IsString()
+  companyName!: string;
+
+  @IsString()
+  role!: string;
+
+  @IsNumber()
+  startYear!: number;
+
+  @IsOptional()
+  @IsNumber()
+  endYear?: number;
+
+  @IsBoolean()
+  isCurrent!: boolean;
+}
+
+class CandidateProfileRequestDto {
+  @IsOptional()
+  @IsObject()
   @ValidateNested()
-  @Type(() => UpdateUserPhoneRequestDto)
-  phone?: UpdateUserPhoneRequestDto;
+  @Type(() => CandidateDocumentsRequestDto)
+  documents?: CandidateDocumentsRequestDto;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => UpdateUserAddressRequestDto)
-  address?: UpdateUserAddressRequestDto;
+  @Type(() => CandidateContactsRequestDto)
+  contacts?: CandidateContactsRequestDto;
+
+  @IsOptional()
+  @IsObject()
+  @ValidateNested()
+  @Type(() => CandidateMediaRequestDto)
+  media?: CandidateMediaRequestDto;
+
+  @IsOptional()
+  @IsEnum(EthnicityTypeEnum)
+  ethnicity?: EthnicityTypeEnum;
 
   @IsOptional()
   @ValidateNested()
-  @Type(() => UpdateUserSocialRequestDto)
-  social?: UpdateUserSocialRequestDto;
+  @Type(() => DiversityRequestDto)
+  diversity?: DiversityRequestDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => PhysicalAttributesRequestDto)
+  physicalAttributes?: PhysicalAttributesRequestDto;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => UniformRequestDto)
+  uniform?: UniformRequestDto;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => EducationRequestDto)
+  educations?: EducationRequestDto[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ProfessionalExperienceRequestDto)
+  professionalExperiences?: ProfessionalExperienceRequestDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsEnum(AvailabilityShiftEnum, { each: true })
+  availability?: AvailabilityShiftEnum[];
+}
+
+class RecruiterProfileRequestDto {
+  @IsOptional()
+  @IsString()
+  companyId?: string;
+
+  @IsOptional()
+  @IsString()
+  position?: string;
+
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => RecruiterContactsRequestDto)
+  contacts?: RecruiterContactsRequestDto;
 }
 
 export class UpdateUserRequestDto {
@@ -211,19 +381,14 @@ export class UpdateUserRequestDto {
   @IsOptional()
   @IsObject()
   @ValidateNested()
-  @Type(() => UpdateUserDocumentsRequestDto)
-  documents?: UpdateUserDocumentsRequestDto;
-
-  @IsOptional()
-  @ValidateNested()
-  @Type(() => UpdateUserContactsRequestDto)
-  contacts?: UpdateUserContactsRequestDto;
+  @Type(() => CandidateProfileRequestDto)
+  candidateProfile?: CandidateProfileRequestDto;
 
   @IsOptional()
   @IsObject()
   @ValidateNested()
-  @Type(() => UpdateUserMediaRequestDto)
-  media?: UpdateUserMediaRequestDto;
+  @Type(() => RecruiterProfileRequestDto)
+  recruiterProfile?: RecruiterProfileRequestDto;
 
   @IsOptional()
   @IsEnum(ProductRoleEnum)

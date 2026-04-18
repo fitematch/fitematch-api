@@ -2,6 +2,8 @@ import { UpdateUserUseCase } from '@src/modules/user/application/use-cases/updat
 import type { UpdateUserRepositoryInterface } from '@src/modules/user/application/contracts/repositories/update-user.repository.interface';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 import { UpdateUserRequestMapper } from '@src/modules/user/adapters/http/mappers/update-user-request.mapper';
+import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
+import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 
 describe('UpdateUserUseCase', () => {
   let useCase: UpdateUserUseCase;
@@ -23,45 +25,47 @@ describe('UpdateUserUseCase', () => {
           name: 'João Silva',
           email: 'joao@email.com',
           birthday: '1995-08-15',
-          documents: {
-            rg: {
-              number: '123456789',
-              issuer: 'SSP',
-              state: 'SP',
+          candidateProfile: {
+            documents: {
+              rg: {
+                number: '123456789',
+                issuer: 'SSP',
+                state: 'SP',
+              },
+              cpf: {
+                number: '12345678901',
+              },
             },
-            cpf: {
-              number: '12345678901',
+            contacts: {
+              phone: {
+                countryCode: '55',
+                areaCode: '11',
+                number: 11999999999,
+                isWhatsapp: true,
+                isTelegram: false,
+              },
+              address: {
+                street: 'Rua A',
+                number: 123,
+                complement: 'Apto 1',
+                neighborhood: 'Centro',
+                city: 'São Paulo',
+                state: 'SP',
+                country: 'Brasil',
+                zipCode: 12345678,
+              },
+              social: {
+                facebook: 'https://facebook.com/user',
+                instagram: 'https://instagram.com/user',
+                x: 'https://x.com/user',
+                youtube: 'https://youtube.com/user',
+                tiktok: 'https://tiktok.com/@user',
+                linkedin: 'https://linkedin.com/in/user',
+              },
             },
-          },
-          contacts: {
-            phone: {
-              countryCode: '55',
-              areaCode: '11',
-              number: 11999999999,
-              isWhatsapp: true,
-              isTelegram: false,
+            media: {
+              resumeUrl: 'https://example.com/resume.pdf',
             },
-            address: {
-              street: 'Rua A',
-              number: 123,
-              complement: 'Apto 1',
-              neighborhood: 'Centro',
-              city: 'São Paulo',
-              state: 'SP',
-              country: 'Brasil',
-              zipCode: 12345678,
-            },
-            social: {
-              facebook: 'https://facebook.com/user',
-              instagram: 'https://instagram.com/user',
-              x: 'https://x.com/user',
-              youtube: 'https://youtube.com/user',
-              tiktok: 'https://tiktok.com/@user',
-              linkedin: 'https://linkedin.com/in/user',
-            },
-          },
-          media: {
-            resumeUrl: 'https://example.com/resume.pdf',
           },
           status: UserStatusEnum.ACTIVE,
         };
@@ -112,58 +116,60 @@ describe('UpdateUserRequestMapper', () => {
           email: 'joao@email.com',
           password: '12345678',
           birthday: '1995-08-15',
-          documents: {
-            rg: {
-              number: '123456789',
-              issuer: 'SSP',
-              state: 'SP',
+          candidateProfile: {
+            documents: {
+              rg: {
+                number: '123456789',
+                issuer: 'SSP',
+                state: 'SP',
+              },
+              cpf: {
+                number: '12345678901',
+              },
+              cref: {
+                number: '98765',
+                category: 'SP',
+                isActive: true,
+              },
+              passport: {
+                number: 'AB123456',
+                country: 'Brasil',
+                expirationDate: '2030-01-01',
+              },
             },
-            cpf: {
-              number: '12345678901',
+            contacts: {
+              phone: {
+                countryCode: '55',
+                areaCode: '11',
+                number: 11999999999,
+                isWhatsapp: true,
+                isTelegram: false,
+              },
+              address: {
+                street: 'Rua A',
+                number: 123,
+                complement: 'Apto 1',
+                neighborhood: 'Centro',
+                city: 'São Paulo',
+                state: 'SP',
+                country: 'Brasil',
+                zipCode: 12345678,
+              },
+              social: {
+                facebook: 'https://facebook.com/user',
+                instagram: 'https://instagram.com/user',
+                x: 'https://x.com/user',
+                youtube: 'https://youtube.com/user',
+                tiktok: 'https://tiktok.com/@user',
+                linkedin: 'https://linkedin.com/in/user',
+              },
             },
-            cref: {
-              number: '98765',
-              category: 'SP',
-              isActive: true,
-            },
-            passport: {
-              number: 'AB123456',
-              country: 'Brasil',
-              expirationDate: '2030-01-01',
+            media: {
+              resumeUrl: 'https://example.com/resume.pdf',
             },
           },
-          contacts: {
-            phone: {
-              countryCode: '55',
-              areaCode: '11',
-              number: 11999999999,
-              isWhatsapp: true,
-              isTelegram: false,
-            },
-            address: {
-              street: 'Rua A',
-              number: 123,
-              complement: 'Apto 1',
-              neighborhood: 'Centro',
-              city: 'São Paulo',
-              state: 'SP',
-              country: 'Brasil',
-              zipCode: 12345678,
-            },
-            social: {
-              facebook: 'https://facebook.com/user',
-              instagram: 'https://instagram.com/user',
-              x: 'https://x.com/user',
-              youtube: 'https://youtube.com/user',
-              tiktok: 'https://tiktok.com/@user',
-              linkedin: 'https://linkedin.com/in/user',
-            },
-          },
-          media: {
-            resumeUrl: 'https://example.com/resume.pdf',
-          },
-          productRole: 'candidate',
-          adminRole: 'admin',
+          productRole: ProductRoleEnum.CANDIDATE,
+          adminRole: AdminRoleEnum.ADMIN,
           status: UserStatusEnum.ACTIVE,
         };
 
@@ -175,58 +181,60 @@ describe('UpdateUserRequestMapper', () => {
           email: 'joao@email.com',
           password: '12345678',
           birthday: '1995-08-15',
-          documents: {
-            rg: {
-              number: '123456789',
-              issuer: 'SSP',
-              state: 'SP',
+          candidateProfile: {
+            documents: {
+              rg: {
+                number: '123456789',
+                issuer: 'SSP',
+                state: 'SP',
+              },
+              cpf: {
+                number: '12345678901',
+              },
+              cref: {
+                number: '98765',
+                category: 'SP',
+                isActive: true,
+              },
+              passport: {
+                number: 'AB123456',
+                country: 'Brasil',
+                expirationDate: new Date('2030-01-01'),
+              },
             },
-            cpf: {
-              number: '12345678901',
+            contacts: {
+              phone: {
+                countryCode: '55',
+                areaCode: '11',
+                number: 11999999999,
+                isWhatsapp: true,
+                isTelegram: false,
+              },
+              address: {
+                street: 'Rua A',
+                number: 123,
+                complement: 'Apto 1',
+                neighborhood: 'Centro',
+                city: 'São Paulo',
+                state: 'SP',
+                country: 'Brasil',
+                zipCode: 12345678,
+              },
+              social: {
+                facebook: 'https://facebook.com/user',
+                instagram: 'https://instagram.com/user',
+                x: 'https://x.com/user',
+                youtube: 'https://youtube.com/user',
+                tiktok: 'https://tiktok.com/@user',
+                linkedin: 'https://linkedin.com/in/user',
+              },
             },
-            cref: {
-              number: '98765',
-              category: 'SP',
-              isActive: true,
-            },
-            passport: {
-              number: 'AB123456',
-              country: 'Brasil',
-              expirationDate: new Date('2030-01-01'),
+            media: {
+              resumeUrl: 'https://example.com/resume.pdf',
             },
           },
-          contacts: {
-            phone: {
-              countryCode: '55',
-              areaCode: '11',
-              number: 11999999999,
-              isWhatsapp: true,
-              isTelegram: false,
-            },
-            address: {
-              street: 'Rua A',
-              number: 123,
-              complement: 'Apto 1',
-              neighborhood: 'Centro',
-              city: 'São Paulo',
-              state: 'SP',
-              country: 'Brasil',
-              zipCode: 12345678,
-            },
-            social: {
-              facebook: 'https://facebook.com/user',
-              instagram: 'https://instagram.com/user',
-              x: 'https://x.com/user',
-              youtube: 'https://youtube.com/user',
-              tiktok: 'https://tiktok.com/@user',
-              linkedin: 'https://linkedin.com/in/user',
-            },
-          },
-          media: {
-            resumeUrl: 'https://example.com/resume.pdf',
-          },
-          productRole: 'candidate',
-          adminRole: 'admin',
+          productRole: ProductRoleEnum.CANDIDATE,
+          adminRole: AdminRoleEnum.ADMIN,
           status: UserStatusEnum.ACTIVE,
         });
       });
@@ -251,9 +259,8 @@ describe('UpdateUserRequestMapper', () => {
           email: 'novo@email.com',
           password: undefined,
           birthday: undefined,
-          documents: undefined,
-          contacts: undefined,
-          media: undefined,
+          candidateProfile: undefined,
+          recruiterProfile: undefined,
           productRole: undefined,
           adminRole: undefined,
           status: UserStatusEnum.INACTIVE,

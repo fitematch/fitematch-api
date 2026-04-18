@@ -1,7 +1,7 @@
 export interface PhoneEntity {
   countryCode?: string;
   areaCode?: string;
-  number?: number;
+  number?: string;
   isWhatsapp?: boolean;
   isTelegram?: boolean;
 }

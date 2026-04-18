@@ -1,7 +1,4 @@
 import {
-  CandidateDocumentsEntity,
-  ContactInfoEntity,
-  CandidateMediaEntity,
   CandidateProfileEntity,
   RecruiterProfileEntity,
 } from '@src/modules/user/domain/entities/user.entity';
@@ -14,9 +11,6 @@ export class ListUserRepositoryOutputDto {
   name?: string;
   email?: string;
   birthday?: string;
-  documents?: CandidateDocumentsEntity;
-  contacts?: ContactInfoEntity;
-  media?: CandidateMediaEntity;
   candidateProfile?: CandidateProfileEntity;
   recruiterProfile?: RecruiterProfileEntity;
   adminRole?: AdminRoleEnum;

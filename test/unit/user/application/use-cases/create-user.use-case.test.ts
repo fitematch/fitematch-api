@@ -20,7 +20,7 @@ describe('CreateUserUseCase', () => {
         email: 'john@mail.com',
         password: '123',
         birthday: '2000-01-01',
-        contacts: undefined,
+        candidateProfile: undefined,
       };
       const expected = { ...input, id: '1', status: UserStatusEnum.PENDING };
       createUserRepository.create.mockResolvedValue(expected);
@@ -38,11 +38,13 @@ describe('CreateUserUseCase', () => {
         email: 'jane@mail.com',
         password: 'abc',
         birthday: '1990-01-01',
-        contacts: {
-          phone: {
-            countryCode: '55',
-            areaCode: '11',
-            number: 11999999999,
+        candidateProfile: {
+          contacts: {
+            phone: {
+              countryCode: '55',
+              areaCode: '11',
+              number: 11999999999,
+            },
           },
         },
         status: UserStatusEnum.ACTIVE,
