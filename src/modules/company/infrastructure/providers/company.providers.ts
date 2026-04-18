@@ -6,6 +6,8 @@ import {
   CREATE_COMPANY_USE_CASE,
   READ_COMPANY_REPOSITORY,
   READ_COMPANY_USE_CASE,
+  UPDATE_COMPANY_REPOSITORY,
+  UPDATE_COMPANY_USE_CASE,
 } from '@src/modules/company/application/contracts/tokens/company.tokens';
 import { ListCompanyUseCase } from '@src/modules/company/application/use-cases/list-company.use-case';
 import { ListCompanyRepository } from '@src/modules/company/infrastructure/repositories/list-company.repository';
@@ -13,6 +15,8 @@ import { CreateCompanyUseCase } from '@src/modules/company/application/use-cases
 import { CreateCompanyRepository } from '@src/modules/company/infrastructure/repositories/create-company.repository';
 import { ReadCompanyUseCase } from '@src/modules/company/application/use-cases/read-company.use-case';
 import { ReadCompanyRepository } from '@src/modules/company/infrastructure/repositories/read-company.repository';
+import { UpdateCompanyUseCase } from '@src/modules/company/application/use-cases/update-company.use-case';
+import { UpdateCompanyRepository } from '@src/modules/company/infrastructure/repositories/update-company.repository';
 
 export const companyProviders: Provider[] = [
   {
@@ -38,5 +42,13 @@ export const companyProviders: Provider[] = [
   {
     provide: READ_COMPANY_REPOSITORY,
     useClass: ReadCompanyRepository,
+  },
+  {
+    provide: UPDATE_COMPANY_USE_CASE,
+    useClass: UpdateCompanyUseCase,
+  },
+  {
+    provide: UPDATE_COMPANY_REPOSITORY,
+    useClass: UpdateCompanyRepository,
   },
 ];

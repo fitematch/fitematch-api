@@ -8,11 +8,13 @@ import {
 import { ListCompanyController } from '@src/modules/company/adapters/http/controllers/list-company.controller';
 import { CreateCompanyController } from '@src/modules/company/adapters/http/controllers/create-company.controller';
 import { ReadCompanyController } from '@src/modules/company/adapters/http/controllers/read-company.controller';
+import { UpdateCompanyController } from '@src/modules/company/adapters/http/controllers/update-company.controller';
 
 const importedControllers = [
   ListCompanyController,
   CreateCompanyController,
   ReadCompanyController,
+  UpdateCompanyController,
 ];
 @Module({
   imports: [
