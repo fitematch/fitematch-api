@@ -8,11 +8,13 @@ import {
 import { ListApplyController } from '@src/modules/apply/adapters/http/controllers/list-apply.controller';
 import { CreateApplyController } from '@src/modules/apply/adapters/http/controllers/create-apply.controller';
 import { ReadApplyController } from '@src/modules/apply/adapters/http/controllers/read-apply.controller';
+import { UpdateApplyController } from '@src/modules/apply/adapters/http/controllers/update-apply.controller';
 
 const importedControllers = [
   ListApplyController,
   CreateApplyController,
   ReadApplyController,
+  UpdateApplyController,
 ];
 
 @Module({
