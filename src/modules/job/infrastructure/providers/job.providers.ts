@@ -6,6 +6,8 @@ import {
   CREATE_JOB_USE_CASE,
   READ_JOB_REPOSITORY,
   READ_JOB_USE_CASE,
+  UPDATE_JOB_REPOSITORY,
+  UPDATE_JOB_USE_CASE,
 } from '@src/modules/job/application/contracts/tokens/job.tokens';
 import { ListJobUseCase } from '@src/modules/job/application/use-cases/list-job.use-case';
 import { ListJobRepository } from '@src/modules/job/infrastructure/repositories/list-job.repository';
@@ -13,6 +15,8 @@ import { CreateJobUseCase } from '@src/modules/job/application/use-cases/create-
 import { CreateJobRepository } from '@src/modules/job/infrastructure/repositories/create-job.repository';
 import { ReadJobUseCase } from '@src/modules/job/application/use-cases/read-job.use-case';
 import { ReadJobRepository } from '@src/modules/job/infrastructure/repositories/read-job.repository';
+import { UpdateJobUseCase } from '@src/modules/job/application/use-cases/update-job.use-case';
+import { UpdateJobRepository } from '@src/modules/job/infrastructure/repositories/update-job.repository';
 
 export const jobProviders: Provider[] = [
   {
@@ -38,5 +42,13 @@ export const jobProviders: Provider[] = [
   {
     provide: READ_JOB_REPOSITORY,
     useClass: ReadJobRepository,
+  },
+  {
+    provide: UPDATE_JOB_USE_CASE,
+    useClass: UpdateJobUseCase,
+  },
+  {
+    provide: UPDATE_JOB_REPOSITORY,
+    useClass: UpdateJobRepository,
   },
 ];
