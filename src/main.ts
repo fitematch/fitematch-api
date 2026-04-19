@@ -9,8 +9,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('bolao-copa- API')
-    .setDescription('API para gerenciar bolão da copa.')
+    .setTitle('fitematch-api')
+    .setDescription('API de gerenciamento do fitematch.')
     .setVersion('1.0')
     .addBearerAuth(
       {
