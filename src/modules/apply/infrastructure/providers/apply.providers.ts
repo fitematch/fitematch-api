@@ -8,6 +8,8 @@ import {
   READ_APPLY_USE_CASE,
   UPDATE_APPLY_REPOSITORY,
   UPDATE_APPLY_USE_CASE,
+  DELETE_APPLY_REPOSITORY,
+  DELETE_APPLY_USE_CASE,
 } from '@src/modules/apply/application/contracts/tokens/apply.tokens';
 import { ListApplyUseCase } from '@src/modules/apply/application/use-cases/list-apply.use-case';
 import { ListApplyRepository } from '@src/modules/apply/infrastructure/repositories/list-apply.repository';
@@ -17,6 +19,8 @@ import { ReadApplyUseCase } from '@src/modules/apply/application/use-cases/read-
 import { ReadApplyRepository } from '@src/modules/apply/infrastructure/repositories/read-apply.repository';
 import { UpdateApplyUseCase } from '@src/modules/apply/application/use-cases/update-apply.use-case';
 import { UpdateApplyRepository } from '@src/modules/apply/infrastructure/repositories/update-apply.repository';
+import { DeleteApplyUseCase } from '@src/modules/apply/application/use-cases/delete-apply.use-case';
+import { DeleteApplyRepository } from '@src/modules/apply/infrastructure/repositories/delete-apply.repository';
 
 export const applyProviders: Provider[] = [
   {
@@ -50,5 +54,13 @@ export const applyProviders: Provider[] = [
   {
     provide: UPDATE_APPLY_REPOSITORY,
     useClass: UpdateApplyRepository,
+  },
+  {
+    provide: DELETE_APPLY_USE_CASE,
+    useClass: DeleteApplyUseCase,
+  },
+  {
+    provide: DELETE_APPLY_REPOSITORY,
+    useClass: DeleteApplyRepository,
   },
 ];

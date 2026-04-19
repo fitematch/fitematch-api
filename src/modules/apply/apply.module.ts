@@ -9,12 +9,14 @@ import { ListApplyController } from '@src/modules/apply/adapters/http/controller
 import { CreateApplyController } from '@src/modules/apply/adapters/http/controllers/create-apply.controller';
 import { ReadApplyController } from '@src/modules/apply/adapters/http/controllers/read-apply.controller';
 import { UpdateApplyController } from '@src/modules/apply/adapters/http/controllers/update-apply.controller';
+import { DeleteApplyController } from '@src/modules/apply/adapters/http/controllers/delete-apply.controller';
 
 const importedControllers = [
   ListApplyController,
   CreateApplyController,
   ReadApplyController,
   UpdateApplyController,
+  DeleteApplyController,
 ];
 
 @Module({
