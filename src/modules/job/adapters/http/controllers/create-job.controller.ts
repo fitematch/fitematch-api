@@ -22,11 +22,11 @@ export class CreateJobController {
   ) {}
 
   @ApiOperation({
-    summary: 'Create a new job',
-    description: 'Creates a new job.',
+    summary: 'Create a new job position',
+    description: 'Creates a new job position.',
   })
   @ApiCreatedResponse({
-    description: 'Job created successfully.',
+    description: 'Job position created successfully.',
     type: CreateJobResponseDto,
   })
   @Post()

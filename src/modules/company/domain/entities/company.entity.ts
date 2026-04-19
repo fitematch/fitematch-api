@@ -1,9 +1,9 @@
 import { CompanyStatusEnum } from '@src/modules/company/domain/enums/company-status.enum';
 import { CompanyDocumentsEntity } from './company-documents.entity';
 import { CompanyMediaEntity } from './company-media.entity';
-import { PhoneEntity } from '@src/shared/domain/enums/entities/phone.entity';
-import { AddressEntity } from '@src/shared/domain/enums/entities/address.entity';
-import { SocialEntity } from '@src/shared/domain/enums/entities/social.entity';
+import { PhoneEntity } from '@src/shared/domain/entities/phone.entity';
+import { AddressEntity } from '@src/shared/domain/entities/address.entity';
+import { SocialEntity } from '@src/shared/domain/entities/social.entity';
 
 export interface ContactsEntity {
   email: string;

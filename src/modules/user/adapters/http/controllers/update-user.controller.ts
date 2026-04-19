@@ -31,15 +31,15 @@ export class UpdateUserController {
   ) {}
 
   @ApiOperation({
-    summary: 'Update user',
-    description: 'Updates a user by id.',
+    summary: 'Update one user',
+    description: 'Updates a user by ID.',
   })
   @ApiOkResponse({
     description: 'User updated successfully.',
     type: UpdateUserResponseDto,
   })
   @ApiNotFoundResponse({
-    description: 'User not found.',
+    description: 'User not found!',
   })
   @Patch(':id')
   async handle(

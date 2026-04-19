@@ -21,11 +21,11 @@ export class ListJobController {
   ) {}
 
   @ApiOperation({
-    summary: 'List jobs',
-    description: 'Returns the list of jobs.',
+    summary: 'List all job positions',
+    description: 'Returns the list of all job positions.',
   })
   @ApiOkResponse({
-    description: 'Jobs listed successfully.',
+    description: 'Job positions listed successfully.',
     type: ListJobResponseDto,
     isArray: true,
   })

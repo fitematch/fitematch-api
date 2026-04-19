@@ -21,8 +21,8 @@ export class ListCompanyController {
   ) {}
 
   @ApiOperation({
-    summary: 'List companies',
-    description: 'Returns the list of companies.',
+    summary: 'List all companies',
+    description: 'Returns the list of all companies.',
   })
   @ApiOkResponse({
     description: 'Companies listed successfully.',

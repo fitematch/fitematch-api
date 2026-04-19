@@ -31,8 +31,8 @@ export class UpdateCompanyController {
   ) {}
 
   @ApiOperation({
-    summary: 'Update company',
-    description: 'Updates a company by id.',
+    summary: 'Update one company',
+    description: 'Updates a company by ID.',
   })
   @ApiOkResponse({
     description: 'Company updated successfully.',

@@ -6,6 +6,7 @@ import { HealthCheckModule } from '@src/modules/health-check/health-check.module
 import { UserModule } from '@src/modules/user/user.module';
 import { CompanyModule } from '@src/modules/company/company.module';
 import { JobModule } from '@src/modules/job/job.module';
+import { ApplyModule } from '@src/modules/apply/apply.module';
 
 const databaseUri = process.env.DATABASE_URI;
 const importedModules = [
@@ -13,6 +14,7 @@ const importedModules = [
   UserModule,
   CompanyModule,
   JobModule,
+  ApplyModule,
 ];
 @Module({
   imports: [

@@ -21,8 +21,8 @@ export class ListUserController {
   ) {}
 
   @ApiOperation({
-    summary: 'List users',
-    description: 'Returns the list of users.',
+    summary: 'List all users',
+    description: 'Returns the list of all users.',
   })
   @ApiOkResponse({
     description: 'Users listed successfully.',

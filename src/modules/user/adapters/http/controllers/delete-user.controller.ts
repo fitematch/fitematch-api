@@ -30,14 +30,14 @@ export class DeleteUserController {
   ) {}
 
   @ApiOperation({
-    summary: 'Delete user',
-    description: 'Deletes a user by id.',
+    summary: 'Delete one user',
+    description: 'Deletes one user by ID.',
   })
   @ApiNoContentResponse({
     description: 'User deleted successfully.',
   })
   @ApiNotFoundResponse({
-    description: 'User not found.',
+    description: 'User not found!',
   })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)

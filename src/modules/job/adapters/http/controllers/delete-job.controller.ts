@@ -29,11 +29,11 @@ export class DeleteJobController {
   ) {}
 
   @ApiOperation({
-    summary: 'Delete job',
-    description: 'Deletes a job by id.',
+    summary: 'Delete one job position',
+    description: 'Deletes a job position by ID.',
   })
   @ApiNoContentResponse({
-    description: 'Job deleted successfully.',
+    description: 'Job position deleted successfully.',
   })
   @ApiNotFoundResponse({
     description: 'Job not found.',

@@ -1,9 +1,9 @@
 import { CompanyStatusEnum } from '@src/modules/company/domain/enums/company-status.enum';
 import { CompanyDocumentsEntity } from '@src/modules/company/domain/entities/company-documents.entity';
 import { CompanyMediaEntity } from '@src/modules/company/domain/entities/company-media.entity';
-import { PhoneEntity } from '@src/shared/domain/enums/entities/phone.entity';
-import { AddressEntity } from '@src/shared/domain/enums/entities/address.entity';
-import { SocialEntity } from '@src/shared/domain/enums/entities/social.entity';
+import { PhoneEntity } from '@src/shared/domain/entities/phone.entity';
+import { AddressEntity } from '@src/shared/domain/entities/address.entity';
+import { SocialEntity } from '@src/shared/domain/entities/social.entity';
 
 export class UpdateCompanyOutputDto {
   id!: string;

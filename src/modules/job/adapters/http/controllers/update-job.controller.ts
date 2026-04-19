@@ -6,7 +6,13 @@ import {
   Param,
   Patch,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UPDATE_JOB_USE_CASE } from '@src/modules/job/application/contracts/tokens/job.tokens';
 import type { UpdateJobUseCaseInterface } from '@src/modules/job/application/contracts/use-cases/update-job.use-case.interface';
 import { UpdateJobParamsDto } from '@src/modules/job/adapters/http/dto/request/update-job.params.dto';
@@ -24,6 +30,17 @@ export class UpdateJobController {
     private readonly useCase: UpdateJobUseCaseInterface,
   ) {}
 
+  @ApiOperation({
+    summary: 'Update one job position',
+    description: 'Updates a job position by ID.',
+  })
+  @ApiOkResponse({
+    description: 'Job position updated successfully.',
+    type: UpdateJobResponseDto,
+  })
+  @ApiNotFoundResponse({
+    description: 'Job position not found.',
+  })
   @Patch(':id')
   @ApiOkResponse({ type: UpdateJobResponseDto })
   async handle(

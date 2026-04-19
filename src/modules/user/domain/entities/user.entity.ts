@@ -8,9 +8,9 @@ import { ClothingSizeEnum } from '@src/shared/domain/enums/clothing-size.enum';
 import { AvailabilityShiftEnum } from '@src/shared/domain/enums/availability-shift.enum';
 import { ShoesSizeUnitEnum } from '@src/shared/domain/enums/shoes-size-unit.enum';
 import { CourseTypeEnum } from '@src/shared/domain/enums/course-type.enum';
-import { PhoneEntity } from '@src/shared/domain/enums/entities/phone.entity';
-import { AddressEntity } from '@src/shared/domain/enums/entities/address.entity';
-import { SocialEntity } from '@src/shared/domain/enums/entities/social.entity';
+import { PhoneEntity } from '@src/shared/domain/entities/phone.entity';
+import { AddressEntity } from '@src/shared/domain/entities/address.entity';
+import { SocialEntity } from '@src/shared/domain/entities/social.entity';
 
 export interface CandidateContactsEntity {
   phone?: PhoneEntity;

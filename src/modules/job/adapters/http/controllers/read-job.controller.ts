@@ -29,11 +29,11 @@ export class ReadJobController {
   ) {}
 
   @ApiOperation({
-    summary: 'Read job',
-    description: 'Returns a job by ID.',
+    summary: 'Return one job position',
+    description: 'Returns one job position by ID.',
   })
   @ApiOkResponse({
-    description: 'Job returned successfully.',
+    description: 'Job position returned successfully.',
     type: ReadJobResponseDto,
   })
   @ApiNotFoundResponse({

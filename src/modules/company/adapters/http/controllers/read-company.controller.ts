@@ -29,8 +29,8 @@ export class ReadCompanyController {
   ) {}
 
   @ApiOperation({
-    summary: 'Read company',
-    description: 'Returns a company by ID.',
+    summary: 'Return one company',
+    description: 'Returns one company by ID.',
   })
   @ApiOkResponse({
     description: 'Company returned successfully.',

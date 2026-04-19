@@ -29,7 +29,7 @@ export class ReadUserController {
   ) {}
 
   @ApiOperation({
-    summary: 'Read user',
+    summary: 'Read one user',
     description: 'Returns a user by ID.',
   })
   @ApiOkResponse({

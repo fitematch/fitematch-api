@@ -29,8 +29,8 @@ export class DeleteCompanyController {
   ) {}
 
   @ApiOperation({
-    summary: 'Delete company',
-    description: 'Deletes a company by id.',
+    summary: 'Delete one company',
+    description: 'Deletes one company by ID.',
   })
   @ApiNoContentResponse({
     description: 'Company deleted successfully.',
