@@ -9,12 +9,14 @@ import { ListJobController } from '@src/modules/job/adapters/http/controllers/li
 import { CreateJobController } from '@src/modules/job/adapters/http/controllers/create-job.controller';
 import { ReadJobController } from '@src/modules/job/adapters/http/controllers/read-job.controller';
 import { UpdateJobController } from './adapters/http/controllers/update-job.controller';
+import { DeleteJobController } from '@src/modules/job/adapters/http/controllers/delete-job.controller';
 
 const importedControllers = [
   ListJobController,
   CreateJobController,
   ReadJobController,
   UpdateJobController,
+  DeleteJobController,
 ];
 
 @Module({
