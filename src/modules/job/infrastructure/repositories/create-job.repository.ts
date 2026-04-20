@@ -28,24 +28,32 @@ export class CreateJobRepository implements CreateJobRepositoryInterface {
       status: input.status,
     });
 
-    const timestamps = createdJob as unknown as {
+    const plainJob = createdJob.toObject() as {
+      _id: { toString(): string };
+      slug: string;
+      companyId: string;
+      title: string;
+      description: string;
+      slots: number;
+      requirements?: CreateJobOutputDto['requirements'];
+      benefits?: CreateJobOutputDto['benefits'];
+      status: CreateJobOutputDto['status'];
       createdAt?: Date;
       updatedAt?: Date;
     };
 
     return {
-      id: createdJob._id.toString(),
-      slug: createdJob.slug,
-      companyId: createdJob.companyId,
-      title: createdJob.title,
-      description: createdJob.description,
-      slots: createdJob.slots,
-      requirements:
-        createdJob.requirements as CreateJobOutputDto['requirements'],
-      benefits: createdJob.benefits as CreateJobOutputDto['benefits'],
-      status: createdJob.status,
-      createdAt: timestamps.createdAt,
-      updatedAt: timestamps.updatedAt,
+      id: plainJob._id.toString(),
+      slug: plainJob.slug,
+      companyId: plainJob.companyId,
+      title: plainJob.title,
+      description: plainJob.description,
+      slots: plainJob.slots,
+      requirements: plainJob.requirements,
+      benefits: plainJob.benefits,
+      status: plainJob.status,
+      createdAt: plainJob.createdAt,
+      updatedAt: plainJob.updatedAt,
     };
   }
 }

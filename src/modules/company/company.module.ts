@@ -18,6 +18,7 @@ const importedControllers = [
   UpdateCompanyController,
   DeleteCompanyController,
 ];
+
 @Module({
   imports: [
     MongooseModule.forFeature([

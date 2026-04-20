@@ -56,9 +56,7 @@ export class UpdateUserRequestMapper {
               ? {
                   phone: body.candidateProfile.contacts.phone
                     ? {
-                        countryCode:
-                          body.candidateProfile.contacts.phone.countryCode,
-                        areaCode: body.candidateProfile.contacts.phone.areaCode,
+                        country: body.candidateProfile.contacts.phone.country,
                         number: body.candidateProfile.contacts.phone.number,
                         isWhatsapp:
                           body.candidateProfile.contacts.phone.isWhatsapp,
@@ -154,9 +152,7 @@ export class UpdateUserRequestMapper {
               ? {
                   phone: body.recruiterProfile.contacts.phone
                     ? {
-                        countryCode:
-                          body.recruiterProfile.contacts.phone.countryCode,
-                        areaCode: body.recruiterProfile.contacts.phone.areaCode,
+                        country: body.recruiterProfile.contacts.phone.country,
                         number: body.recruiterProfile.contacts.phone.number,
                         isWhatsapp:
                           body.recruiterProfile.contacts.phone.isWhatsapp,

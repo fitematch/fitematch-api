@@ -41,8 +41,7 @@ describe('CreateUserUseCase', () => {
         candidateProfile: {
           contacts: {
             phone: {
-              countryCode: '55',
-              areaCode: '11',
+              country: '55',
               number: 11999999999,
             },
           },

@@ -37,8 +37,6 @@ export class CreateUserController {
       CreateUserRequestMapper.toInput(body),
     );
 
-    console.log(result);
-
     return CreateUserMapper.toResponse(result);
   }
 }

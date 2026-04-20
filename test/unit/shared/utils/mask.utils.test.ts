@@ -59,4 +59,21 @@ describe('MaskUtils', () => {
       expect(maskUtils.formatCEP('12345678')).toBe('12345-678');
     });
   });
+
+  describe('formatCREF', () => {
+    it('should format cref progressively', () => {
+      expect(maskUtils.formatCREF(null)).toBe('');
+      expect(maskUtils.formatCREF('123456')).toBe('123456');
+      expect(maskUtils.formatCREF('123456g')).toBe('123456-G');
+      expect(maskUtils.formatCREF('123456gsp')).toBe('123456-G/SP');
+    });
+  });
+
+  describe('formatPassport', () => {
+    it('should normalize passport number', () => {
+      expect(maskUtils.formatPassport(undefined)).toBe('');
+      expect(maskUtils.formatPassport('ab123456')).toBe('AB123456');
+      expect(maskUtils.formatPassport('ab-12.3456')).toBe('AB123456');
+    });
+  });
 });

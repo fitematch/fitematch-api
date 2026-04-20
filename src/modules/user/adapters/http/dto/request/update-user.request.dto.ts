@@ -96,11 +96,7 @@ class CandidateDocumentsRequestDto {
 class PhoneRequestDto {
   @IsOptional()
   @IsString()
-  countryCode?: string;
-
-  @IsOptional()
-  @IsString()
-  areaCode?: string;
+  country?: string;
 
   @IsOptional()
   @IsString()

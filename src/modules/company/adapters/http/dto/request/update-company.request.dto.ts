@@ -3,13 +3,10 @@ import { CompanyStatusEnum } from '@src/modules/company/domain/enums/company-sta
 
 class PhoneRequestDto {
   @ApiPropertyOptional()
+  country?: string;
+
+  @ApiPropertyOptional()
   number?: string;
-
-  @ApiPropertyOptional()
-  countryCode?: string;
-
-  @ApiPropertyOptional()
-  areaCode?: string;
 
   @ApiPropertyOptional()
   isWhatsapp?: boolean;

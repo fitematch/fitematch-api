@@ -125,4 +125,31 @@ export class MaskUtils {
 
     return `${v.slice(0, 5)}-${v.slice(5)}`;
   }
+
+  /**
+   * Formats CREF - Conselho Regional de Educacao Fisica.
+   *
+   * @param {string | number | null | undefined} value - The value to be formatted.
+   * @returns {string} - The formatted CREF.
+   */
+  formatCREF(value: string | number | null | undefined): string {
+    const v = this.alphaNum(value).toUpperCase().slice(0, 9);
+
+    if (!v) return '';
+
+    if (v.length <= 6) return v;
+    if (v.length <= 7) return `${v.slice(0, 6)}-${v.slice(6)}`;
+
+    return `${v.slice(0, 6)}-${v.slice(6, 7)}/${v.slice(7)}`;
+  }
+
+  /**
+   * Formats passport number.
+   *
+   * @param {string | number | null | undefined} value - The value to be formatted.
+   * @returns {string} - The formatted passport number.
+   */
+  formatPassport(value: string | number | null | undefined): string {
+    return this.alphaNum(value).toUpperCase().slice(0, 9);
+  }
 }

@@ -28,27 +28,34 @@ export class CreateUserRepository implements CreateUserRepositoryInterface {
       adminRole: input.adminRole,
       status: input.status,
     });
-    const timestamps = createdUser as unknown as {
+    const plainUser = createdUser.toObject() as {
+      _id: { toString(): string };
+      name: string;
+      email: string;
+      birthday?: Date;
+      candidateProfile?: CreateUserOutputDto['candidateProfile'];
+      recruiterProfile?: CreateUserOutputDto['recruiterProfile'];
+      status?: CreateUserOutputDto['status'];
+      productRole?: CreateUserOutputDto['productRole'];
+      adminRole?: CreateUserOutputDto['adminRole'];
       createdAt?: Date;
       updatedAt?: Date;
     };
 
     return {
-      id: createdUser._id.toString(),
-      name: createdUser.name,
-      email: createdUser.email,
-      birthday: createdUser.birthday
-        ? createdUser.birthday.toISOString().split('T')[0]
+      id: plainUser._id.toString(),
+      name: plainUser.name,
+      email: plainUser.email,
+      birthday: plainUser.birthday
+        ? plainUser.birthday.toISOString().split('T')[0]
         : undefined,
-      candidateProfile:
-        createdUser.candidateProfile as CreateUserOutputDto['candidateProfile'],
-      recruiterProfile:
-        createdUser.recruiterProfile as CreateUserOutputDto['recruiterProfile'],
-      status: createdUser.status,
-      productRole: createdUser.productRole,
-      adminRole: createdUser.adminRole,
-      createdAt: timestamps.createdAt,
-      updatedAt: timestamps.updatedAt,
+      candidateProfile: plainUser.candidateProfile,
+      recruiterProfile: plainUser.recruiterProfile,
+      status: plainUser.status,
+      productRole: plainUser.productRole,
+      adminRole: plainUser.adminRole,
+      createdAt: plainUser.createdAt,
+      updatedAt: plainUser.updatedAt,
     };
   }
 }

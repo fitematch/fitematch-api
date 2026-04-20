@@ -25,8 +25,7 @@ describe('CreateCompanyUseCase', () => {
             email: 'contact@umbrella.com',
             website: 'https://umbrella.com',
             phone: {
-              countryCode: '+55',
-              areaCode: '11',
+              country: '+55',
               number: '999999999',
               isWhatsapp: true,
               isTelegram: false,
@@ -87,8 +86,7 @@ describe('CreateCompanyUseCase', () => {
           contacts: {
             email: 'contact@starslabs.com',
             phone: {
-              countryCode: '+1',
-              areaCode: '212',
+              country: '+1',
               number: '5550101',
               isWhatsapp: false,
               isTelegram: true,
@@ -142,8 +140,7 @@ describe('CreateCompanyUseCase', () => {
           contacts: {
             email: 'error@company.com',
             phone: {
-              countryCode: '+55',
-              areaCode: '11',
+              country: '+55',
               number: '988887777',
             },
             address: {

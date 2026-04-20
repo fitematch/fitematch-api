@@ -49,8 +49,7 @@ describe('ReadUserUseCase', () => {
             },
             contacts: {
               phone: {
-                countryCode: '55',
-                areaCode: '11',
+                country: '55',
                 number: '11999999999',
                 isWhatsapp: true,
                 isTelegram: false,
@@ -83,8 +82,7 @@ describe('ReadUserUseCase', () => {
             position: 'Recruiter',
             contacts: {
               phone: {
-                countryCode: '55',
-                areaCode: '21',
+                country: '55',
                 number: '21999999999',
                 isWhatsapp: true,
                 isTelegram: true,

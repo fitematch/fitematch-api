@@ -26,8 +26,7 @@ describe('UpdateCompanyUseCase', () => {
             email: 'contato@fitematch.com',
             website: 'https://fitematch.com',
             phone: {
-              countryCode: '+55',
-              areaCode: '11',
+              country: '+55',
               number: '11999999999',
               isWhatsapp: true,
               isTelegram: false,

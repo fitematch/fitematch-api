@@ -7,10 +7,7 @@ export type CompanyDocument = HydratedDocument<CompanySchema>;
 @Schema({ _id: false })
 class PhoneSchema {
   @Prop()
-  countryCode?: string;
-
-  @Prop()
-  areaCode?: string;
+  country?: string;
 
   @Prop()
   number?: string;

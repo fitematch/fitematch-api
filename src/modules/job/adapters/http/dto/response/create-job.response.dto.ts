@@ -30,7 +30,7 @@ export class CreateJobResponseDto {
     };
   };
   benefits?: {
-    salary?: number;
+    salary?: string;
     healthInsurance?: boolean;
     dentalInsurance?: boolean;
     alimentationVoucher?: boolean;

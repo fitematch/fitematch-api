@@ -32,7 +32,7 @@ async function bootstrap() {
   const configService = app.get<ConfigService>(ConfigService);
   const port = configService.get<number>('api.port', 3000);
   await app.listen(port ?? 3000);
-  Logger.log(`Server running on http://localhost:${4000}/`, 'NestBootstrap');
+  Logger.log(`Server running on http://localhost:${port}/`, 'NestBootstrap');
 }
 
 void bootstrap();
