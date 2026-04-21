@@ -1,3 +1,4 @@
+import { ConflictException } from '@nestjs/common';
 import { CreateJobUseCase } from '@src/modules/job/application/use-cases/create-job.use-case';
 import type { CreateJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/create-job.repository.interface';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
@@ -14,6 +15,7 @@ describe('CreateJobUseCase', () => {
   beforeEach(() => {
     createJobRepository = {
       existsBySlug: jest.fn().mockResolvedValue(false),
+      existsDuplicate: jest.fn().mockResolvedValue(false),
       create: jest.fn(),
     } as jest.Mocked<CreateJobRepositoryInterface>;
 
@@ -76,6 +78,11 @@ describe('CreateJobUseCase', () => {
         const result = await useCase.execute(input);
 
         expect(result).toEqual(expected);
+        expect(createJobRepository.existsDuplicate).toHaveBeenCalledWith(
+          input.companyId,
+          input.title,
+          [JobStatusEnum.PENDING, JobStatusEnum.ACTIVE],
+        );
         expect(createJobRepository.create).toHaveBeenCalledWith({
           ...input,
           slug: 'personal-trainer-senior',
@@ -107,6 +114,11 @@ describe('CreateJobUseCase', () => {
         const result = await useCase.execute(input);
 
         expect(result).toEqual(expected);
+        expect(createJobRepository.existsDuplicate).toHaveBeenCalledWith(
+          input.companyId,
+          input.title,
+          [JobStatusEnum.PENDING, JobStatusEnum.ACTIVE],
+        );
         expect(createJobRepository.create).toHaveBeenCalledWith({
           ...input,
           slug: 'personal-trainer-senior',
@@ -139,6 +151,11 @@ describe('CreateJobUseCase', () => {
         const result = await useCase.execute(input);
 
         expect(result).toEqual(expected);
+        expect(createJobRepository.existsDuplicate).toHaveBeenCalledWith(
+          input.companyId,
+          input.title,
+          [JobStatusEnum.PENDING, JobStatusEnum.ACTIVE],
+        );
         expect(createJobRepository.existsBySlug).toHaveBeenNthCalledWith(
           1,
           'personal-trainer-senior',
@@ -217,11 +234,42 @@ describe('CreateJobUseCase', () => {
         const result = await useCase.execute(input);
 
         expect(result).toEqual(expected);
+        expect(createJobRepository.existsDuplicate).toHaveBeenCalledWith(
+          input.companyId,
+          input.title,
+          [JobStatusEnum.PENDING, JobStatusEnum.ACTIVE],
+        );
         expect(createJobRepository.create).toHaveBeenCalledWith({
           ...input,
           slug: 'fitness-coordinator',
         });
         expect(createJobRepository.create).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    describe('when a duplicate active or pending job exists', () => {
+      it('should throw a conflict exception', async () => {
+        const input = {
+          companyId: 'company-1',
+          title: '  Personal Trainer Senior  ',
+          description: 'Responsible for training and monitoring gym clients.',
+          slots: 2,
+        };
+
+        createJobRepository.existsDuplicate.mockResolvedValue(true);
+
+        await expect(useCase.execute(input)).rejects.toThrow(
+          new ConflictException(
+            'A job with the same title already exists for this company.',
+          ),
+        );
+        expect(createJobRepository.existsDuplicate).toHaveBeenCalledWith(
+          input.companyId,
+          input.title,
+          [JobStatusEnum.PENDING, JobStatusEnum.ACTIVE],
+        );
+        expect(createJobRepository.existsBySlug).not.toHaveBeenCalled();
+        expect(createJobRepository.create).not.toHaveBeenCalled();
       });
     });
 

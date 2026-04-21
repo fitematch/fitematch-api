@@ -8,6 +8,7 @@ import {
 import type { UpdateJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/update-job.repository.interface';
 import type { UpdateJobInputDto } from '@src/modules/job/application/dto/input/update-job.input.dto';
 import type { UpdateJobOutputDto } from '@src/modules/job/application/dto/output/update-job.output.dto';
+import { SlugUtils } from '@src/shared/utils/slug.utils';
 
 @Injectable()
 export class UpdateJobRepository implements UpdateJobRepositoryInterface {
@@ -23,6 +24,9 @@ export class UpdateJobRepository implements UpdateJobRepositoryInterface {
         {
           ...(input.companyId !== undefined && { companyId: input.companyId }),
           ...(input.title !== undefined && { title: input.title }),
+          ...(input.title !== undefined && {
+            normalizedTitle: SlugUtils.generate(input.title),
+          }),
           ...(input.description !== undefined && {
             description: input.description,
           }),

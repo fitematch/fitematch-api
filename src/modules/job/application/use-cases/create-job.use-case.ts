@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import type { CreateJobUseCaseInterface } from '@src/modules/job/application/contracts/use-cases/create-job.use-case.interface';
 import type { CreateJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/create-job.repository.interface';
 import { CREATE_JOB_REPOSITORY } from '@src/modules/job/application/contracts/tokens/job.tokens';
@@ -15,6 +15,18 @@ export class CreateJobUseCase implements CreateJobUseCaseInterface {
   ) {}
 
   async execute(input: CreateJobInputDto): Promise<CreateJobOutputDto> {
+    const hasDuplicate = await this.createJobRepository.existsDuplicate(
+      input.companyId,
+      input.title,
+      [JobStatusEnum.PENDING, JobStatusEnum.ACTIVE],
+    );
+
+    if (hasDuplicate) {
+      throw new ConflictException(
+        'A job with the same title already exists for this company.',
+      );
+    }
+
     const requestedSlug = SlugUtils.generate(input.slug ?? '');
     const baseSlug = requestedSlug || SlugUtils.generate(input.title);
     const slug = await this.generateUniqueSlug(baseSlug);

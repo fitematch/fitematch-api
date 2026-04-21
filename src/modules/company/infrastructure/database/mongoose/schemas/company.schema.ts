@@ -102,7 +102,6 @@ CompanySchemaFactory.pre('validate', function () {
   }
 });
 
-CompanySchemaFactory.index({ slug: 1 }, { unique: true });
 CompanySchemaFactory.index(
   { 'documents.cnpj': 1 },
   {

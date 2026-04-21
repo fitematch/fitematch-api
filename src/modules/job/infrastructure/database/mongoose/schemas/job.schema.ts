@@ -76,6 +76,9 @@ export class JobSchema {
   title!: string;
 
   @Prop({ required: true })
+  normalizedTitle!: string;
+
+  @Prop({ required: true })
   description!: string;
 
   @Prop({ required: true })
@@ -99,4 +102,14 @@ export class JobSchema {
 
 export const JobSchemaFactory = SchemaFactory.createForClass(JobSchema);
 
-JobSchemaFactory.index({ slug: 1 }, { unique: true });
+JobSchemaFactory.index(
+  { companyId: 1, normalizedTitle: 1, status: 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      status: {
+        $in: [JobStatusEnum.PENDING, JobStatusEnum.ACTIVE],
+      },
+    },
+  },
+);
