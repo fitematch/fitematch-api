@@ -1,0 +1,4 @@
+export const SIGN_UP_USE_CASE = Symbol('SIGN_UP_USE_CASE');
+export const SIGN_UP_REPOSITORY = Symbol('SIGN_UP_REPOSITORY');
+export const ACTIVATION_CODE_REPOSITORY = Symbol('ACTIVATION_CODE_REPOSITORY');
+export const HASH_SERVICE = Symbol('HASH_SERVICE');

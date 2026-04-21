@@ -7,6 +7,7 @@ import { UserModule } from '@src/modules/user/user.module';
 import { CompanyModule } from '@src/modules/company/company.module';
 import { JobModule } from '@src/modules/job/job.module';
 import { ApplyModule } from '@src/modules/apply/apply.module';
+import { AuthModule } from '@src/modules/auth/auth.module';
 
 const databaseUri = process.env.DATABASE_URI;
 const importedModules = [
@@ -15,6 +16,7 @@ const importedModules = [
   CompanyModule,
   JobModule,
   ApplyModule,
+  AuthModule,
 ];
 @Module({
   imports: [
