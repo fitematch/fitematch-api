@@ -1,17 +1,23 @@
 import { UpdateUserUseCase } from '@src/modules/user/application/use-cases/update-user.use-case';
 import type { UpdateUserRepositoryInterface } from '@src/modules/user/application/contracts/repositories/update-user.repository.interface';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
+import EncryptUtils from '@src/shared/utils/encrypt.utils';
 
 describe('UpdateUserUseCase', () => {
   let useCase: UpdateUserUseCase;
   let updateUserRepository: jest.Mocked<UpdateUserRepositoryInterface>;
+  let encryptUtils: jest.Mocked<EncryptUtils>;
 
   beforeEach(() => {
     updateUserRepository = {
       update: jest.fn(),
     } as jest.Mocked<UpdateUserRepositoryInterface>;
+    encryptUtils = {
+      encryptPassword: jest.fn(),
+      comparePassword: jest.fn(),
+    } as unknown as jest.Mocked<EncryptUtils>;
 
-    useCase = new UpdateUserUseCase(updateUserRepository);
+    useCase = new UpdateUserUseCase(updateUserRepository, encryptUtils);
   });
 
   describe('execute', () => {
@@ -21,6 +27,7 @@ describe('UpdateUserUseCase', () => {
           _id: 'user-id-1',
           name: 'Rebecca Chambers',
           email: 'rebecca@fitematch.com',
+          password: 'new-password',
           birthday: '1998-07-29',
           candidateProfile: {
             documents: {
@@ -82,12 +89,19 @@ describe('UpdateUserUseCase', () => {
           updatedAt: new Date('2024-01-02T00:00:00.000Z'),
         };
 
+        encryptUtils.encryptPassword.mockResolvedValue('hashed-new-password');
         updateUserRepository.update.mockResolvedValue(output);
 
         const result = await useCase.execute(input);
 
         expect(result).toEqual(output);
-        expect(updateUserRepository.update).toHaveBeenCalledWith(input);
+        expect(encryptUtils.encryptPassword).toHaveBeenCalledWith(
+          'new-password',
+        );
+        expect(updateUserRepository.update).toHaveBeenCalledWith({
+          ...input,
+          password: 'hashed-new-password',
+        });
         expect(updateUserRepository.update).toHaveBeenCalledTimes(1);
       });
     });
@@ -104,6 +118,7 @@ describe('UpdateUserUseCase', () => {
         const result = await useCase.execute(input);
 
         expect(result).toBeNull();
+        expect(encryptUtils.encryptPassword).not.toHaveBeenCalled();
         expect(updateUserRepository.update).toHaveBeenCalledWith(input);
         expect(updateUserRepository.update).toHaveBeenCalledTimes(1);
       });
@@ -120,6 +135,7 @@ describe('UpdateUserUseCase', () => {
         updateUserRepository.update.mockRejectedValue(new Error(errorMessage));
 
         await expect(useCase.execute(input)).rejects.toThrow(errorMessage);
+        expect(encryptUtils.encryptPassword).not.toHaveBeenCalled();
         expect(updateUserRepository.update).toHaveBeenCalledWith(input);
         expect(updateUserRepository.update).toHaveBeenCalledTimes(1);
       });

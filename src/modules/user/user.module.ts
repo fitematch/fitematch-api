@@ -10,6 +10,7 @@ import { CreateUserController } from '@src/modules/user/adapters/http/controller
 import { ReadUserController } from '@src/modules/user/adapters/http/controllers/read-user.controller';
 import { UpdateUserController } from '@src/modules/user/adapters/http/controllers/update-user.controller';
 import { DeleteUserController } from '@src/modules/user/adapters/http/controllers/delete-user.controller';
+import EncryptUtils from '@src/shared/utils/encrypt.utils';
 
 const importedControllers = [
   ListUserController,
@@ -28,7 +29,7 @@ const importedControllers = [
     ]),
   ],
   controllers: [...importedControllers],
-  providers: [...userProviders],
-  exports: [...userProviders, MongooseModule],
+  providers: [...userProviders, EncryptUtils],
+  exports: [...userProviders, MongooseModule, EncryptUtils],
 })
 export class UserModule {}

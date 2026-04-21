@@ -1,16 +1,22 @@
 import { CreateUserUseCase } from '@src/modules/user/application/use-cases/create-user.use-case';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 import type { CreateUserRepositoryInterface } from '@src/modules/user/application/contracts/repositories/create-user.repository.interface';
+import EncryptUtils from '@src/shared/utils/encrypt.utils';
 
 describe('CreateUserUseCase', () => {
   let useCase: CreateUserUseCase;
   let createUserRepository: jest.Mocked<CreateUserRepositoryInterface>;
+  let encryptUtils: jest.Mocked<EncryptUtils>;
 
   beforeEach(() => {
     createUserRepository = {
       create: jest.fn(),
     } as jest.Mocked<CreateUserRepositoryInterface>;
-    useCase = new CreateUserUseCase(createUserRepository);
+    encryptUtils = {
+      encryptPassword: jest.fn(),
+      comparePassword: jest.fn(),
+    } as unknown as jest.Mocked<EncryptUtils>;
+    useCase = new CreateUserUseCase(createUserRepository, encryptUtils);
   });
 
   describe('execute', () => {
@@ -22,12 +28,20 @@ describe('CreateUserUseCase', () => {
         birthday: '2000-01-01',
         candidateProfile: undefined,
       };
-      const expected = { ...input, _id: '1', status: UserStatusEnum.PENDING };
+      const expected = {
+        ...input,
+        password: 'hashed-123',
+        _id: '1',
+        status: UserStatusEnum.PENDING,
+      };
+      encryptUtils.encryptPassword.mockResolvedValue('hashed-123');
       createUserRepository.create.mockResolvedValue(expected);
       const result = await useCase.execute(input);
       expect(result).toEqual(expected);
+      expect(encryptUtils.encryptPassword).toHaveBeenCalledWith('123');
       expect(createUserRepository.create).toHaveBeenCalledWith({
         ...input,
+        password: 'hashed-123',
         status: UserStatusEnum.PENDING,
       });
     });
@@ -48,11 +62,16 @@ describe('CreateUserUseCase', () => {
         },
         status: UserStatusEnum.ACTIVE,
       };
-      const expected = { ...input, _id: '2' };
+      const expected = { ...input, password: 'hashed-abc', _id: '2' };
+      encryptUtils.encryptPassword.mockResolvedValue('hashed-abc');
       createUserRepository.create.mockResolvedValue(expected);
       const result = await useCase.execute(input);
       expect(result).toEqual(expected);
-      expect(createUserRepository.create).toHaveBeenCalledWith(input);
+      expect(encryptUtils.encryptPassword).toHaveBeenCalledWith('abc');
+      expect(createUserRepository.create).toHaveBeenCalledWith({
+        ...input,
+        password: 'hashed-abc',
+      });
     });
   });
 });
