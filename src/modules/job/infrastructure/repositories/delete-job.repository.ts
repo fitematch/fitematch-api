@@ -17,7 +17,7 @@ export class DeleteJobRepository implements DeleteJobRepositoryInterface {
 
   async delete(input: DeleteJobInputDto): Promise<boolean> {
     const deletedJob = await this.jobModel
-      .findByIdAndDelete(input.id)
+      .findByIdAndDelete(input._id)
       .lean()
       .exec();
 

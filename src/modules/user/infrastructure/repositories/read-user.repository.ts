@@ -17,7 +17,7 @@ export class ReadUserRepository implements ReadUserRepositoryInterface {
   ) {}
 
   async read(input: ReadUserInputDto): Promise<ReadUserOutputDto | null> {
-    const user = (await this.userModel.findById(input.id).lean().exec()) as
+    const user = (await this.userModel.findById(input._id).lean().exec()) as
       | (ReadUserOutputDto & { _id: { toString(): string } })
       | null;
 
@@ -26,7 +26,7 @@ export class ReadUserRepository implements ReadUserRepositoryInterface {
     }
 
     return {
-      id: user._id.toString(),
+      _id: user._id.toString(),
       name: user.name,
       email: user.email,
       birthday: user.birthday

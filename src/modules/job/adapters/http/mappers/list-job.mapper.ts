@@ -7,7 +7,7 @@ export class ListJobMapper {
     const currencyUtils = new CurrencyUtils();
 
     return {
-      id: job.id,
+      _id: job._id,
       slug: job.slug,
       companyId: job.companyId,
       title: job.title,

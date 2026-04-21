@@ -5,7 +5,7 @@ import { UpdateCompanyMapper } from '@src/modules/company/adapters/http/mappers/
 import { CompanyStatusEnum } from '@src/modules/company/domain/enums/company-status.enum';
 
 const company = {
-  id: 'company-1',
+  _id: 'company-1',
   slug: 'umbrella-corp',
   tradeName: 'Umbrella Corp',
   legalName: 'Umbrella Corporation LTDA',

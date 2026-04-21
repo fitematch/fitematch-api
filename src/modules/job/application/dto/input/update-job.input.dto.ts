@@ -6,7 +6,7 @@ import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 
 export class UpdateJobInputDto {
-  id!: string;
+  _id!: string;
 
   companyId?: string;
   title?: string;

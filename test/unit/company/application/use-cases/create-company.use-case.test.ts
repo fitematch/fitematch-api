@@ -8,6 +8,8 @@ describe('CreateCompanyUseCase', () => {
 
   beforeEach(() => {
     createCompanyRepository = {
+      existsBySlug: jest.fn().mockResolvedValue(false),
+      existsByCnpj: jest.fn().mockResolvedValue(false),
       create: jest.fn(),
     } as jest.Mocked<CreateCompanyRepositoryInterface>;
 
@@ -46,7 +48,7 @@ describe('CreateCompanyUseCase', () => {
             },
           },
           documents: {
-            cnpj: '12.345.678/0001-90',
+            cnpj: '11.222.333/0001-81',
             isVerified: false,
           },
           media: {
@@ -59,7 +61,11 @@ describe('CreateCompanyUseCase', () => {
 
         const expected = {
           ...input,
-          id: 'company-1',
+          _id: 'company-1',
+          documents: {
+            ...input.documents,
+            cnpj: '11222333000181',
+          },
           status: CompanyStatusEnum.PENDING,
           createdAt: new Date('2024-01-01T00:00:00.000Z'),
           updatedAt: new Date('2024-01-02T00:00:00.000Z'),
@@ -72,9 +78,249 @@ describe('CreateCompanyUseCase', () => {
         expect(result).toEqual(expected);
         expect(createCompanyRepository.create).toHaveBeenCalledWith({
           ...input,
+          documents: {
+            ...input.documents,
+            cnpj: '11222333000181',
+          },
+          slug: 'umbrella-corp',
           status: CompanyStatusEnum.PENDING,
         });
         expect(createCompanyRepository.create).toHaveBeenCalledTimes(1);
+      });
+
+      it('should generate the slug from trade name when the informed slug is empty', async () => {
+        const input = {
+          slug: '',
+          tradeName: 'Umbrella Corp',
+          contacts: {
+            email: 'contact@umbrella.com',
+            phone: {
+              country: '+55',
+              number: '999999999',
+            },
+            address: {
+              street: 'Rua das Empresas',
+              number: '1000',
+              city: 'Sao Paulo',
+              state: 'SP',
+              country: 'Brasil',
+              zipCode: '01001-000',
+            },
+          },
+          documents: {
+            cnpj: '11.222.333/0001-81',
+          },
+          media: {},
+        };
+
+        const expected = {
+          ...input,
+          _id: 'company-1',
+          slug: 'umbrella-corp',
+          documents: {
+            ...input.documents,
+            cnpj: '11222333000181',
+          },
+          status: CompanyStatusEnum.PENDING,
+          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+          updatedAt: new Date('2024-01-02T00:00:00.000Z'),
+        };
+
+        createCompanyRepository.create.mockResolvedValue(expected);
+
+        const result = await useCase.execute(input);
+
+        expect(result).toEqual(expected);
+        expect(createCompanyRepository.create).toHaveBeenCalledWith({
+          ...input,
+          documents: {
+            ...input.documents,
+            cnpj: '11222333000181',
+          },
+          slug: 'umbrella-corp',
+          status: CompanyStatusEnum.PENDING,
+        });
+      });
+
+      it('should generate the slug from trade name when slug is not provided', async () => {
+        const input = {
+          tradeName: 'Raccoon Fitness',
+          contacts: {
+            email: 'contact@raccoonfitness.com',
+            phone: {
+              country: '+55',
+              number: '999999999',
+            },
+            address: {
+              street: 'Rua das Academias',
+              number: '321',
+              city: 'Sao Paulo',
+              state: 'SP',
+              country: 'Brasil',
+              zipCode: '01001-000',
+            },
+          },
+          documents: {
+            cnpj: '11.222.333/0001-81',
+          },
+          media: {},
+        };
+
+        const expected = {
+          ...input,
+          _id: 'company-3',
+          slug: 'raccoon-fitness',
+          documents: {
+            ...input.documents,
+            cnpj: '11222333000181',
+          },
+          status: CompanyStatusEnum.PENDING,
+          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+          updatedAt: new Date('2024-01-02T00:00:00.000Z'),
+        };
+
+        createCompanyRepository.create.mockResolvedValue(expected);
+
+        const result = await useCase.execute(input);
+
+        expect(result).toEqual(expected);
+        expect(createCompanyRepository.create).toHaveBeenCalledWith({
+          ...input,
+          documents: {
+            ...input.documents,
+            cnpj: '11222333000181',
+          },
+          slug: 'raccoon-fitness',
+          status: CompanyStatusEnum.PENDING,
+        });
+      });
+
+      it('should append a numeric suffix when the generated slug already exists', async () => {
+        const input = {
+          tradeName: 'Umbrella Corp',
+          contacts: {
+            email: 'contact@umbrella.com',
+            phone: {
+              country: '+55',
+              number: '999999999',
+            },
+            address: {
+              street: 'Rua das Empresas',
+              number: '1000',
+              city: 'Sao Paulo',
+              state: 'SP',
+              country: 'Brasil',
+              zipCode: '01001-000',
+            },
+          },
+          documents: {
+            cnpj: '11.222.333/0001-81',
+          },
+          media: {},
+        };
+
+        const expected = {
+          ...input,
+          _id: 'company-4',
+          slug: 'umbrella-corp-1',
+          documents: {
+            ...input.documents,
+            cnpj: '11222333000181',
+          },
+          status: CompanyStatusEnum.PENDING,
+          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+          updatedAt: new Date('2024-01-02T00:00:00.000Z'),
+        };
+
+        createCompanyRepository.existsBySlug
+          .mockResolvedValueOnce(true)
+          .mockResolvedValueOnce(false);
+        createCompanyRepository.create.mockResolvedValue(expected);
+
+        const result = await useCase.execute(input);
+
+        expect(result).toEqual(expected);
+        expect(createCompanyRepository.existsBySlug).toHaveBeenNthCalledWith(
+          1,
+          'umbrella-corp',
+        );
+        expect(createCompanyRepository.existsBySlug).toHaveBeenNthCalledWith(
+          2,
+          'umbrella-corp-1',
+        );
+        expect(createCompanyRepository.create).toHaveBeenCalledWith({
+          ...input,
+          documents: {
+            ...input.documents,
+            cnpj: '11222333000181',
+          },
+          slug: 'umbrella-corp-1',
+          status: CompanyStatusEnum.PENDING,
+        });
+      });
+
+      it('should throw conflict when a company with the same cnpj already exists', async () => {
+        const input = {
+          tradeName: 'Umbrella Corp',
+          contacts: {
+            email: 'contact@umbrella.com',
+            phone: {
+              country: '+55',
+              number: '999999999',
+            },
+            address: {
+              street: 'Rua das Empresas',
+              number: '1000',
+              city: 'Sao Paulo',
+              state: 'SP',
+              country: 'Brasil',
+              zipCode: '01001-000',
+            },
+          },
+          documents: {
+            cnpj: '11.222.333/0001-81',
+          },
+          media: {},
+        };
+
+        createCompanyRepository.existsByCnpj.mockResolvedValue(true);
+
+        await expect(useCase.execute(input)).rejects.toThrow(
+          'Company with this CNPJ already exists.',
+        );
+        expect(createCompanyRepository.existsByCnpj).toHaveBeenCalledWith(
+          '11222333000181',
+        );
+        expect(createCompanyRepository.create).not.toHaveBeenCalled();
+      });
+
+      it('should throw bad request when the informed cnpj is invalid', async () => {
+        const input = {
+          tradeName: 'Umbrella Corp',
+          contacts: {
+            email: 'contact@umbrella.com',
+            phone: {
+              country: '+55',
+              number: '999999999',
+            },
+            address: {
+              street: 'Rua das Empresas',
+              number: '1000',
+              city: 'Sao Paulo',
+              state: 'SP',
+              country: 'Brasil',
+              zipCode: '01001-000',
+            },
+          },
+          documents: {
+            cnpj: '12.345.678/0001-91',
+          },
+          media: {},
+        };
+
+        await expect(useCase.execute(input)).rejects.toThrow('Invalid CNPJ.');
+        expect(createCompanyRepository.existsByCnpj).not.toHaveBeenCalled();
+        expect(createCompanyRepository.create).not.toHaveBeenCalled();
       });
     });
 
@@ -102,7 +348,7 @@ describe('CreateCompanyUseCase', () => {
             },
           },
           documents: {
-            cnpj: '98.765.432/0001-10',
+            cnpj: '11.444.777/0001-61',
             isVerified: true,
           },
           media: {
@@ -117,7 +363,11 @@ describe('CreateCompanyUseCase', () => {
 
         const expected = {
           ...input,
-          id: 'company-2',
+          _id: 'company-2',
+          documents: {
+            ...input.documents,
+            cnpj: '11444777000161',
+          },
           createdAt: new Date('2024-02-01T00:00:00.000Z'),
           updatedAt: new Date('2024-02-02T00:00:00.000Z'),
         };
@@ -127,7 +377,14 @@ describe('CreateCompanyUseCase', () => {
         const result = await useCase.execute(input);
 
         expect(result).toEqual(expected);
-        expect(createCompanyRepository.create).toHaveBeenCalledWith(input);
+        expect(createCompanyRepository.create).toHaveBeenCalledWith({
+          ...input,
+          documents: {
+            ...input.documents,
+            cnpj: '11444777000161',
+          },
+          slug: 'stars-labs',
+        });
         expect(createCompanyRepository.create).toHaveBeenCalledTimes(1);
       });
     });
@@ -153,7 +410,7 @@ describe('CreateCompanyUseCase', () => {
             },
           },
           documents: {
-            cnpj: '00.000.000/0001-00',
+            cnpj: '00.000.000/0001-91',
           },
           media: {},
         };
@@ -167,6 +424,11 @@ describe('CreateCompanyUseCase', () => {
         await expect(useCase.execute(input)).rejects.toThrow(errorMessage);
         expect(createCompanyRepository.create).toHaveBeenCalledWith({
           ...input,
+          documents: {
+            ...input.documents,
+            cnpj: '00000000000191',
+          },
+          slug: 'error-company',
           status: CompanyStatusEnum.PENDING,
         });
         expect(createCompanyRepository.create).toHaveBeenCalledTimes(1);

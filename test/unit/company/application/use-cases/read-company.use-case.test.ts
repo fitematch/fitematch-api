@@ -17,10 +17,10 @@ describe('ReadCompanyUseCase', () => {
   describe('execute', () => {
     describe('when the company exists', () => {
       it('should return the company with all mapped fields', async () => {
-        const input = { id: 'company-id-1' };
+        const input = { _id: 'company-id-1' };
 
         const output = {
-          id: 'company-id-1',
+          _id: 'company-id-1',
           slug: 'fitematch',
           tradeName: 'Fitematch',
           legalName: 'Fitematch Tecnologia Ltda',
@@ -83,7 +83,7 @@ describe('ReadCompanyUseCase', () => {
 
     describe('when the company does not exist', () => {
       it('should return null', async () => {
-        const input = { id: 'missing-company-id' };
+        const input = { _id: 'missing-company-id' };
 
         readCompanyRepository.read.mockResolvedValue(null);
 
@@ -97,7 +97,7 @@ describe('ReadCompanyUseCase', () => {
 
     describe('when the repository throws an error', () => {
       it('should propagate the error', async () => {
-        const input = { id: 'error-company-id' };
+        const input = { _id: 'error-company-id' };
         const errorMessage = 'Repository error';
 
         readCompanyRepository.read.mockRejectedValue(new Error(errorMessage));

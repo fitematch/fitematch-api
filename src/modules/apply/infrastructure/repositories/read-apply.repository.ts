@@ -17,7 +17,7 @@ export class ReadApplyRepository implements ReadApplyRepositoryInterface {
   ) {}
 
   async read(input: ReadApplyInputDto): Promise<ReadApplyOutputDto | null> {
-    const apply = (await this.applyModel.findById(input.id).lean().exec()) as
+    const apply = (await this.applyModel.findById(input._id).lean().exec()) as
       | (ReadApplyOutputDto & { _id: { toString(): string } })
       | null;
 
@@ -26,7 +26,7 @@ export class ReadApplyRepository implements ReadApplyRepositoryInterface {
     }
 
     return {
-      id: apply._id.toString(),
+      _id: apply._id.toString(),
       jobId: apply.jobId,
       userId: apply.userId,
       status: apply.status,

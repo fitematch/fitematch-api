@@ -1,7 +1,7 @@
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 
 export class UpdateJobResponseDto {
-  id!: string;
+  _id!: string;
   slug!: string;
   companyId!: string;
   title!: string;

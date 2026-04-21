@@ -9,7 +9,7 @@ describe('DeleteUserUseCase', () => {
   let deleteUserRepository: jest.Mocked<DeleteUserRepositoryInterface>;
 
   const input: DeleteUserInputDto = {
-    id: 'user-id',
+    _id: 'user-id',
   };
 
   beforeEach(() => {
@@ -53,7 +53,7 @@ describe('DeleteUserUseCase', () => {
 
       expect(deleteUserRepository.delete).toHaveBeenCalledTimes(1);
       expect(deleteUserRepository.delete).toHaveBeenCalledWith({
-        id: 'user-id',
+        _id: 'user-id',
       });
     });
 

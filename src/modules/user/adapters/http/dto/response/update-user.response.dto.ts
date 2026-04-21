@@ -7,7 +7,7 @@ import {
 } from '@src/modules/user/domain/entities/user.entity';
 
 export class UpdateUserResponseDto {
-  id!: string;
+  _id!: string;
   name!: string;
   email!: string;
   birthday?: string;

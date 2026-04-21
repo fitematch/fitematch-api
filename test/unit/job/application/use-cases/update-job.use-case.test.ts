@@ -23,7 +23,7 @@ describe('UpdateJobUseCase', () => {
     describe('when the job exists', () => {
       it('should return the updated job with all fields', async () => {
         const input = {
-          id: 'job-id-1',
+          _id: 'job-id-1',
           companyId: 'company-id-1',
           title: 'Senior Personal Trainer',
           description: 'Responsible for premium clients and training plans.',
@@ -90,7 +90,7 @@ describe('UpdateJobUseCase', () => {
     describe('when the job does not exist', () => {
       it('should return null', async () => {
         const input = {
-          id: 'missing-job-id',
+          _id: 'missing-job-id',
           title: 'Missing Job',
         };
 
@@ -107,7 +107,7 @@ describe('UpdateJobUseCase', () => {
     describe('when the repository throws an error', () => {
       it('should propagate the error', async () => {
         const input = {
-          id: 'error-job-id',
+          _id: 'error-job-id',
           title: 'Error Job',
         };
         const errorMessage = 'Repository error';

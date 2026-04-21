@@ -23,7 +23,7 @@ export interface CompanyApprovalEntity {
 }
 
 export interface CompanyEntity {
-  id: string;
+  _id: string;
   slug: string;
   tradeName: string;
   legalName?: string;

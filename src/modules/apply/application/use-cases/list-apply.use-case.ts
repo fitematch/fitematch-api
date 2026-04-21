@@ -16,7 +16,7 @@ export class ListApplyUseCase implements ListApplyUseCaseInterface {
     const applies = await this.listApplyRepository.list(input);
 
     return applies.map((apply) => ({
-      id: apply.id,
+      _id: apply._id,
       jobId: apply.jobId,
       userId: apply.userId,
       status: apply.status,

@@ -9,6 +9,10 @@ import type { ListApplyRepositoryInterface } from '@src/modules/apply/applicatio
 import type { ListApplyInputDto } from '@src/modules/apply/application/dto/input/list-apply.input.dto';
 import type { ListApplyRepositoryOutputDto } from '@src/modules/apply/application/dto/output/list-apply.repository-output.dto';
 
+type ListApplyLeanDocument = Omit<ListApplyRepositoryOutputDto, '_id'> & {
+  _id: { toString(): string };
+};
+
 @Injectable()
 export class ListApplyRepository implements ListApplyRepositoryInterface {
   constructor(
@@ -36,18 +40,16 @@ export class ListApplyRepository implements ListApplyRepositoryInterface {
       filters.status = input.status;
     }
 
-    const applies = (await this.applyModel
+    const applies = await this.applyModel
       .find(filters)
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
-      .lean()
-      .exec()) as Array<
-      ListApplyRepositoryOutputDto & { _id: { toString(): string } }
-    >;
+      .lean<ListApplyLeanDocument[]>()
+      .exec();
 
     return applies.map((apply) => ({
-      id: apply._id.toString(),
+      _id: apply._id.toString(),
       jobId: apply.jobId,
       userId: apply.userId,
       status: apply.status,

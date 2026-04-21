@@ -6,7 +6,7 @@ import { AddressEntity } from '@src/shared/domain/entities/address.entity';
 import { SocialEntity } from '@src/shared/domain/entities/social.entity';
 
 export class CreateCompanyInputDto {
-  slug!: string;
+  slug?: string;
   tradeName!: string;
   legalName?: string;
   contacts!: {

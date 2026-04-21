@@ -4,7 +4,7 @@ import type { ReadApplyResponseDto } from '@src/modules/apply/adapters/http/dto/
 export class ReadApplyMapper {
   static toResponse(apply: ReadApplyOutputDto): ReadApplyResponseDto {
     return {
-      id: apply.id,
+      _id: apply._id,
       jobId: apply.jobId,
       userId: apply.userId,
       status: apply.status,

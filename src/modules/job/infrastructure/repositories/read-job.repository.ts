@@ -17,7 +17,7 @@ export class ReadJobRepository implements ReadJobRepositoryInterface {
   ) {}
 
   async read(input: ReadJobInputDto): Promise<ReadJobOutputDto | null> {
-    const job = (await this.jobModel.findById(input.id).lean().exec()) as
+    const job = (await this.jobModel.findById(input._id).lean().exec()) as
       | (ReadJobOutputDto & { _id: { toString(): string } })
       | null;
 
@@ -26,7 +26,7 @@ export class ReadJobRepository implements ReadJobRepositoryInterface {
     }
 
     return {
-      id: job._id.toString(),
+      _id: job._id.toString(),
       companyId: job.companyId,
       title: job.title,
       description: job.description,

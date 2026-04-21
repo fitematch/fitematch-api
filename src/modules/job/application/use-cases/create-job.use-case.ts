@@ -5,6 +5,7 @@ import { CREATE_JOB_REPOSITORY } from '@src/modules/job/application/contracts/to
 import { CreateJobInputDto } from '@src/modules/job/application/dto/input/create-job.input.dto';
 import { CreateJobOutputDto } from '@src/modules/job/application/dto/output/create-job.output.dto';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
+import { SlugUtils } from '@src/shared/utils/slug.utils';
 
 @Injectable()
 export class CreateJobUseCase implements CreateJobUseCaseInterface {
@@ -14,9 +15,26 @@ export class CreateJobUseCase implements CreateJobUseCaseInterface {
   ) {}
 
   async execute(input: CreateJobInputDto): Promise<CreateJobOutputDto> {
+    const requestedSlug = SlugUtils.generate(input.slug ?? '');
+    const baseSlug = requestedSlug || SlugUtils.generate(input.title);
+    const slug = await this.generateUniqueSlug(baseSlug);
+
     return this.createJobRepository.create({
       ...input,
+      slug,
       status: input.status ?? JobStatusEnum.PENDING,
     });
+  }
+
+  private async generateUniqueSlug(baseSlug: string): Promise<string> {
+    let slug = baseSlug;
+    let counter = 1;
+
+    while (await this.createJobRepository.existsBySlug(slug)) {
+      slug = SlugUtils.generateWithSuffix(baseSlug, counter);
+      counter++;
+    }
+
+    return slug;
   }
 }

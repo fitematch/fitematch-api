@@ -4,16 +4,13 @@ import type { Model } from 'mongoose';
 import type { UpdateCompanyRepositoryInterface } from '@src/modules/company/application/contracts/repositories/update-company.repository.interface';
 import type { UpdateCompanyInputDto } from '@src/modules/company/application/dto/input/update-company.input.dto';
 import type { UpdateCompanyOutputDto } from '@src/modules/company/application/dto/output/update-company.output.dto';
-import {
-  CompanySchema,
-  type CompanyDocument,
-} from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
+import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 
 @Injectable()
 export class UpdateCompanyRepository implements UpdateCompanyRepositoryInterface {
   constructor(
     @InjectModel(CompanySchema.name)
-    private readonly companyModel: Model<CompanyDocument>,
+    private readonly companyModel: Model<CompanySchema>,
   ) {}
 
   async update(
@@ -21,7 +18,7 @@ export class UpdateCompanyRepository implements UpdateCompanyRepositoryInterface
   ): Promise<UpdateCompanyOutputDto | null> {
     const updatedCompany = await this.companyModel
       .findByIdAndUpdate(
-        input.id,
+        input._id,
         {
           ...(input.slug !== undefined && { slug: input.slug }),
           ...(input.tradeName !== undefined && { tradeName: input.tradeName }),
@@ -45,7 +42,7 @@ export class UpdateCompanyRepository implements UpdateCompanyRepositoryInterface
     }
 
     return {
-      id: updatedCompany._id.toString(),
+      _id: updatedCompany._id.toString(),
       slug: updatedCompany.slug,
       tradeName: updatedCompany.tradeName,
       legalName: updatedCompany.legalName,

@@ -3,10 +3,13 @@ import { CompanyStatusEnum } from '@src/modules/company/domain/enums/company-sta
 
 class PhoneRequestDto {
   @ApiPropertyOptional()
-  country?: string;
+  number?: string;
 
   @ApiPropertyOptional()
-  number?: string;
+  countryCode?: string;
+
+  @ApiPropertyOptional()
+  areaCode?: string;
 
   @ApiPropertyOptional()
   isWhatsapp?: boolean;
@@ -20,7 +23,7 @@ class AddressRequestDto {
   street?: string;
 
   @ApiPropertyOptional()
-  number?: string;
+  number?: string | number;
 
   @ApiPropertyOptional()
   complement?: string;
@@ -92,8 +95,8 @@ class ApprovalRequestDto {
 }
 
 export class CreateCompanyRequestDto {
-  @ApiProperty()
-  slug!: string;
+  @ApiPropertyOptional()
+  slug?: string;
 
   @ApiProperty()
   tradeName!: string;

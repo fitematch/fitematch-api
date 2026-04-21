@@ -1,3 +1,3 @@
 export class DeleteUserInputDto {
-  id!: string;
+  _id!: string;
 }

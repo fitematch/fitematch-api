@@ -1,3 +1,3 @@
 export class ReadUserInputDto {
-  id!: string;
+  _id!: string;
 }

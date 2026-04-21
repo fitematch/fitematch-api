@@ -27,7 +27,7 @@ describe('ListApplyUseCase', () => {
 
         const applies = [
           {
-            id: 'apply-1',
+            _id: 'apply-1',
             jobId: 'job-id-1',
             userId: 'user-id-1',
             status: ApplicationStatusEnum.APPLIED,
@@ -35,7 +35,7 @@ describe('ListApplyUseCase', () => {
             updatedAt: new Date('2026-04-19T10:10:00.000Z'),
           },
           {
-            id: 'apply-2',
+            _id: 'apply-2',
             jobId: 'job-id-1',
             userId: 'user-id-2',
             status: ApplicationStatusEnum.SHORTLISTED,
@@ -61,7 +61,7 @@ describe('ListApplyUseCase', () => {
 
         listApplyRepository.list.mockResolvedValue([
           {
-            id: 'apply-3',
+            _id: 'apply-3',
             jobId: 'job-id-3',
             userId: 'user-id-3',
             status: ApplicationStatusEnum.HIRED,
@@ -74,7 +74,7 @@ describe('ListApplyUseCase', () => {
 
         expect(result).toEqual([
           {
-            id: 'apply-3',
+            _id: 'apply-3',
             jobId: 'job-id-3',
             userId: 'user-id-3',
             status: ApplicationStatusEnum.HIRED,

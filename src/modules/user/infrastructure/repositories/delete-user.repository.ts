@@ -18,7 +18,7 @@ export class DeleteUserRepository implements DeleteUserRepositoryInterface {
 
   async delete(input: DeleteUserInputDto): Promise<boolean> {
     const deletedUser = await this.userModel
-      .findByIdAndDelete(input.id)
+      .findByIdAndDelete(input._id)
       .lean()
       .exec();
 

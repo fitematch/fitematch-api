@@ -22,10 +22,10 @@ describe('ReadJobUseCase', () => {
   describe('execute', () => {
     describe('when the job exists', () => {
       it('should return the job with all mapped fields', async () => {
-        const input = { id: 'job-id-1' };
+        const input = { _id: 'job-id-1' };
 
         const output = {
-          id: 'job-id-1',
+          _id: 'job-id-1',
           companyId: 'company-1',
           title: 'Personal Trainer Senior',
           description:
@@ -87,7 +87,7 @@ describe('ReadJobUseCase', () => {
 
     describe('when the job does not exist', () => {
       it('should return null', async () => {
-        const input = { id: 'missing-job-id' };
+        const input = { _id: 'missing-job-id' };
 
         readJobRepository.read.mockResolvedValue(null);
 
@@ -101,7 +101,7 @@ describe('ReadJobUseCase', () => {
 
     describe('when the repository throws an error', () => {
       it('should propagate the error', async () => {
-        const input = { id: 'error-job-id' };
+        const input = { _id: 'error-job-id' };
         const errorMessage = 'Repository error';
 
         readJobRepository.read.mockRejectedValue(new Error(errorMessage));

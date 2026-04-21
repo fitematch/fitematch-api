@@ -1,3 +1,3 @@
 export class ReadApplyInputDto {
-  id!: string;
+  _id!: string;
 }

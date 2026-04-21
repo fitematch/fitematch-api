@@ -33,7 +33,7 @@ export interface BenefitsEntity {
 }
 
 export interface JobEntity {
-  id: string;
+  _id: string;
   slug: string;
   companyId: string;
   title: string;

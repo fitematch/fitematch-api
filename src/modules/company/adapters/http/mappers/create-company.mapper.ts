@@ -7,7 +7,7 @@ export class CreateCompanyMapper {
     const maskUtils = new MaskUtils();
 
     return {
-      id: company.id,
+      _id: company._id,
       slug: company.slug,
       tradeName: company.tradeName,
       legalName: company.legalName,

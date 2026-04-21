@@ -3,11 +3,11 @@ import type { CreateJobResponseDto } from '@src/modules/job/adapters/http/dto/re
 import CurrencyUtils from '@src/shared/utils/currency.utils';
 
 export class CreateJobMapper {
-  static toResponse(job: CreateJobOutputDto): CreateJobResponseDto {
+  public static toResponse(job: CreateJobOutputDto): CreateJobResponseDto {
     const currencyUtils = new CurrencyUtils();
 
     return {
-      id: job.id,
+      _id: job._id,
       slug: job.slug,
       companyId: job.companyId,
       title: job.title,

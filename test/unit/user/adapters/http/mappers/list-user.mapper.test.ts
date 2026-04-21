@@ -6,7 +6,7 @@ describe('ListUserMapper', () => {
   describe('toResponse', () => {
     it('should format birthday and candidate document numbers', () => {
       const result = ListUserMapper.toResponse({
-        id: 'user-id-1',
+        _id: 'user-id-1',
         name: 'Rebecca Chambers',
         email: 'rebecca@fitematch.com',
         birthday: '1998-07-29',

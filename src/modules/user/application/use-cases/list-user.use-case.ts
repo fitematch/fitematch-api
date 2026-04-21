@@ -16,7 +16,7 @@ export class ListUserUseCase implements ListUserUseCaseInterface {
     const users = await this.listUserRepository.list(input);
 
     return users.map((user) => ({
-      id: user.id,
+      _id: user._id,
       name: user.name,
       email: user.email,
       birthday: user.birthday,

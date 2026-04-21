@@ -4,7 +4,7 @@ import type { ReadUserResponseDto } from '@src/modules/user/adapters/http/dto/re
 export class ReadUserMapper {
   static toResponse(user: ReadUserOutputDto): ReadUserResponseDto {
     return {
-      id: user.id,
+      _id: user._id,
       name: user.name,
       email: user.email,
       birthday: user.birthday,

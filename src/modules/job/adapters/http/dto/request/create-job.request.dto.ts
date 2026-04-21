@@ -68,8 +68,8 @@ class BenefitsRequestDto {
 }
 
 export class CreateJobRequestDto {
-  @ApiProperty()
-  slug!: string;
+  @ApiPropertyOptional()
+  slug?: string;
 
   @ApiProperty()
   companyId!: string;

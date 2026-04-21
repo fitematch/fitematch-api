@@ -16,7 +16,7 @@ export class ListCompanyUseCase implements ListCompanyUseCaseInterface {
     const companies = await this.listCompanyRepository.list(input);
 
     return companies.map((company) => ({
-      id: company.id,
+      _id: company._id,
       slug: company.slug,
       tradeName: company.tradeName,
       legalName: company.legalName,

@@ -39,7 +39,7 @@ export class ReadUserController {
   @ApiNotFoundResponse({
     description: 'User not found!',
   })
-  @Get(':id')
+  @Get(':_id')
   async handle(
     @Param() params: ReadUserParamsDto,
   ): Promise<ReadUserResponseDto> {

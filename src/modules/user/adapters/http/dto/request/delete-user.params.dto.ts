@@ -2,5 +2,5 @@ import { IsString } from 'class-validator';
 
 export class DeleteUserParamsDto {
   @IsString()
-  id!: string;
+  _id!: string;
 }

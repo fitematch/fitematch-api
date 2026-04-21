@@ -7,7 +7,7 @@ import {
 } from '@src/modules/user/domain/entities/user.entity';
 
 export class UpdateUserInputDto {
-  id!: string;
+  _id!: string;
   name?: string;
   email?: string;
   password?: string;

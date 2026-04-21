@@ -4,7 +4,7 @@ import type { ReadCompanyParamsDto } from '@src/modules/company/adapters/http/dt
 export class ReadCompanyRequestMapper {
   static toInput(params: ReadCompanyParamsDto): ReadCompanyInputDto {
     return {
-      id: params.id,
+      _id: params._id,
     };
   }
 }

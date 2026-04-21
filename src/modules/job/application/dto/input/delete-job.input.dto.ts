@@ -1,3 +1,3 @@
 export class DeleteJobInputDto {
-  id!: string;
+  _id!: string;
 }

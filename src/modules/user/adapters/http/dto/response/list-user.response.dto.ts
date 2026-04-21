@@ -6,7 +6,7 @@ import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enu
 import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 export class ListUserResponseDto {
-  id?: string;
+  _id?: string;
   name?: string;
   email?: string;
   birthday?: string;

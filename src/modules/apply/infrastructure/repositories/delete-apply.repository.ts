@@ -17,7 +17,7 @@ export class DeleteApplyRepository implements DeleteApplyRepositoryInterface {
 
   async delete(input: DeleteApplyInputDto): Promise<boolean> {
     const deletedApply = await this.applyModel
-      .findByIdAndDelete(input.id)
+      .findByIdAndDelete(input._id)
       .lean()
       .exec();
 

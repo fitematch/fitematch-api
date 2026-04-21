@@ -16,7 +16,7 @@ export class ListJobUseCase implements ListJobUseCaseInterface {
     const jobs = await this.listJobRepository.list(input);
 
     return jobs.map((job) => ({
-      id: job.id,
+      _id: job._id,
       slug: job.slug,
       companyId: job.companyId,
       title: job.title,

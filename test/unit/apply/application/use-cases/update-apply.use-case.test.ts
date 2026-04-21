@@ -18,7 +18,7 @@ describe('UpdateApplyUseCase', () => {
     describe('when the application exists', () => {
       it('should return the updated application with all fields', async () => {
         const input = {
-          id: 'apply-id-1',
+          _id: 'apply-id-1',
           status: ApplicationStatusEnum.SHORTLISTED,
         };
 
@@ -43,7 +43,7 @@ describe('UpdateApplyUseCase', () => {
     describe('when the application does not exist', () => {
       it('should return null', async () => {
         const input = {
-          id: 'missing-apply-id',
+          _id: 'missing-apply-id',
           status: ApplicationStatusEnum.REJECTED,
         };
 
@@ -60,7 +60,7 @@ describe('UpdateApplyUseCase', () => {
     describe('when the repository throws an error', () => {
       it('should propagate the error', async () => {
         const input = {
-          id: 'error-apply-id',
+          _id: 'error-apply-id',
           status: ApplicationStatusEnum.HIRED,
         };
         const errorMessage = 'Repository error';

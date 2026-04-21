@@ -13,6 +13,7 @@ describe('CreateJobUseCase', () => {
 
   beforeEach(() => {
     createJobRepository = {
+      existsBySlug: jest.fn().mockResolvedValue(false),
       create: jest.fn(),
     } as jest.Mocked<CreateJobRepositoryInterface>;
 
@@ -64,7 +65,7 @@ describe('CreateJobUseCase', () => {
 
         const expected = {
           ...input,
-          id: 'job-1',
+          _id: 'job-1',
           status: JobStatusEnum.PENDING,
           createdAt: new Date('2024-01-01T00:00:00.000Z'),
           updatedAt: new Date('2024-01-02T00:00:00.000Z'),
@@ -77,9 +78,80 @@ describe('CreateJobUseCase', () => {
         expect(result).toEqual(expected);
         expect(createJobRepository.create).toHaveBeenCalledWith({
           ...input,
+          slug: 'personal-trainer-senior',
           status: JobStatusEnum.PENDING,
         });
         expect(createJobRepository.create).toHaveBeenCalledTimes(1);
+      });
+
+      it('should generate the slug from title when the informed slug is empty', async () => {
+        const input = {
+          slug: '',
+          companyId: 'company-1',
+          title: 'Personal Trainer Senior',
+          description: 'Responsible for training and monitoring gym clients.',
+          slots: 2,
+        };
+
+        const expected = {
+          ...input,
+          _id: 'job-3',
+          slug: 'personal-trainer-senior',
+          status: JobStatusEnum.PENDING,
+          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+          updatedAt: new Date('2024-01-02T00:00:00.000Z'),
+        };
+
+        createJobRepository.create.mockResolvedValue(expected);
+
+        const result = await useCase.execute(input);
+
+        expect(result).toEqual(expected);
+        expect(createJobRepository.create).toHaveBeenCalledWith({
+          ...input,
+          slug: 'personal-trainer-senior',
+          status: JobStatusEnum.PENDING,
+        });
+      });
+
+      it('should append a numeric suffix when the generated slug already exists', async () => {
+        const input = {
+          companyId: 'company-1',
+          title: 'Personal Trainer Senior',
+          description: 'Responsible for training and monitoring gym clients.',
+          slots: 2,
+        };
+
+        const expected = {
+          ...input,
+          _id: 'job-4',
+          slug: 'personal-trainer-senior-1',
+          status: JobStatusEnum.PENDING,
+          createdAt: new Date('2024-01-01T00:00:00.000Z'),
+          updatedAt: new Date('2024-01-02T00:00:00.000Z'),
+        };
+
+        createJobRepository.existsBySlug
+          .mockResolvedValueOnce(true)
+          .mockResolvedValueOnce(false);
+        createJobRepository.create.mockResolvedValue(expected);
+
+        const result = await useCase.execute(input);
+
+        expect(result).toEqual(expected);
+        expect(createJobRepository.existsBySlug).toHaveBeenNthCalledWith(
+          1,
+          'personal-trainer-senior',
+        );
+        expect(createJobRepository.existsBySlug).toHaveBeenNthCalledWith(
+          2,
+          'personal-trainer-senior-1',
+        );
+        expect(createJobRepository.create).toHaveBeenCalledWith({
+          ...input,
+          slug: 'personal-trainer-senior-1',
+          status: JobStatusEnum.PENDING,
+        });
       });
     });
 
@@ -135,7 +207,7 @@ describe('CreateJobUseCase', () => {
 
         const expected = {
           ...input,
-          id: 'job-2',
+          _id: 'job-2',
           createdAt: new Date('2024-02-01T00:00:00.000Z'),
           updatedAt: new Date('2024-02-02T00:00:00.000Z'),
         };
@@ -145,7 +217,10 @@ describe('CreateJobUseCase', () => {
         const result = await useCase.execute(input);
 
         expect(result).toEqual(expected);
-        expect(createJobRepository.create).toHaveBeenCalledWith(input);
+        expect(createJobRepository.create).toHaveBeenCalledWith({
+          ...input,
+          slug: 'fitness-coordinator',
+        });
         expect(createJobRepository.create).toHaveBeenCalledTimes(1);
       });
     });
@@ -166,6 +241,7 @@ describe('CreateJobUseCase', () => {
         await expect(useCase.execute(input)).rejects.toThrow(errorMessage);
         expect(createJobRepository.create).toHaveBeenCalledWith({
           ...input,
+          slug: 'error-job',
           status: JobStatusEnum.PENDING,
         });
         expect(createJobRepository.create).toHaveBeenCalledTimes(1);

@@ -18,7 +18,7 @@ describe('UpdateUserUseCase', () => {
     describe('when the user exists', () => {
       it('should return the updated user with all fields', async () => {
         const input = {
-          id: 'user-id-1',
+          _id: 'user-id-1',
           name: 'Rebecca Chambers',
           email: 'rebecca@fitematch.com',
           birthday: '1998-07-29',
@@ -95,7 +95,7 @@ describe('UpdateUserUseCase', () => {
     describe('when the user does not exist', () => {
       it('should return null', async () => {
         const input = {
-          id: 'missing-user-id',
+          _id: 'missing-user-id',
           name: 'Rebecca Chambers',
         };
 
@@ -112,7 +112,7 @@ describe('UpdateUserUseCase', () => {
     describe('when the repository throws an error', () => {
       it('should propagate the error', async () => {
         const input = {
-          id: 'error-user-id',
+          _id: 'error-user-id',
           email: 'error@fitematch.com',
         };
         const errorMessage = 'Repository error';

@@ -4,7 +4,7 @@ import type { ReadUserParamsDto } from '@src/modules/user/adapters/http/dto/requ
 export class ReadUserRequestMapper {
   static toInput(params: ReadUserParamsDto): ReadUserInputDto {
     return {
-      id: params.id,
+      _id: params._id,
     };
   }
 }

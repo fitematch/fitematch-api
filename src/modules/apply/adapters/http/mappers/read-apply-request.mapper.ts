@@ -4,7 +4,7 @@ import type { ReadApplyParamsDto } from '@src/modules/apply/adapters/http/dto/re
 export class ReadApplyRequestMapper {
   static toInput(params: ReadApplyParamsDto): ReadApplyInputDto {
     return {
-      id: params.id,
+      _id: params._id,
     };
   }
 }

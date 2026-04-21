@@ -10,7 +10,7 @@ export class CreateUserMapper {
     const maskUtils = new MaskUtils();
 
     return {
-      id: user.id,
+      _id: user._id,
       name: user.name,
       email: user.email,
       birthday: user.birthday ? dateUtils.formatDate(user.birthday) : undefined,

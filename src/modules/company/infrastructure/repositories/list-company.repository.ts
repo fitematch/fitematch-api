@@ -3,19 +3,16 @@ import { Model } from 'mongoose';
 import { ListCompanyRepositoryInterface } from '@src/modules/company/application/contracts/repositories/list-company.repository.interface';
 import { ListCompanyInputDto } from '@src/modules/company/application/dto/input/list-company.input.dto';
 import { ListCompanyRepositoryOutputDto } from '@src/modules/company/application/dto/output/list-company.repository-output.dto';
-import {
-  CompanyDocument,
-  CompanySchema,
-} from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
+import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 
-type LeanCompany = Omit<ListCompanyRepositoryOutputDto, 'id'> & {
+type LeanCompany = Omit<ListCompanyRepositoryOutputDto, '_id'> & {
   _id: { toString(): string };
 };
 
 export class ListCompanyRepository implements ListCompanyRepositoryInterface {
   constructor(
     @InjectModel(CompanySchema.name)
-    private readonly companyModel: Model<CompanyDocument>,
+    private readonly companyModel: Model<CompanySchema>,
   ) {}
 
   async list(
@@ -48,7 +45,7 @@ export class ListCompanyRepository implements ListCompanyRepositoryInterface {
       .exec()) as LeanCompany[];
 
     return companies.map((company) => ({
-      id: company._id.toString(),
+      _id: company._id.toString(),
       slug: company.slug,
       tradeName: company.tradeName,
       legalName: company.legalName,

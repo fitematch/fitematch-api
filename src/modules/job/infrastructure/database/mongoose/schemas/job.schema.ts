@@ -98,3 +98,5 @@ export class JobSchema {
 }
 
 export const JobSchemaFactory = SchemaFactory.createForClass(JobSchema);
+
+JobSchemaFactory.index({ slug: 1 }, { unique: true });

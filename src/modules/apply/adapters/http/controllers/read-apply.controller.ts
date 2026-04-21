@@ -39,7 +39,7 @@ export class ReadApplyController {
   @ApiNotFoundResponse({
     description: 'Job application not found!',
   })
-  @Get(':id')
+  @Get(':_id')
   async handle(
     @Param() params: ReadApplyParamsDto,
   ): Promise<ReadApplyResponseDto> {

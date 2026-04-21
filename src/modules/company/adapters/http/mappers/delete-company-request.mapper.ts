@@ -4,7 +4,7 @@ import type { DeleteCompanyParamsDto } from '@src/modules/company/adapters/http/
 export class DeleteCompanyRequestMapper {
   static toInput(params: DeleteCompanyParamsDto): DeleteCompanyInputDto {
     return {
-      id: params.id,
+      _id: params._id,
     };
   }
 }

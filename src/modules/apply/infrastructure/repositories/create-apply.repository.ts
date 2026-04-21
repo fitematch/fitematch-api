@@ -42,7 +42,7 @@ export class CreateApplyRepository implements CreateApplyRepositoryInterface {
       };
 
       return {
-        id: createdApply._id.toString(),
+        _id: createdApply._id.toString(),
         jobId: createdApply.jobId,
         userId: createdApply.userId,
         status: createdApply.status,

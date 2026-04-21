@@ -7,7 +7,7 @@ describe('DeleteJobUseCase', () => {
   let deleteJobRepository: jest.Mocked<DeleteJobRepositoryInterface>;
 
   const input: DeleteJobInputDto = {
-    id: 'job-id',
+    _id: 'job-id',
   };
 
   beforeEach(() => {
@@ -51,7 +51,7 @@ describe('DeleteJobUseCase', () => {
 
         expect(deleteJobRepository.delete).toHaveBeenCalledTimes(1);
         expect(deleteJobRepository.delete).toHaveBeenCalledWith({
-          id: 'job-id',
+          _id: 'job-id',
         });
       });
     });

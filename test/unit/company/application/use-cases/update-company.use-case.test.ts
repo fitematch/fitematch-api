@@ -18,7 +18,7 @@ describe('UpdateCompanyUseCase', () => {
     describe('when the company exists', () => {
       it('should return the updated company with all fields', async () => {
         const input = {
-          id: 'company-id-1',
+          _id: 'company-id-1',
           slug: 'fitematch',
           tradeName: 'Fitematch',
           legalName: 'Fitematch Tecnologia Ltda',
@@ -86,7 +86,7 @@ describe('UpdateCompanyUseCase', () => {
     describe('when the company does not exist', () => {
       it('should return null', async () => {
         const input = {
-          id: 'missing-company-id',
+          _id: 'missing-company-id',
           tradeName: 'Missing Company',
         };
 
@@ -103,7 +103,7 @@ describe('UpdateCompanyUseCase', () => {
     describe('when the repository throws an error', () => {
       it('should propagate the error', async () => {
         const input = {
-          id: 'error-company-id',
+          _id: 'error-company-id',
           tradeName: 'Error Company',
         };
         const errorMessage = 'Repository error';

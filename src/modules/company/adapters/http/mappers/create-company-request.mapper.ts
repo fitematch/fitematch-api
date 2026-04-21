@@ -7,7 +7,30 @@ export class CreateCompanyRequestMapper {
       slug: body.slug,
       tradeName: body.tradeName,
       legalName: body.legalName,
-      contacts: body.contacts,
+      contacts: {
+        email: body.contacts.email,
+        website: body.contacts.website,
+        phone: {
+          country: body.contacts.phone.countryCode,
+          number: body.contacts.phone.number,
+          isWhatsapp: body.contacts.phone.isWhatsapp,
+          isTelegram: body.contacts.phone.isTelegram,
+        },
+        address: {
+          street: body.contacts.address.street,
+          number:
+            body.contacts.address.number !== undefined
+              ? String(body.contacts.address.number)
+              : undefined,
+          complement: body.contacts.address.complement,
+          neighborhood: body.contacts.address.neighborhood,
+          city: body.contacts.address.city,
+          state: body.contacts.address.state,
+          country: body.contacts.address.country,
+          zipCode: body.contacts.address.zipCode,
+        },
+        social: body.contacts.social,
+      },
       documents: body.documents,
       media: body.media,
       audit: body.audit,

@@ -1,3 +1,3 @@
 export class ReadJobInputDto {
-  id!: string;
+  _id!: string;
 }

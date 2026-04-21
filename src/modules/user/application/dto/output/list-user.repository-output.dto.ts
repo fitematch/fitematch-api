@@ -7,7 +7,7 @@ import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enu
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 
 export class ListUserRepositoryOutputDto {
-  id?: string;
+  _id?: string;
   name?: string;
   email?: string;
   birthday?: string;

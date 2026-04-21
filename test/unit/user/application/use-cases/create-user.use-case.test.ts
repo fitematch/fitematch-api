@@ -22,7 +22,7 @@ describe('CreateUserUseCase', () => {
         birthday: '2000-01-01',
         candidateProfile: undefined,
       };
-      const expected = { ...input, id: '1', status: UserStatusEnum.PENDING };
+      const expected = { ...input, _id: '1', status: UserStatusEnum.PENDING };
       createUserRepository.create.mockResolvedValue(expected);
       const result = await useCase.execute(input);
       expect(result).toEqual(expected);
@@ -42,13 +42,13 @@ describe('CreateUserUseCase', () => {
           contacts: {
             phone: {
               country: '55',
-              number: 11999999999,
+              number: '11999999999',
             },
           },
         },
         status: UserStatusEnum.ACTIVE,
       };
-      const expected = { ...input, id: '2' };
+      const expected = { ...input, _id: '2' };
       createUserRepository.create.mockResolvedValue(expected);
       const result = await useCase.execute(input);
       expect(result).toEqual(expected);

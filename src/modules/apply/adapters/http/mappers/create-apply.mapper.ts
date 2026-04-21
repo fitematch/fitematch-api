@@ -4,7 +4,7 @@ import type { CreateApplyResponseDto } from '@src/modules/apply/adapters/http/dt
 export class CreateApplyMapper {
   static toResponse(apply: CreateApplyOutputDto): CreateApplyResponseDto {
     return {
-      id: apply.id,
+      _id: apply._id,
       jobId: apply.jobId,
       userId: apply.userId,
       status: apply.status,

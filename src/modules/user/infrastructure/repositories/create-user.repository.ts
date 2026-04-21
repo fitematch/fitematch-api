@@ -43,7 +43,7 @@ export class CreateUserRepository implements CreateUserRepositoryInterface {
     };
 
     return {
-      id: plainUser._id.toString(),
+      _id: plainUser._id.toString(),
       name: plainUser.name,
       email: plainUser.email,
       birthday: plainUser.birthday

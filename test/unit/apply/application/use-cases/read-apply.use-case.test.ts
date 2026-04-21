@@ -17,10 +17,10 @@ describe('ReadApplyUseCase', () => {
   describe('execute', () => {
     describe('when the application exists', () => {
       it('should return the application with all mapped fields', async () => {
-        const input = { id: 'apply-id-1' };
+        const input = { _id: 'apply-id-1' };
 
         const output = {
-          id: 'apply-id-1',
+          _id: 'apply-id-1',
           jobId: 'job-id-1',
           userId: 'user-id-1',
           status: ApplicationStatusEnum.APPLIED,
@@ -40,7 +40,7 @@ describe('ReadApplyUseCase', () => {
 
     describe('when the application does not exist', () => {
       it('should return null', async () => {
-        const input = { id: 'missing-apply-id' };
+        const input = { _id: 'missing-apply-id' };
 
         readApplyRepository.read.mockResolvedValue(null);
 
@@ -54,7 +54,7 @@ describe('ReadApplyUseCase', () => {
 
     describe('when the repository throws an error', () => {
       it('should propagate the error', async () => {
-        const input = { id: 'error-apply-id' };
+        const input = { _id: 'error-apply-id' };
         const errorMessage = 'Repository error';
 
         readApplyRepository.read.mockRejectedValue(new Error(errorMessage));

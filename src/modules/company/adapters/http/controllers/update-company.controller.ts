@@ -41,7 +41,7 @@ export class UpdateCompanyController {
   @ApiNotFoundResponse({
     description: 'Company not found.',
   })
-  @Patch(':id')
+  @Patch(':_id')
   async handle(
     @Param() params: UpdateCompanyParamsDto,
     @Body() body: UpdateCompanyRequestDto,

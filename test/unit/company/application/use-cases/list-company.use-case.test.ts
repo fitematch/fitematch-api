@@ -25,7 +25,7 @@ describe('ListCompanyUseCase', () => {
 
       const companies = [
         {
-          id: 'company-1',
+          _id: 'company-1',
           slug: 'umbrella-corp',
           tradeName: 'Umbrella Corp',
           legalName: 'Umbrella Corporation S.A.',
@@ -72,7 +72,7 @@ describe('ListCompanyUseCase', () => {
           updatedAt: new Date('2024-01-02T00:00:00.000Z'),
         },
         {
-          id: 'company-2',
+          _id: 'company-2',
           slug: 'stars-labs',
           tradeName: 'S.T.A.R.S. Labs',
           legalName: 'STARS Labs LTDA',
@@ -135,7 +135,7 @@ describe('ListCompanyUseCase', () => {
 
       listCompanyRepository.list.mockResolvedValue([
         {
-          id: 'company-3',
+          _id: 'company-3',
           slug: 'raccoon-fitness',
           tradeName: 'Raccoon Fitness',
           legalName: 'Raccoon Fitness LTDA',
@@ -191,7 +191,7 @@ describe('ListCompanyUseCase', () => {
 
       expect(result).toEqual([
         {
-          id: 'company-3',
+          _id: 'company-3',
           slug: 'raccoon-fitness',
           tradeName: 'Raccoon Fitness',
           legalName: 'Raccoon Fitness LTDA',

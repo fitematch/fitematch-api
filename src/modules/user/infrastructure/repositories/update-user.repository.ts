@@ -19,7 +19,7 @@ export class UpdateUserRepository implements UpdateUserRepositoryInterface {
   async update(input: UpdateUserInputDto): Promise<UpdateUserOutputDto | null> {
     const updatedUser = (await this.userModel
       .findByIdAndUpdate(
-        input.id,
+        input._id,
         {
           ...(input.name !== undefined && { name: input.name }),
           ...(input.email !== undefined && { email: input.email }),
@@ -51,7 +51,7 @@ export class UpdateUserRepository implements UpdateUserRepositoryInterface {
     }
 
     return {
-      id: updatedUser._id.toString(),
+      _id: updatedUser._id.toString(),
       name: updatedUser.name,
       email: updatedUser.email,
       birthday: updatedUser.birthday

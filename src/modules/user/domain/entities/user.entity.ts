@@ -114,7 +114,7 @@ export interface RecruiterProfileEntity {
 }
 
 export interface UserEntity {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   password: string;

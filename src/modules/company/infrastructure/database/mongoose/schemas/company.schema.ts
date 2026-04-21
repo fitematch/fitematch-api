@@ -1,71 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { CompanyStatusEnum } from '@src/modules/company/domain/enums/company-status.enum';
+import type {
+  CompanyApprovalEntity,
+  CompanyAuditEntity,
+  ContactsEntity,
+} from '@src/modules/company/domain/entities/company.entity';
+import type { CompanyDocumentsEntity } from '@src/modules/company/domain/entities/company-documents.entity';
+import type { CompanyMediaEntity } from '@src/modules/company/domain/entities/company-media.entity';
+import type { AddressEntity } from '@src/shared/domain/entities/address.entity';
+import type { PhoneEntity } from '@src/shared/domain/entities/phone.entity';
+import type { SocialEntity } from '@src/shared/domain/entities/social.entity';
+import { CnpjUtils } from '@src/shared/utils/cnpj.utils';
+import { SlugUtils } from '@src/shared/utils/slug.utils';
 
 export type CompanyDocument = HydratedDocument<CompanySchema>;
-
-@Schema({ _id: false })
-class PhoneSchema {
-  @Prop()
-  country?: string;
-
-  @Prop()
-  number?: string;
-
-  @Prop()
-  isWhatsapp?: boolean;
-
-  @Prop()
-  isTelegram?: boolean;
-}
-
-@Schema({ _id: false })
-class AddressSchema {
-  @Prop()
-  street?: string;
-
-  @Prop()
-  number?: string;
-
-  @Prop()
-  complement?: string;
-
-  @Prop()
-  neighborhood?: string;
-
-  @Prop()
-  city?: string;
-
-  @Prop()
-  state?: string;
-
-  @Prop()
-  country?: string;
-
-  @Prop()
-  zipCode?: string;
-}
-
-@Schema({ _id: false })
-class SocialSchema {
-  @Prop()
-  facebook?: string;
-
-  @Prop()
-  instagram?: string;
-
-  @Prop()
-  x?: string;
-
-  @Prop()
-  youtube?: string;
-
-  @Prop()
-  tiktok?: string;
-
-  @Prop()
-  linkedin?: string;
-}
 
 @Schema({ _id: false })
 class ContactsSchema {
@@ -75,29 +24,14 @@ class ContactsSchema {
   @Prop()
   website?: string;
 
-  @Prop({ type: PhoneSchema, required: true })
-  phone!: PhoneSchema;
+  @Prop({ type: Object, required: true })
+  phone!: PhoneEntity;
 
-  @Prop({ type: AddressSchema, required: true })
-  address!: AddressSchema;
+  @Prop({ type: Object, required: true })
+  address!: AddressEntity;
 
-  @Prop({ type: SocialSchema })
-  social?: SocialSchema;
-}
-
-@Schema({ _id: false })
-class CompanyDocumentsSchema {
-  @Prop()
-  cnpj?: string;
-
-  @Prop()
-  isVerified?: boolean;
-}
-
-@Schema({ _id: false })
-class CompanyMediaSchema {
-  @Prop()
-  logoUrl?: string;
+  @Prop({ type: Object })
+  social?: SocialEntity;
 }
 
 @Schema({ _id: false })
@@ -130,19 +64,19 @@ export class CompanySchema {
   legalName?: string;
 
   @Prop({ type: ContactsSchema, required: true })
-  contacts!: ContactsSchema;
+  contacts!: ContactsEntity;
 
-  @Prop({ type: CompanyDocumentsSchema, required: true })
-  documents!: CompanyDocumentsSchema;
+  @Prop({ type: Object, required: true })
+  documents!: CompanyDocumentsEntity;
 
-  @Prop({ type: CompanyMediaSchema, required: true })
-  media!: CompanyMediaSchema;
+  @Prop({ type: Object, required: true })
+  media!: CompanyMediaEntity;
 
   @Prop({ type: CompanyAuditSchema })
-  audit?: CompanyAuditSchema;
+  audit?: CompanyAuditEntity;
 
   @Prop({ type: CompanyApprovalSchema })
-  approval?: CompanyApprovalSchema;
+  approval?: CompanyApprovalEntity;
 
   @Prop({
     required: true,
@@ -155,3 +89,26 @@ export class CompanySchema {
 }
 
 export const CompanySchemaFactory = SchemaFactory.createForClass(CompanySchema);
+
+CompanySchemaFactory.pre('validate', function () {
+  const cnpjUtils = new CnpjUtils();
+
+  if (!this.slug) {
+    this.slug = SlugUtils.generate(this.tradeName);
+  }
+
+  if (this.documents?.cnpj) {
+    this.documents.cnpj = cnpjUtils.normalize(this.documents.cnpj);
+  }
+});
+
+CompanySchemaFactory.index({ slug: 1 }, { unique: true });
+CompanySchemaFactory.index(
+  { 'documents.cnpj': 1 },
+  {
+    unique: true,
+    partialFilterExpression: {
+      'documents.cnpj': { $exists: true, $type: 'string' },
+    },
+  },
+);

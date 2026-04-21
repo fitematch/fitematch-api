@@ -4,7 +4,7 @@ import { LeanUser } from '@src/modules/user/infrastructure/database/types/user-l
 export class UserPersistenceMapper {
   static toListOutput(this: void, user: LeanUser): ListUserRepositoryOutputDto {
     return {
-      id: user._id.toString(),
+      _id: user._id.toString(),
       name: user.name,
       email: user.email,
       birthday: user.birthday

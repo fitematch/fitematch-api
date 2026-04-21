@@ -8,7 +8,7 @@ import {
   JobSchema,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
 
-type LeanJob = Omit<ListJobRepositoryOutputDto, 'id'> & {
+type LeanJob = Omit<ListJobRepositoryOutputDto, '_id'> & {
   _id: { toString(): string };
 };
 
@@ -48,7 +48,7 @@ export class ListJobRepository implements ListJobRepositoryInterface {
       .exec()) as LeanJob[];
 
     return jobs.map((job) => ({
-      id: job._id.toString(),
+      _id: job._id.toString(),
       slug: job.slug,
       companyId: job.companyId,
       title: job.title,

@@ -19,10 +19,10 @@ describe('ReadUserUseCase', () => {
   describe('execute', () => {
     describe('when the user exists', () => {
       it('should return the user with all mapped fields', async () => {
-        const input = { id: 'user-id-1' };
+        const input = { _id: 'user-id-1' };
 
         const output = {
-          id: 'user-id-1',
+          _id: 'user-id-1',
           name: 'Rebecca Chambers',
           email: 'rebecca@fitematch.com',
           birthday: '1998-07-29',
@@ -108,7 +108,7 @@ describe('ReadUserUseCase', () => {
 
     describe('when the user does not exist', () => {
       it('should return null', async () => {
-        const input = { id: 'missing-user-id' };
+        const input = { _id: 'missing-user-id' };
 
         readUserRepository.read.mockResolvedValue(null);
 
@@ -122,7 +122,7 @@ describe('ReadUserUseCase', () => {
 
     describe('when the repository throws an error', () => {
       it('should propagate the error', async () => {
-        const input = { id: 'error-user-id' };
+        const input = { _id: 'error-user-id' };
         const errorMessage = 'Repository error';
 
         readUserRepository.read.mockRejectedValue(new Error(errorMessage));

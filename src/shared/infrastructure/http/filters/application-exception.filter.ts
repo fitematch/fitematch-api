@@ -30,10 +30,12 @@ export class ApplicationExceptionFilter implements ExceptionFilter {
           ? (exception.keyPattern as Record<string, unknown>)
           : {};
       const duplicatedField = Object.keys(keyPattern)[0];
+      const normalizedField =
+        duplicatedField === '_id' ? 'id' : duplicatedField;
 
       response.status(HttpStatus.CONFLICT).json({
-        message: duplicatedField
-          ? `${duplicatedField.charAt(0).toUpperCase()}${duplicatedField.slice(1)} already exists!`
+        message: normalizedField
+          ? `Duplicated value for field "${normalizedField}".`
           : 'Duplicate key error',
         statusCode: HttpStatus.CONFLICT,
       });

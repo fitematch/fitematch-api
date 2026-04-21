@@ -7,7 +7,7 @@ describe('DeleteCompanyUseCase', () => {
   let deleteCompanyRepository: jest.Mocked<DeleteCompanyRepositoryInterface>;
 
   const input: DeleteCompanyInputDto = {
-    id: 'company-id',
+    _id: 'company-id',
   };
 
   beforeEach(() => {
@@ -51,7 +51,7 @@ describe('DeleteCompanyUseCase', () => {
 
         expect(deleteCompanyRepository.delete).toHaveBeenCalledTimes(1);
         expect(deleteCompanyRepository.delete).toHaveBeenCalledWith({
-          id: 'company-id',
+          _id: 'company-id',
         });
       });
     });

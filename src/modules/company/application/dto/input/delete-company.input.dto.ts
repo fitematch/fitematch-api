@@ -1,3 +1,3 @@
 export class DeleteCompanyInputDto {
-  id!: string;
+  _id!: string;
 }

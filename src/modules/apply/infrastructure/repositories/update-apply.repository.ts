@@ -21,7 +21,7 @@ export class UpdateApplyRepository implements UpdateApplyRepositoryInterface {
   ): Promise<UpdateApplyOutputDto | null> {
     const updatedApply = (await this.applyModel
       .findByIdAndUpdate(
-        input.id,
+        input._id,
         {
           ...(input.status !== undefined && { status: input.status }),
         },
@@ -39,7 +39,7 @@ export class UpdateApplyRepository implements UpdateApplyRepositoryInterface {
     }
 
     return {
-      id: updatedApply._id.toString(),
+      _id: updatedApply._id.toString(),
       jobId: updatedApply.jobId,
       userId: updatedApply.userId,
       status: updatedApply.status,

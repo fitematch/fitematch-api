@@ -41,7 +41,7 @@ export class UpdateApplyController {
   @ApiNotFoundResponse({
     description: 'Job application not found!',
   })
-  @Patch(':id')
+  @Patch(':_id')
   async handle(
     @Param() params: UpdateApplyParamsDto,
     @Body() body: UpdateApplyRequestDto,

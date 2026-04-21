@@ -4,7 +4,7 @@ import type { DeleteApplyParamsDto } from '@src/modules/apply/adapters/http/dto/
 export class DeleteApplyRequestMapper {
   static toInput(params: DeleteApplyParamsDto): DeleteApplyInputDto {
     return {
-      id: params.id,
+      _id: params._id,
     };
   }
 }

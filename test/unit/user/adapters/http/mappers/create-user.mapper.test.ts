@@ -6,7 +6,7 @@ describe('CreateUserMapper', () => {
   describe('toResponse', () => {
     it('should apply masks to birthday, documents and contacts', () => {
       const result = CreateUserMapper.toResponse({
-        id: 'user-id-1',
+        _id: 'user-id-1',
         name: 'Rebecca Chambers',
         email: 'rebecca@fitematch.com',
         birthday: '1998-07-29',

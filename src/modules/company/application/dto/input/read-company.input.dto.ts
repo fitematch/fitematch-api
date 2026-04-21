@@ -1,3 +1,3 @@
 export class ReadCompanyInputDto {
-  id!: string;
+  _id!: string;
 }

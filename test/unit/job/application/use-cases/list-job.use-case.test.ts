@@ -32,7 +32,7 @@ describe('ListJobUseCase', () => {
 
         const jobs = [
           {
-            id: 'job-1',
+            _id: 'job-1',
             slug: 'personal-trainer-senior',
             companyId: 'company-1',
             title: 'Personal Trainer',
@@ -75,7 +75,7 @@ describe('ListJobUseCase', () => {
             updatedAt: new Date('2024-01-02T00:00:00.000Z'),
           },
           {
-            id: 'job-2',
+            _id: 'job-2',
             slug: 'group-class-instructor',
             companyId: 'company-1',
             title: 'Group Class Instructor',
@@ -124,7 +124,7 @@ describe('ListJobUseCase', () => {
 
         listJobRepository.list.mockResolvedValue([
           {
-            id: 'job-3',
+            _id: 'job-3',
             slug: 'fitness-coordinator',
             companyId: 'company-2',
             title: 'Fitness Coordinator',
@@ -187,7 +187,7 @@ describe('ListJobUseCase', () => {
 
         expect(result).toEqual([
           {
-            id: 'job-3',
+            _id: 'job-3',
             slug: 'fitness-coordinator',
             companyId: 'company-2',
             title: 'Fitness Coordinator',

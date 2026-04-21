@@ -4,7 +4,7 @@ import type { ReadJobParamsDto } from '@src/modules/job/adapters/http/dto/reques
 export class ReadJobRequestMapper {
   static toInput(params: ReadJobParamsDto): ReadJobInputDto {
     return {
-      id: params.id,
+      _id: params._id,
     };
   }
 }

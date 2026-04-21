@@ -7,7 +7,7 @@ export class ReadJobMapper {
     const currencyUtils = new CurrencyUtils();
 
     return {
-      id: job.id,
+      _id: job._id,
       companyId: job.companyId,
       title: job.title,
       description: job.description,

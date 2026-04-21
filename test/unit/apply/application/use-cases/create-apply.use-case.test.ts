@@ -25,7 +25,7 @@ describe('CreateApplyUseCase', () => {
         };
 
         const output = {
-          id: 'apply-id-1',
+          _id: 'apply-id-1',
           ...input,
           status: ApplicationStatusEnum.APPLIED,
           createdAt: new Date('2026-04-19T10:00:00.000Z'),
@@ -61,7 +61,7 @@ describe('CreateApplyUseCase', () => {
         };
 
         const output = {
-          id: 'apply-id-2',
+          _id: 'apply-id-2',
           ...input,
           createdAt: new Date('2026-04-19T11:00:00.000Z'),
           updatedAt: new Date('2026-04-19T11:30:00.000Z'),

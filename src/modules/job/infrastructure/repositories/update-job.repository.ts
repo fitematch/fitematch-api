@@ -19,7 +19,7 @@ export class UpdateJobRepository implements UpdateJobRepositoryInterface {
   async update(input: UpdateJobInputDto): Promise<UpdateJobOutputDto | null> {
     const updated = (await this.jobModel
       .findByIdAndUpdate(
-        input.id,
+        input._id,
         {
           ...(input.companyId !== undefined && { companyId: input.companyId }),
           ...(input.title !== undefined && { title: input.title }),
@@ -41,7 +41,7 @@ export class UpdateJobRepository implements UpdateJobRepositoryInterface {
     if (!updated) return null;
 
     return {
-      id: updated._id.toString(),
+      _id: updated._id.toString(),
       slug: updated.slug,
       companyId: updated.companyId,
       title: updated.title,

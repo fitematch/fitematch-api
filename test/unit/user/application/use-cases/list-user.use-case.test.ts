@@ -17,7 +17,7 @@ describe('ListUserUseCase', () => {
       const input = { search: 'any', page: 1, limit: 10 };
       const users = [
         {
-          id: '1',
+          _id: '1',
           name: 'John',
           email: 'john@mail.com',
           birthday: '2000-01-01',
@@ -25,7 +25,7 @@ describe('ListUserUseCase', () => {
           updatedAt: new Date('2024-01-02T00:00:00.000Z'),
         },
         {
-          id: '2',
+          _id: '2',
           name: 'Jane',
           email: 'jane@mail.com',
           birthday: '1990-01-01',

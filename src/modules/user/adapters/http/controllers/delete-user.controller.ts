@@ -39,7 +39,7 @@ export class DeleteUserController {
   @ApiNotFoundResponse({
     description: 'User not found!',
   })
-  @Delete(':id')
+  @Delete(':_id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async handle(@Param() params: DeleteUserParamsDto): Promise<void> {
     const deleted = await this.deleteUserUseCase.execute(
