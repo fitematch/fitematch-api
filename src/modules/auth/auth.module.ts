@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { MongooseModule } from '@nestjs/mongoose';
 import { authProviders } from '@src/modules/auth/infrastructure/providers/auth.providers';
@@ -13,17 +12,22 @@ import {
 } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
 import { SignUpController } from '@src/modules/auth/adapters/http/controllers/sign-up.controller';
 import { SignInController } from '@src/modules/auth/adapters/http/controllers/sign-in.controller';
+import { GetMeController } from '@src/modules/auth/adapters/http/controllers/get-me.controller';
+import { JwtStrategy } from '@src/modules/auth/infrastructure/strategies/jwt.strategy';
 
-const importedControllers = [SignUpController, SignInController];
+const importedControllers = [
+  SignUpController,
+  SignInController,
+  GetMeController,
+];
 
 @Module({
   imports: [
-    JwtModule.registerAsync({
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: { expiresIn: '1d' },
-      }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET ?? 'default_jwt_secret',
+      signOptions: {
+        expiresIn: '1d',
+      },
     }),
     MongooseModule.forFeature([
       {
@@ -37,7 +41,7 @@ const importedControllers = [SignUpController, SignInController];
     ]),
   ],
   controllers: [...importedControllers],
-  providers: [...authProviders],
-  exports: [...authProviders, MongooseModule],
+  providers: [...authProviders, JwtStrategy],
+  exports: [...authProviders, JwtModule, MongooseModule],
 })
 export class AuthModule {}

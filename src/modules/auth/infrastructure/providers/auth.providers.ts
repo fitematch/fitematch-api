@@ -6,6 +6,8 @@ import {
   HASH_SERVICE,
   SIGN_IN_REPOSITORY,
   SIGN_IN_USE_CASE,
+  GET_ME_REPOSITORY,
+  GET_ME_USE_CASE,
   TOKEN_SERVICE,
 } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import { SignUpUseCase } from '@src/modules/auth/application/use-cases/sign-up.use-case';
@@ -14,6 +16,8 @@ import { ActivationCodeRepository } from '@src/modules/auth/infrastructure/repos
 import { PasswordHashService } from '@src/modules/auth/infrastructure/services/password-hash.service';
 import { SignInUseCase } from '@src/modules/auth/application/use-cases/sign-in.use-case';
 import { SignInRepository } from '@src/modules/auth/infrastructure/repositories/sign-in.repository';
+import { GetMeUseCase } from '@src/modules/auth/application/use-cases/get-me.use-case';
+import { GetMeRepository } from '@src/modules/auth/infrastructure/repositories/get-me.repository';
 import { JwtTokenService } from '@src/modules/auth/infrastructure/services/jwt-token.service';
 
 export const authProviders: Provider[] = [
@@ -32,6 +36,14 @@ export const authProviders: Provider[] = [
   {
     provide: SIGN_IN_REPOSITORY,
     useClass: SignInRepository,
+  },
+  {
+    provide: GET_ME_USE_CASE,
+    useClass: GetMeUseCase,
+  },
+  {
+    provide: GET_ME_REPOSITORY,
+    useClass: GetMeRepository,
   },
   {
     provide: ACTIVATION_CODE_REPOSITORY,

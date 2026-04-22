@@ -92,6 +92,7 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "**/*.use-case.ts",
+      "**/*.service.ts",
       "**/*.utils.ts",
       "!**/node_modules/**",
       "!**/dist/**",
