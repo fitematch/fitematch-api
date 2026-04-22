@@ -16,7 +16,7 @@ export class ActivationCodeRepository implements ActivationCodeRepositoryInterfa
     private readonly activationCodeModel: Model<ActivationCodeDocument>,
   ) {}
 
-  async invalidateActiveCodes(
+  public async invalidateActiveCodes(
     userId: string,
     type: ActivationCodeTypeEnum,
   ): Promise<void> {
@@ -34,7 +34,7 @@ export class ActivationCodeRepository implements ActivationCodeRepositoryInterfa
     );
   }
 
-  async create(
+  public async create(
     input: Omit<ActivationCodeEntity, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<ActivationCodeEntity> {
     const createdCode = await this.activationCodeModel.create({
@@ -60,5 +60,42 @@ export class ActivationCodeRepository implements ActivationCodeRepositoryInterfa
       createdAt: timestamps.createdAt,
       updatedAt: timestamps.updatedAt,
     };
+  }
+
+  public async findValidCode(
+    userId: string,
+    code: string,
+    type: ActivationCodeTypeEnum,
+  ): Promise<ActivationCodeEntity | null> {
+    const activationCode = await this.activationCodeModel
+      .findOne({
+        userId,
+        code,
+        type,
+        usedAt: { $exists: false },
+      })
+      .lean()
+      .exec();
+
+    if (!activationCode) {
+      return null;
+    }
+
+    return {
+      id: activationCode._id.toString(),
+      userId: activationCode.userId,
+      code: activationCode.code,
+      type: activationCode.type,
+      expiresAt: activationCode.expiresAt,
+      usedAt: activationCode.usedAt,
+      createdAt: activationCode.createdAt,
+      updatedAt: activationCode.updatedAt,
+    };
+  }
+
+  public async markAsUsed(id: string): Promise<void> {
+    await this.activationCodeModel.findByIdAndUpdate(id, {
+      usedAt: new Date(),
+    });
   }
 }
