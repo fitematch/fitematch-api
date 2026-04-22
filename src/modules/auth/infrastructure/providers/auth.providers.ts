@@ -2,6 +2,8 @@ import type { Provider } from '@nestjs/common';
 import {
   SIGN_UP_REPOSITORY,
   SIGN_UP_USE_CASE,
+  CREATE_ACTIVATION_CODE_REPOSITORY,
+  CREATE_ACTIVATION_CODE_USE_CASE,
   ACTIVATION_CODE_REPOSITORY,
   HASH_SERVICE,
   SIGN_IN_REPOSITORY,
@@ -14,6 +16,8 @@ import {
 } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import { SignUpUseCase } from '@src/modules/auth/application/use-cases/sign-up.use-case';
 import { SignUpRepository } from '@src/modules/auth/infrastructure/repositories/sign-up.repository';
+import { CreateActivationCodeUseCase } from '@src/modules/auth/application/use-cases/create-activation-code.use-case';
+import { CreateActivationCodeRepository } from '@src/modules/auth/infrastructure/repositories/create-activation-code.repository';
 import { ActivationCodeRepository } from '@src/modules/auth/infrastructure/repositories/activation-code.repository';
 import { SignInUseCase } from '@src/modules/auth/application/use-cases/sign-in.use-case';
 import { SignInRepository } from '@src/modules/auth/infrastructure/repositories/sign-in.repository';
@@ -32,6 +36,18 @@ export const authProviders: Provider[] = [
   {
     provide: SIGN_UP_REPOSITORY,
     useClass: SignUpRepository,
+  },
+  {
+    provide: CREATE_ACTIVATION_CODE_USE_CASE,
+    useClass: CreateActivationCodeUseCase,
+  },
+  {
+    provide: CREATE_ACTIVATION_CODE_REPOSITORY,
+    useClass: CreateActivationCodeRepository,
+  },
+  {
+    provide: ACTIVATION_CODE_REPOSITORY,
+    useClass: ActivationCodeRepository,
   },
   {
     provide: SIGN_IN_USE_CASE,
@@ -56,10 +72,6 @@ export const authProviders: Provider[] = [
   {
     provide: UPDATE_ME_REPOSITORY,
     useClass: UpdateMeRepository,
-  },
-  {
-    provide: ACTIVATION_CODE_REPOSITORY,
-    useClass: ActivationCodeRepository,
   },
   {
     provide: HASH_SERVICE,

@@ -14,6 +14,7 @@ import { SignUpController } from '@src/modules/auth/adapters/http/controllers/si
 import { SignInController } from '@src/modules/auth/adapters/http/controllers/sign-in.controller';
 import { GetMeController } from '@src/modules/auth/adapters/http/controllers/get-me.controller';
 import { UpdateMeController } from '@src/modules/auth/adapters/http/controllers/update-me.controller';
+import { CreateActivationCodeController } from '@src/modules/auth/adapters/http/controllers/create-activation-code.controller';
 import { JwtStrategy } from '@src/modules/auth/infrastructure/strategies/jwt.strategy';
 
 const importedControllers = [
@@ -21,6 +22,7 @@ const importedControllers = [
   SignInController,
   GetMeController,
   UpdateMeController,
+  CreateActivationCodeController,
 ];
 
 @Module({
