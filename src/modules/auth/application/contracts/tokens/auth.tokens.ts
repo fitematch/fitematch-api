@@ -4,6 +4,8 @@ export const SIGN_UP_REPOSITORY = Symbol('SIGN_UP_REPOSITORY');
 export const SIGN_IN_USE_CASE = Symbol('SIGN_IN_USE_CASE');
 export const SIGN_IN_REPOSITORY = Symbol('SIGN_IN_REPOSITORY');
 
+export const SIGN_OUT_USE_CASE = Symbol('SIGN_OUT_USE_CASE');
+
 export const GET_ME_USE_CASE = Symbol('GET_ME_USE_CASE');
 export const GET_ME_REPOSITORY = Symbol('GET_ME_REPOSITORY');
 

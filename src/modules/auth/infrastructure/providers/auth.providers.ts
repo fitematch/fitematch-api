@@ -14,6 +14,7 @@ import {
   GET_ME_USE_CASE,
   UPDATE_ME_REPOSITORY,
   UPDATE_ME_USE_CASE,
+  SIGN_OUT_USE_CASE,
   REFRESH_TOKEN_REPOSITORY,
   REFRESH_TOKEN_USE_CASE,
   TOKEN_SERVICE,
@@ -31,6 +32,7 @@ import { GetMeUseCase } from '@src/modules/auth/application/use-cases/get-me.use
 import { GetMeRepository } from '@src/modules/auth/infrastructure/repositories/get-me.repository';
 import { UpdateMeUseCase } from '@src/modules/auth/application/use-cases/update-me.use-case';
 import { UpdateMeRepository } from '@src/modules/auth/infrastructure/repositories/update-me.repository';
+import { SignOutUseCase } from '@src/modules/auth/application/use-cases/sign-out.use-case';
 import { PasswordHashService } from '@src/modules/auth/infrastructure/services/password-hash.service';
 import { RefreshTokenUseCase } from '@src/modules/auth/application/use-cases/refresh-token.use-case';
 import { RefreshTokenRepository } from '@src/modules/auth/infrastructure/repositories/refresh-token.repository';
@@ -88,6 +90,10 @@ export const authProviders: Provider[] = [
   {
     provide: UPDATE_ME_REPOSITORY,
     useClass: UpdateMeRepository,
+  },
+  {
+    provide: SIGN_OUT_USE_CASE,
+    useClass: SignOutUseCase,
   },
   {
     provide: HASH_SERVICE,
