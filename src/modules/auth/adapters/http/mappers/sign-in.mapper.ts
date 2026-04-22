@@ -5,6 +5,7 @@ export class SignInMapper {
   public static toResponse(result: SignInOutputDto): SignInResponseDto {
     return {
       accessToken: result.accessToken,
+      refreshToken: result.refreshToken,
       user: {
         id: result.user.id,
         name: result.user.name,

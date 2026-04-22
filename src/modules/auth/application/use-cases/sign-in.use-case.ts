@@ -28,7 +28,7 @@ export class SignInUseCase implements SignInUseCaseInterface {
   public async execute(input: SignInInputDto): Promise<SignInOutputDto> {
     const user = await this.signInRepository.findByEmail(input.email);
 
-    if (!user) {
+    if (!user || !user.password) {
       throw new UnauthorizedException('Invalid credentials.');
     }
 
@@ -41,7 +41,7 @@ export class SignInUseCase implements SignInUseCaseInterface {
       throw new UnauthorizedException('Invalid credentials.');
     }
 
-    const payload: AccessTokenPayload = {
+    const accessPayload: AccessTokenPayload = {
       sub: user.id,
       email: user.email,
       productRole: user.productRole,
@@ -49,10 +49,17 @@ export class SignInUseCase implements SignInUseCaseInterface {
       permissions: user.permissions,
     };
 
-    const accessToken = await this.tokenService.generateAccessToken(payload);
+    const accessToken =
+      await this.tokenService.generateAccessToken(accessPayload);
+
+    const refreshToken = await this.tokenService.generateRefreshToken({
+      sub: user.id,
+      email: user.email,
+    });
 
     return {
       accessToken,
+      refreshToken,
       user: {
         id: user.id,
         name: user.name,

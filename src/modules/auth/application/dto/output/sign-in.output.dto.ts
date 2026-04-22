@@ -4,6 +4,7 @@ import { PermissionEnum } from '@src/shared/domain/enums/permission.enum';
 
 export class SignInOutputDto {
   accessToken!: string;
+  refreshToken!: string;
   user!: {
     id: string;
     name: string;

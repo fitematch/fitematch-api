@@ -14,6 +14,8 @@ import {
   GET_ME_USE_CASE,
   UPDATE_ME_REPOSITORY,
   UPDATE_ME_USE_CASE,
+  REFRESH_TOKEN_REPOSITORY,
+  REFRESH_TOKEN_USE_CASE,
   TOKEN_SERVICE,
 } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import { SignUpUseCase } from '@src/modules/auth/application/use-cases/sign-up.use-case';
@@ -30,6 +32,8 @@ import { GetMeRepository } from '@src/modules/auth/infrastructure/repositories/g
 import { UpdateMeUseCase } from '@src/modules/auth/application/use-cases/update-me.use-case';
 import { UpdateMeRepository } from '@src/modules/auth/infrastructure/repositories/update-me.repository';
 import { PasswordHashService } from '@src/modules/auth/infrastructure/services/password-hash.service';
+import { RefreshTokenUseCase } from '@src/modules/auth/application/use-cases/refresh-token.use-case';
+import { RefreshTokenRepository } from '@src/modules/auth/infrastructure/repositories/refresh-token.repository';
 import { JwtTokenService } from '@src/modules/auth/infrastructure/services/jwt-token.service';
 
 export const authProviders: Provider[] = [
@@ -88,6 +92,14 @@ export const authProviders: Provider[] = [
   {
     provide: HASH_SERVICE,
     useClass: PasswordHashService,
+  },
+  {
+    provide: REFRESH_TOKEN_USE_CASE,
+    useClass: RefreshTokenUseCase,
+  },
+  {
+    provide: REFRESH_TOKEN_REPOSITORY,
+    useClass: RefreshTokenRepository,
   },
   {
     provide: TOKEN_SERVICE,

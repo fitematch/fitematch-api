@@ -17,6 +17,8 @@ describe('CreateActivationCodeUseCase', () => {
     activationCodeRepository = {
       create: jest.fn(),
       invalidateActiveCodes: jest.fn(),
+      findValidCode: jest.fn(),
+      markAsUsed: jest.fn(),
     } as jest.Mocked<ActivationCodeRepositoryInterface>;
 
     useCase = new CreateActivationCodeUseCase(

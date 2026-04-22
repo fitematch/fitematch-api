@@ -16,6 +16,7 @@ import { GetMeController } from '@src/modules/auth/adapters/http/controllers/get
 import { UpdateMeController } from '@src/modules/auth/adapters/http/controllers/update-me.controller';
 import { CreateActivationCodeController } from '@src/modules/auth/adapters/http/controllers/create-activation-code.controller';
 import { ActivateAccountController } from '@src/modules/auth/adapters/http/controllers/activate-account.controller';
+import { RefreshTokenController } from '@src/modules/auth/adapters/http/controllers/refresh-token.controller';
 import { JwtStrategy } from '@src/modules/auth/infrastructure/strategies/jwt.strategy';
 
 const importedControllers = [
@@ -25,6 +26,7 @@ const importedControllers = [
   UpdateMeController,
   CreateActivationCodeController,
   ActivateAccountController,
+  RefreshTokenController,
 ];
 
 @Module({

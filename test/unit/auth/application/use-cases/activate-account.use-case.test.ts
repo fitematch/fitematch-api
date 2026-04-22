@@ -45,7 +45,6 @@ describe('ActivateAccountUseCase', () => {
           code: input.code,
           type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
           expiresAt: new Date(Date.now() + 15 * 60 * 1000),
-          usedAt: null,
           createdAt: new Date('2026-04-22T12:00:00.000Z'),
           updatedAt: new Date('2026-04-22T12:00:00.000Z'),
         };
@@ -167,7 +166,6 @@ describe('ActivateAccountUseCase', () => {
           code: input.code,
           type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
           expiresAt: new Date(Date.now() - 60 * 1000),
-          usedAt: null,
           createdAt: new Date('2026-04-22T12:00:00.000Z'),
           updatedAt: new Date('2026-04-22T12:00:00.000Z'),
         });
@@ -198,7 +196,6 @@ describe('ActivateAccountUseCase', () => {
           code: input.code,
           type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
           expiresAt: new Date(Date.now() + 60 * 1000),
-          usedAt: null,
           createdAt: new Date('2026-04-22T12:00:00.000Z'),
           updatedAt: new Date('2026-04-22T12:00:00.000Z'),
         });

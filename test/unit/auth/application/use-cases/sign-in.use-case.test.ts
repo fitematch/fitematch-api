@@ -27,6 +27,8 @@ describe('SignInUseCase', () => {
     } as jest.Mocked<HashServiceInterface>;
     tokenService = {
       generateAccessToken: jest.fn(),
+      generateRefreshToken: jest.fn(),
+      verifyRefreshToken: jest.fn(),
     } as jest.Mocked<TokenServiceInterface>;
 
     useCase = new SignInUseCase(signInRepository, hashService, tokenService);
