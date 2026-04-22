@@ -31,7 +31,7 @@ export class UpdateCompanyRepository implements UpdateCompanyRepositoryInterface
           ...(input.status !== undefined && { status: input.status }),
         },
         {
-          new: true,
+          returnDocument: 'after',
         },
       )
       .lean()

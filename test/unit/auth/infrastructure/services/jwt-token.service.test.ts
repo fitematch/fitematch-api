@@ -23,7 +23,7 @@ describe('JwtTokenService', () => {
         email: 'rebecca@fitematch.com',
         productRole: ProductRoleEnum.RECRUITER,
         adminRole: AdminRoleEnum.SUPER_ADMIN,
-        permissions: [PermissionEnum.MANAGE_USERS],
+        permissions: [PermissionEnum.CREATE_USERS],
       };
 
       jwtService.signAsync.mockResolvedValue('access-token');

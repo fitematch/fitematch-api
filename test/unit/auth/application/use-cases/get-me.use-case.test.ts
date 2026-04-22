@@ -27,7 +27,7 @@ describe('GetMeUseCase', () => {
           birthday: '1998-07-29',
           productRole: ProductRoleEnum.RECRUITER,
           adminRole: AdminRoleEnum.SUPER_ADMIN,
-          permissions: [PermissionEnum.MANAGE_USERS],
+          permissions: [PermissionEnum.CREATE_USERS],
           status: UserStatusEnum.ACTIVE,
           createdAt: new Date('2026-04-21T12:00:00.000Z'),
           updatedAt: new Date('2026-04-22T12:00:00.000Z'),

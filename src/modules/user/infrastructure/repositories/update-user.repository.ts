@@ -39,7 +39,7 @@ export class UpdateUserRepository implements UpdateUserRepositoryInterface {
           ...(input.adminRole !== undefined && { adminRole: input.adminRole }),
           ...(input.status !== undefined && { status: input.status }),
         },
-        { new: true },
+        { returnDocument: 'after' },
       )
       .lean()
       .exec()) as

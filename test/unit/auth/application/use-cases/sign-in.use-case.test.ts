@@ -9,6 +9,7 @@ import { SignInUseCase } from '@src/modules/auth/application/use-cases/sign-in.u
 import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
+import { PermissionEnum } from '@src/shared/domain/enums/permission.enum';
 
 describe('SignInUseCase', () => {
   let useCase: SignInUseCase;
@@ -45,7 +46,10 @@ describe('SignInUseCase', () => {
           password: 'hashed-password',
           productRole: ProductRoleEnum.RECRUITER,
           adminRole: AdminRoleEnum.SUPER_ADMIN,
-          permissions: ['manage_users', 'manage_jobs'],
+          permissions: [
+            PermissionEnum.CREATE_USERS,
+            PermissionEnum.CREATE_JOBS,
+          ],
           status: UserStatusEnum.ACTIVE,
         };
 

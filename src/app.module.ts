@@ -11,8 +11,8 @@ import { AuthModule } from '@src/modules/auth/auth.module';
 
 const databaseUri = process.env.DATABASE_URI;
 const importedModules = [
-  AuthModule,
   HealthCheckModule,
+  AuthModule,
   UserModule,
   CompanyModule,
   JobModule,

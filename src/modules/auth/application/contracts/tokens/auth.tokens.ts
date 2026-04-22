@@ -6,6 +6,8 @@ export const SIGN_IN_REPOSITORY = Symbol('SIGN_IN_REPOSITORY');
 
 export const GET_ME_USE_CASE = Symbol('GET_ME_USE_CASE');
 export const GET_ME_REPOSITORY = Symbol('GET_ME_REPOSITORY');
+export const UPDATE_ME_USE_CASE = Symbol('UPDATE_ME_USE_CASE');
+export const UPDATE_ME_REPOSITORY = Symbol('UPDATE_ME_REPOSITORY');
 
 export const ACTIVATION_CODE_REPOSITORY = Symbol('ACTIVATION_CODE_REPOSITORY');
 

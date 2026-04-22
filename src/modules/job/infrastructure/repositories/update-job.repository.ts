@@ -37,7 +37,7 @@ export class UpdateJobRepository implements UpdateJobRepositoryInterface {
           ...(input.benefits !== undefined && { benefits: input.benefits }),
           ...(input.status !== undefined && { status: input.status }),
         },
-        { new: true },
+        { returnDocument: 'after' },
       )
       .lean()
       .exec()) as (UpdateJobOutputDto & { _id: { toString(): string } }) | null;

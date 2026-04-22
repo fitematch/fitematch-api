@@ -13,12 +13,14 @@ import {
 import { SignUpController } from '@src/modules/auth/adapters/http/controllers/sign-up.controller';
 import { SignInController } from '@src/modules/auth/adapters/http/controllers/sign-in.controller';
 import { GetMeController } from '@src/modules/auth/adapters/http/controllers/get-me.controller';
+import { UpdateMeController } from '@src/modules/auth/adapters/http/controllers/update-me.controller';
 import { JwtStrategy } from '@src/modules/auth/infrastructure/strategies/jwt.strategy';
 
 const importedControllers = [
   SignUpController,
   SignInController,
   GetMeController,
+  UpdateMeController,
 ];
 
 @Module({

@@ -8,16 +8,20 @@ import {
   SIGN_IN_USE_CASE,
   GET_ME_REPOSITORY,
   GET_ME_USE_CASE,
+  UPDATE_ME_REPOSITORY,
+  UPDATE_ME_USE_CASE,
   TOKEN_SERVICE,
 } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import { SignUpUseCase } from '@src/modules/auth/application/use-cases/sign-up.use-case';
 import { SignUpRepository } from '@src/modules/auth/infrastructure/repositories/sign-up.repository';
 import { ActivationCodeRepository } from '@src/modules/auth/infrastructure/repositories/activation-code.repository';
-import { PasswordHashService } from '@src/modules/auth/infrastructure/services/password-hash.service';
 import { SignInUseCase } from '@src/modules/auth/application/use-cases/sign-in.use-case';
 import { SignInRepository } from '@src/modules/auth/infrastructure/repositories/sign-in.repository';
 import { GetMeUseCase } from '@src/modules/auth/application/use-cases/get-me.use-case';
 import { GetMeRepository } from '@src/modules/auth/infrastructure/repositories/get-me.repository';
+import { UpdateMeUseCase } from '@src/modules/auth/application/use-cases/update-me.use-case';
+import { UpdateMeRepository } from '@src/modules/auth/infrastructure/repositories/update-me.repository';
+import { PasswordHashService } from '@src/modules/auth/infrastructure/services/password-hash.service';
 import { JwtTokenService } from '@src/modules/auth/infrastructure/services/jwt-token.service';
 
 export const authProviders: Provider[] = [
@@ -44,6 +48,14 @@ export const authProviders: Provider[] = [
   {
     provide: GET_ME_REPOSITORY,
     useClass: GetMeRepository,
+  },
+  {
+    provide: UPDATE_ME_USE_CASE,
+    useClass: UpdateMeUseCase,
+  },
+  {
+    provide: UPDATE_ME_REPOSITORY,
+    useClass: UpdateMeRepository,
   },
   {
     provide: ACTIVATION_CODE_REPOSITORY,
