@@ -41,7 +41,7 @@ export class UpdateUserController {
   @ApiNotFoundResponse({
     description: 'User not found!',
   })
-  @Patch(':_id')
+  @Patch(':userId')
   async handle(
     @Param() params: UpdateUserParamsDto,
     @Body() body: UpdateUserRequestDto,

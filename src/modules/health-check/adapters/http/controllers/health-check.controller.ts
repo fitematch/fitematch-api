@@ -18,7 +18,7 @@ export class HealthCheckController {
   ) {}
 
   @ApiOperation({
-    summary: 'Health check',
+    summary: 'Check API healthy status',
     description: 'Returns the health status of the application.',
   })
   @ApiOkResponse({

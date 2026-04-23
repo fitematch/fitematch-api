@@ -39,7 +39,7 @@ export class ReadCompanyController {
   @ApiNotFoundResponse({
     description: 'Company not found!',
   })
-  @Get(':_id')
+  @Get(':companyId')
   async handle(
     @Param() params: ReadCompanyParamsDto,
   ): Promise<ReadCompanyResponseDto> {

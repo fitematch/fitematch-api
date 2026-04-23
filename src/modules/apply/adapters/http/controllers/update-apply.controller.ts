@@ -31,8 +31,8 @@ export class UpdateApplyController {
   ) {}
 
   @ApiOperation({
-    summary: 'Update job application',
-    description: 'Updates one job application by id.',
+    summary: 'Update one job application',
+    description: 'Updates one job application by ID.',
   })
   @ApiOkResponse({
     description: 'Job application updated successfully.',
@@ -41,7 +41,7 @@ export class UpdateApplyController {
   @ApiNotFoundResponse({
     description: 'Job application not found!',
   })
-  @Patch(':_id')
+  @Patch(':applyId')
   async handle(
     @Param() params: UpdateApplyParamsDto,
     @Body() body: UpdateApplyRequestDto,

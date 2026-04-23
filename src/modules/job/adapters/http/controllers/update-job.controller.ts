@@ -41,7 +41,7 @@ export class UpdateJobController {
   @ApiNotFoundResponse({
     description: 'Job position not found.',
   })
-  @Patch(':_id')
+  @Patch(':jobId')
   @ApiOkResponse({ type: UpdateJobResponseDto })
   async handle(
     @Param() params: UpdateJobParamsDto,

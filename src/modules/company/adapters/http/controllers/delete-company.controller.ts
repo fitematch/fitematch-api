@@ -38,7 +38,7 @@ export class DeleteCompanyController {
   @ApiNotFoundResponse({
     description: 'Company not found.',
   })
-  @Delete(':_id')
+  @Delete(':companyId')
   @HttpCode(HttpStatus.NO_CONTENT)
   async handle(@Param() params: DeleteCompanyParamsDto): Promise<void> {
     const deleted = await this.deleteCompanyUseCase.execute(

@@ -39,7 +39,7 @@ export class ReadJobController {
   @ApiNotFoundResponse({
     description: 'Job not found!',
   })
-  @Get(':_id')
+  @Get(':jobId')
   async handle(@Param() params: ReadJobParamsDto): Promise<ReadJobResponseDto> {
     const result = await this.readJobUseCase.execute(
       ReadJobRequestMapper.toInput(params),

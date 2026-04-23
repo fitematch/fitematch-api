@@ -29,7 +29,7 @@ export class ReadApplyController {
   ) {}
 
   @ApiOperation({
-    summary: 'Read job application',
+    summary: 'Read one job application',
     description: 'Returns one job application by ID.',
   })
   @ApiOkResponse({
@@ -39,7 +39,7 @@ export class ReadApplyController {
   @ApiNotFoundResponse({
     description: 'Job application not found!',
   })
-  @Get(':_id')
+  @Get(':applyId')
   async handle(
     @Param() params: ReadApplyParamsDto,
   ): Promise<ReadApplyResponseDto> {

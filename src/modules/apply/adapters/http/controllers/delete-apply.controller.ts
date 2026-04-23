@@ -29,16 +29,16 @@ export class DeleteApplyController {
   ) {}
 
   @ApiOperation({
-    summary: 'Delete job application',
+    summary: 'Delete one job application',
     description: 'Deletes one job application by ID.',
   })
   @ApiNoContentResponse({
     description: 'Job application deleted successfully.',
   })
   @ApiNotFoundResponse({
-    description: 'Job application not found.',
+    description: 'Job application not found!',
   })
-  @Delete(':_id')
+  @Delete(':applyId')
   @HttpCode(HttpStatus.NO_CONTENT)
   async handle(@Param() params: DeleteApplyParamsDto): Promise<void> {
     const deleted = await this.deleteApplyUseCase.execute(
