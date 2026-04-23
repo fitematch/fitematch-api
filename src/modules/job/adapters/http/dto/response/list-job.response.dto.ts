@@ -36,6 +36,9 @@ export class ListJobResponseDto {
     alimentationVoucher?: boolean;
     transportationVoucher?: boolean;
   };
+  media?: {
+    coverUrl?: string;
+  };
   status!: JobStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;

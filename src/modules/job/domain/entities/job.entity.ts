@@ -4,6 +4,7 @@ import { EducationLevelEnum } from '@src/shared/domain/enums/education-level.enu
 import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
+import { JobMediaEntity } from '@src/modules/job/domain/entities/job-media.entity';
 
 export interface LanguageRequirement {
   name: LanguagesEnum;
@@ -41,6 +42,7 @@ export interface JobEntity {
   slots: number;
   requirements?: RequirementsEntity;
   benefits?: BenefitsEntity;
+  media?: JobMediaEntity;
   status: JobStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;

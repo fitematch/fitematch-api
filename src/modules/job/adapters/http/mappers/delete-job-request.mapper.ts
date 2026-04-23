@@ -4,7 +4,7 @@ import type { DeleteJobParamsDto } from '@src/modules/job/adapters/http/dto/requ
 export class DeleteJobRequestMapper {
   static toInput(params: DeleteJobParamsDto): DeleteJobInputDto {
     return {
-      _id: params._id,
+      _id: params.jobId,
     };
   }
 }

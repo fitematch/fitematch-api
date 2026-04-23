@@ -8,7 +8,7 @@ export class UpdateCompanyRequestMapper {
     body: UpdateCompanyRequestDto,
   ): UpdateCompanyInputDto {
     return {
-      _id: params._id,
+      _id: params.companyId,
       slug: body.slug,
       tradeName: body.tradeName,
       legalName: body.legalName,

@@ -23,6 +23,7 @@ export class CreateJobMapper {
                 : undefined,
           }
         : undefined,
+      media: job.media,
       status: job.status,
       createdAt: job.createdAt,
       updatedAt: job.updatedAt,

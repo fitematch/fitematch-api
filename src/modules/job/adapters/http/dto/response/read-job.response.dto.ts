@@ -35,6 +35,9 @@ export class ReadJobResponseDto {
     alimentationVoucher?: boolean;
     transportationVoucher?: boolean;
   };
+  media?: {
+    coverUrl?: string;
+  };
   status!: JobStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;

@@ -11,6 +11,10 @@ import {
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
 import { SlugUtils } from '@src/shared/utils/slug.utils';
 
+type CreatedJobPlain = Omit<CreateJobOutputDto, '_id'> & {
+  _id: { toString(): string };
+};
+
 @Injectable()
 export class CreateJobRepository implements CreateJobRepositoryInterface {
   constructor(
@@ -53,22 +57,24 @@ export class CreateJobRepository implements CreateJobRepositoryInterface {
         slots: input.slots,
         requirements: input.requirements,
         benefits: input.benefits,
+        media: input.media,
         status: input.status,
       });
+      const job = createdJob.toObject() as CreatedJobPlain;
 
       return {
-        _id: createdJob._id.toString(),
-        slug: createdJob.slug,
-        companyId: createdJob.companyId,
-        title: createdJob.title,
-        description: createdJob.description,
-        slots: createdJob.slots,
-        requirements:
-          createdJob.requirements as CreateJobOutputDto['requirements'],
-        benefits: createdJob.benefits as CreateJobOutputDto['benefits'],
-        status: createdJob.status,
-        createdAt: createdJob.createdAt,
-        updatedAt: createdJob.updatedAt,
+        _id: job._id.toString(),
+        slug: job.slug,
+        companyId: job.companyId,
+        title: job.title,
+        description: job.description,
+        slots: job.slots,
+        requirements: job.requirements,
+        benefits: job.benefits,
+        media: job.media,
+        status: job.status,
+        createdAt: job.createdAt,
+        updatedAt: job.updatedAt,
       };
     } catch (error: unknown) {
       if (this.isDuplicateActiveTitleError(error)) {

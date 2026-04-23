@@ -9,6 +9,7 @@ export class UpdateJobResponseDto {
   slots!: number;
   requirements?: unknown;
   benefits?: unknown;
+  media?: unknown;
   status!: JobStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;

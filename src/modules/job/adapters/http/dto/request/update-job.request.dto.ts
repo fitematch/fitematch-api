@@ -67,6 +67,11 @@ class BenefitsRequestDto {
   transportationVoucher?: boolean;
 }
 
+class JobMediaRequestDto {
+  @ApiPropertyOptional()
+  coverUrl?: string;
+}
+
 export class UpdateJobRequestDto {
   @ApiPropertyOptional()
   companyId?: string;
@@ -85,6 +90,9 @@ export class UpdateJobRequestDto {
 
   @ApiPropertyOptional({ type: BenefitsRequestDto })
   benefits?: BenefitsRequestDto;
+
+  @ApiPropertyOptional({ type: JobMediaRequestDto })
+  media?: JobMediaRequestDto;
 
   @ApiPropertyOptional({ enum: JobStatusEnum })
   status?: JobStatusEnum;

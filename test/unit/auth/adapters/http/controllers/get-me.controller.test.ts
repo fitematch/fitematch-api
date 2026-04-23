@@ -4,6 +4,7 @@ import type { GetMeUseCaseInterface } from '@src/modules/auth/application/contra
 import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
+import { AvailabilityShiftEnum } from '@src/shared/domain/enums/availability-shift.enum';
 import { PermissionEnum } from '@src/shared/domain/enums/permission.enum';
 
 describe('GetMeController', () => {
@@ -33,6 +34,19 @@ describe('GetMeController', () => {
           name: 'Rebecca Chambers',
           email: 'rebecca@fitematch.com',
           birthday: '1998-07-29',
+          candidateProfile: {
+            contacts: {
+              phone: {
+                country: '+55',
+                number: '11999999999',
+                isWhatsapp: true,
+              },
+            },
+            availability: [AvailabilityShiftEnum.MORNING],
+          },
+          recruiterProfile: {
+            position: 'Recruiter',
+          },
           productRole: ProductRoleEnum.RECRUITER,
           adminRole: AdminRoleEnum.SUPER_ADMIN,
           permissions: [PermissionEnum.CREATE_USERS],
@@ -45,7 +59,20 @@ describe('GetMeController', () => {
 
         const result = await controller.handle(user);
 
-        expect(result).toEqual(output);
+        expect(result).toEqual({
+          ...output,
+          birthday: '29/07/1998',
+          candidateProfile: {
+            ...output.candidateProfile,
+            contacts: {
+              ...output.candidateProfile.contacts,
+              phone: {
+                ...output.candidateProfile.contacts.phone,
+                number: '(11) 99999-9999',
+              },
+            },
+          },
+        });
         expect(getMeUseCase.execute).toHaveBeenCalledWith({
           userId: user.sub,
         });

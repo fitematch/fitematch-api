@@ -8,7 +8,7 @@ export class UpdateApplyRequestMapper {
     body: UpdateApplyRequestDto,
   ): UpdateApplyInputDto {
     return {
-      _id: params._id,
+      _id: params.applyId,
       status: body.status,
     };
   }

@@ -4,7 +4,7 @@ import type { DeleteUserParamsDto } from '@src/modules/user/adapters/http/dto/re
 export class DeleteUserRequestMapper {
   static toInput(params: DeleteUserParamsDto): DeleteUserInputDto {
     return {
-      _id: params._id,
+      _id: params.userId,
     };
   }
 }

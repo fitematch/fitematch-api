@@ -4,6 +4,7 @@ import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
 import { LanguagesLevelEnum } from '@src/shared/domain/enums/languages-levels.enum';
 import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
+import type { JobMediaEntity } from '@src/modules/job/domain/entities/job-media.entity';
 
 export class UpdateJobOutputDto {
   _id!: string;
@@ -38,6 +39,8 @@ export class UpdateJobOutputDto {
     alimentationVoucher?: boolean;
     transportationVoucher?: boolean;
   };
+
+  media?: JobMediaEntity;
 
   status!: JobStatusEnum;
   createdAt?: Date;

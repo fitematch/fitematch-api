@@ -11,6 +11,7 @@ export class CreateJobRequestMapper {
       slots: body.slots,
       requirements: body.requirements,
       benefits: body.benefits,
+      media: body.media,
       status: body.status,
     };
   }

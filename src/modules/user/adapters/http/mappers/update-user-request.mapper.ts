@@ -8,7 +8,7 @@ export class UpdateUserRequestMapper {
     body: UpdateUserRequestDto,
   ): UpdateUserInputDto {
     return {
-      _id: params._id,
+      _id: params.userId,
       name: body.name,
       email: body.email,
       password: body.password,

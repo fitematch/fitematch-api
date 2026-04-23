@@ -8,7 +8,7 @@ export class UpdateJobRequestMapper {
     body: UpdateJobRequestDto,
   ): UpdateJobInputDto {
     return {
-      _id: params._id,
+      _id: params.jobId,
       ...body,
     };
   }

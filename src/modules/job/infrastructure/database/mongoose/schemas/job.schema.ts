@@ -61,6 +61,12 @@ class BenefitsSchema {
   transportationVoucher?: boolean;
 }
 
+@Schema({ _id: false })
+class JobMediaSchema {
+  @Prop()
+  coverUrl?: string;
+}
+
 @Schema({
   collection: 'jobs',
   timestamps: true,
@@ -89,6 +95,9 @@ export class JobSchema {
 
   @Prop({ type: BenefitsSchema })
   benefits?: BenefitsSchema;
+
+  @Prop({ type: JobMediaSchema })
+  media?: JobMediaSchema;
 
   @Prop({
     required: true,

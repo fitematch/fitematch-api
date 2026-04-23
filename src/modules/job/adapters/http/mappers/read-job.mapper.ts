@@ -22,6 +22,7 @@ export class ReadJobMapper {
                 : undefined,
           }
         : undefined,
+      media: job.media,
       status: job.status,
       createdAt: job.createdAt,
       updatedAt: job.updatedAt,

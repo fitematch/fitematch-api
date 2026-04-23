@@ -3,6 +3,7 @@ import { GetMeUseCase } from '@src/modules/auth/application/use-cases/get-me.use
 import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
+import { AvailabilityShiftEnum } from '@src/shared/domain/enums/availability-shift.enum';
 import { PermissionEnum } from '@src/shared/domain/enums/permission.enum';
 
 describe('GetMeUseCase', () => {
@@ -25,6 +26,19 @@ describe('GetMeUseCase', () => {
           name: 'Rebecca Chambers',
           email: 'rebecca@fitematch.com',
           birthday: '1998-07-29',
+          candidateProfile: {
+            contacts: {
+              phone: {
+                country: '+55',
+                number: '11999999999',
+                isWhatsapp: true,
+              },
+            },
+            availability: [AvailabilityShiftEnum.MORNING],
+          },
+          recruiterProfile: {
+            position: 'Recruiter',
+          },
           productRole: ProductRoleEnum.RECRUITER,
           adminRole: AdminRoleEnum.SUPER_ADMIN,
           permissions: [PermissionEnum.CREATE_USERS],
