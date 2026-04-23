@@ -4,8 +4,6 @@ export const SIGN_UP_REPOSITORY = Symbol('SIGN_UP_REPOSITORY');
 export const SIGN_IN_USE_CASE = Symbol('SIGN_IN_USE_CASE');
 export const SIGN_IN_REPOSITORY = Symbol('SIGN_IN_REPOSITORY');
 
-export const SIGN_OUT_USE_CASE = Symbol('SIGN_OUT_USE_CASE');
-
 export const GET_ME_USE_CASE = Symbol('GET_ME_USE_CASE');
 export const GET_ME_REPOSITORY = Symbol('GET_ME_REPOSITORY');
 
@@ -27,7 +25,11 @@ export const ACTIVATE_ACCOUNT_REPOSITORY = Symbol(
 export const REFRESH_TOKEN_USE_CASE = Symbol('REFRESH_TOKEN_USE_CASE');
 export const REFRESH_TOKEN_REPOSITORY = Symbol('REFRESH_TOKEN_REPOSITORY');
 
+export const SIGN_OUT_USE_CASE = Symbol('SIGN_OUT_USE_CASE');
+export const SIGN_OUT_REPOSITORY = Symbol('SIGN_OUT_REPOSITORY');
+
 export const ACTIVATION_CODE_REPOSITORY = Symbol('ACTIVATION_CODE_REPOSITORY');
+export const SESSION_REPOSITORY = Symbol('SESSION_REPOSITORY');
 
 export const HASH_SERVICE = Symbol('HASH_SERVICE');
 export const TOKEN_SERVICE = Symbol('TOKEN_SERVICE');

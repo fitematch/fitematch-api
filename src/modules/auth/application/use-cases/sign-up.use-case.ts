@@ -30,7 +30,7 @@ export class SignUpUseCase implements SignUpUseCaseInterface {
     private readonly hashService: HashServiceInterface,
   ) {}
 
-  async execute(input: SignUpInputDto): Promise<SignUpOutputDto> {
+  public async execute(input: SignUpInputDto): Promise<SignUpOutputDto> {
     if (
       input.productRole !== ProductRoleEnum.CANDIDATE &&
       input.productRole !== ProductRoleEnum.RECRUITER
@@ -59,11 +59,16 @@ export class SignUpUseCase implements SignUpUseCaseInterface {
       ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
     );
 
+    const activationCode = ActivationCodeUtils.generateSixDigits();
+    const codeHash = await this.hashService.hash(activationCode);
+
     await this.activationCodeRepository.create({
       userId: createdUser.id,
-      code: ActivationCodeUtils.generateSixDigits(),
+      codeHash,
       type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
       expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+      attemptsCount: 0,
+      maxAttempts: 5,
     });
 
     return createdUser;

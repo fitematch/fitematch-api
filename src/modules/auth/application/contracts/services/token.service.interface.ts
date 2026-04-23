@@ -15,4 +15,5 @@ export interface TokenServiceInterface {
   generateAccessToken(payload: AccessTokenPayload): Promise<string>;
   generateRefreshToken(payload: RefreshTokenPayload): Promise<string>;
   verifyRefreshToken(token: string): Promise<RefreshTokenPayload>;
+  getRefreshTokenExpiresAt(): Date;
 }

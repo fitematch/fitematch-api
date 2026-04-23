@@ -39,10 +39,12 @@ export class ActivationCodeRepository implements ActivationCodeRepositoryInterfa
   ): Promise<ActivationCodeEntity> {
     const createdCode = await this.activationCodeModel.create({
       userId: input.userId,
-      code: input.code,
+      codeHash: input.codeHash,
       type: input.type,
       expiresAt: input.expiresAt,
       usedAt: input.usedAt,
+      attemptsCount: input.attemptsCount,
+      maxAttempts: input.maxAttempts,
     });
 
     const timestamps = createdCode as unknown as {
@@ -53,27 +55,28 @@ export class ActivationCodeRepository implements ActivationCodeRepositoryInterfa
     return {
       id: createdCode._id.toString(),
       userId: createdCode.userId,
-      code: createdCode.code,
+      codeHash: createdCode.codeHash,
       type: createdCode.type,
       expiresAt: createdCode.expiresAt,
       usedAt: createdCode.usedAt,
+      attemptsCount: createdCode.attemptsCount,
+      maxAttempts: createdCode.maxAttempts,
       createdAt: timestamps.createdAt,
       updatedAt: timestamps.updatedAt,
     };
   }
 
-  public async findValidCode(
+  public async findActiveCodeByUserIdAndType(
     userId: string,
-    code: string,
     type: ActivationCodeTypeEnum,
   ): Promise<ActivationCodeEntity | null> {
     const activationCode = await this.activationCodeModel
       .findOne({
         userId,
-        code,
         type,
         usedAt: { $exists: false },
       })
+      .sort({ createdAt: -1 })
       .lean()
       .exec();
 
@@ -84,13 +87,23 @@ export class ActivationCodeRepository implements ActivationCodeRepositoryInterfa
     return {
       id: activationCode._id.toString(),
       userId: activationCode.userId,
-      code: activationCode.code,
+      codeHash: activationCode.codeHash,
       type: activationCode.type,
       expiresAt: activationCode.expiresAt,
       usedAt: activationCode.usedAt,
+      attemptsCount: activationCode.attemptsCount,
+      maxAttempts: activationCode.maxAttempts,
       createdAt: activationCode.createdAt,
       updatedAt: activationCode.updatedAt,
     };
+  }
+
+  public async incrementAttempts(id: string): Promise<void> {
+    await this.activationCodeModel.findByIdAndUpdate(id, {
+      $inc: {
+        attemptsCount: 1,
+      },
+    });
   }
 
   public async markAsUsed(id: string): Promise<void> {

@@ -1,23 +1,24 @@
 import type { Provider } from '@nestjs/common';
 import {
-  SIGN_UP_REPOSITORY,
-  SIGN_UP_USE_CASE,
-  CREATE_ACTIVATION_CODE_REPOSITORY,
-  CREATE_ACTIVATION_CODE_USE_CASE,
   ACTIVATE_ACCOUNT_REPOSITORY,
   ACTIVATE_ACCOUNT_USE_CASE,
   ACTIVATION_CODE_REPOSITORY,
-  HASH_SERVICE,
-  SIGN_IN_REPOSITORY,
-  SIGN_IN_USE_CASE,
+  CREATE_ACTIVATION_CODE_REPOSITORY,
+  CREATE_ACTIVATION_CODE_USE_CASE,
   GET_ME_REPOSITORY,
   GET_ME_USE_CASE,
-  UPDATE_ME_REPOSITORY,
-  UPDATE_ME_USE_CASE,
-  SIGN_OUT_USE_CASE,
+  HASH_SERVICE,
   REFRESH_TOKEN_REPOSITORY,
   REFRESH_TOKEN_USE_CASE,
+  SESSION_REPOSITORY,
+  SIGN_IN_REPOSITORY,
+  SIGN_IN_USE_CASE,
+  SIGN_OUT_USE_CASE,
+  SIGN_UP_REPOSITORY,
+  SIGN_UP_USE_CASE,
   TOKEN_SERVICE,
+  UPDATE_ME_REPOSITORY,
+  UPDATE_ME_USE_CASE,
 } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import { SignUpUseCase } from '@src/modules/auth/application/use-cases/sign-up.use-case';
 import { SignUpRepository } from '@src/modules/auth/infrastructure/repositories/sign-up.repository';
@@ -36,6 +37,7 @@ import { SignOutUseCase } from '@src/modules/auth/application/use-cases/sign-out
 import { PasswordHashService } from '@src/modules/auth/infrastructure/services/password-hash.service';
 import { RefreshTokenUseCase } from '@src/modules/auth/application/use-cases/refresh-token.use-case';
 import { RefreshTokenRepository } from '@src/modules/auth/infrastructure/repositories/refresh-token.repository';
+import { SessionRepository } from '@src/modules/auth/infrastructure/repositories/session.repository';
 import { JwtTokenService } from '@src/modules/auth/infrastructure/services/jwt-token.service';
 
 export const authProviders: Provider[] = [
@@ -110,5 +112,9 @@ export const authProviders: Provider[] = [
   {
     provide: TOKEN_SERVICE,
     useClass: JwtTokenService,
+  },
+  {
+    provide: SESSION_REPOSITORY,
+    useClass: SessionRepository,
   },
 ];

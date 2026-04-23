@@ -3,10 +3,12 @@ import { ActivationCodeTypeEnum } from '@src/modules/auth/domain/enums/activatio
 export interface ActivationCodeEntity {
   id: string;
   userId: string;
-  code: string;
+  codeHash: string;
   type: ActivationCodeTypeEnum;
   expiresAt: Date;
   usedAt?: Date;
+  attemptsCount: number;
+  maxAttempts: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

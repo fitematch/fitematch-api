@@ -1,6 +1,7 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import type { ActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/activation-code.repository.interface';
 import type { CreateActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/create-activation-code.repository.interface';
+import type { HashServiceInterface } from '@src/modules/auth/application/contracts/services/hash.service.interface';
 import { CreateActivationCodeUseCase } from '@src/modules/auth/application/use-cases/create-activation-code.use-case';
 import { ActivationCodeTypeEnum } from '@src/modules/auth/domain/enums/activation-code-type.enum';
 import { ActivationCodeUtils } from '@src/shared/utils/activation-code.utils';
@@ -9,6 +10,7 @@ describe('CreateActivationCodeUseCase', () => {
   let useCase: CreateActivationCodeUseCase;
   let createActivationCodeRepository: jest.Mocked<CreateActivationCodeRepositoryInterface>;
   let activationCodeRepository: jest.Mocked<ActivationCodeRepositoryInterface>;
+  let hashService: jest.Mocked<HashServiceInterface>;
 
   beforeEach(() => {
     createActivationCodeRepository = {
@@ -17,13 +19,19 @@ describe('CreateActivationCodeUseCase', () => {
     activationCodeRepository = {
       create: jest.fn(),
       invalidateActiveCodes: jest.fn(),
-      findValidCode: jest.fn(),
+      findActiveCodeByUserIdAndType: jest.fn(),
+      incrementAttempts: jest.fn(),
       markAsUsed: jest.fn(),
     } as jest.Mocked<ActivationCodeRepositoryInterface>;
+    hashService = {
+      hash: jest.fn(),
+      compare: jest.fn(),
+    } as jest.Mocked<HashServiceInterface>;
 
     useCase = new CreateActivationCodeUseCase(
       createActivationCodeRepository,
       activationCodeRepository,
+      hashService,
     );
   });
 
@@ -41,12 +49,15 @@ describe('CreateActivationCodeUseCase', () => {
 
         createActivationCodeRepository.findByEmail.mockResolvedValue(user);
         activationCodeRepository.invalidateActiveCodes.mockResolvedValue();
+        hashService.hash.mockResolvedValue('hashed-123456');
         activationCodeRepository.create.mockResolvedValue({
           id: 'activation-1',
           userId: user.id,
-          code: '123456',
+          codeHash: 'hashed-123456',
           type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
           expiresAt: new Date('2026-04-22T12:15:00.000Z'),
+          attemptsCount: 0,
+          maxAttempts: 5,
           createdAt: new Date('2026-04-22T12:00:00.000Z'),
           updatedAt: new Date('2026-04-22T12:00:00.000Z'),
         });
@@ -69,11 +80,14 @@ describe('CreateActivationCodeUseCase', () => {
           user.id,
           ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
         );
+        expect(hashService.hash).toHaveBeenCalledWith('123456');
         expect(activationCodeRepository.create).toHaveBeenCalledWith({
           userId: user.id,
-          code: '123456',
+          codeHash: 'hashed-123456',
           type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
           expiresAt: expect.any(Date),
+          attemptsCount: 0,
+          maxAttempts: 5,
         });
 
         codeSpy.mockRestore();
@@ -97,6 +111,7 @@ describe('CreateActivationCodeUseCase', () => {
         expect(
           activationCodeRepository.invalidateActiveCodes,
         ).not.toHaveBeenCalled();
+        expect(hashService.hash).not.toHaveBeenCalled();
         expect(activationCodeRepository.create).not.toHaveBeenCalled();
       });
     });
@@ -122,6 +137,7 @@ describe('CreateActivationCodeUseCase', () => {
         expect(
           activationCodeRepository.invalidateActiveCodes,
         ).not.toHaveBeenCalled();
+        expect(hashService.hash).not.toHaveBeenCalled();
         expect(activationCodeRepository.create).not.toHaveBeenCalled();
       });
     });
@@ -153,6 +169,7 @@ describe('CreateActivationCodeUseCase', () => {
           'user-1',
           ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
         );
+        expect(hashService.hash).not.toHaveBeenCalled();
         expect(activationCodeRepository.create).not.toHaveBeenCalled();
       });
     });

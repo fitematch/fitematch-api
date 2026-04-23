@@ -9,10 +9,10 @@ export interface ActivationCodeRepositoryInterface {
     userId: string,
     type: ActivationCodeTypeEnum,
   ): Promise<void>;
-  findValidCode(
+  findActiveCodeByUserIdAndType(
     userId: string,
-    code: string,
     type: ActivationCodeTypeEnum,
   ): Promise<ActivationCodeEntity | null>;
+  incrementAttempts(id: string): Promise<void>;
   markAsUsed(id: string): Promise<void>;
 }

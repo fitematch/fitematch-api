@@ -1,4 +1,5 @@
-import { Body, Controller, Inject, Post } from '@nestjs/common';
+import { Body, Controller, Inject, Ip, Post, Req } from '@nestjs/common';
+import type { Request } from 'express';
 import {
   ApiOkResponse,
   ApiOperation,
@@ -22,7 +23,8 @@ export class SignInController {
 
   @ApiOperation({
     summary: 'Sign in',
-    description: 'Authenticates the user and returns an access token.',
+    description:
+      'Authenticates the user and returns access and refresh tokens.',
   })
   @ApiOkResponse({
     description: 'User signed in successfully.',
@@ -34,9 +36,15 @@ export class SignInController {
   @Post('sign-in')
   public async handle(
     @Body() body: SignInRequestDto,
+    @Req() request: Request,
+    @Ip() ipAddress: string,
   ): Promise<SignInResponseDto> {
     const result = await this.signInUseCase.execute(
-      SignInRequestMapper.toInput(body),
+      SignInRequestMapper.toInput(
+        body,
+        request.headers['user-agent'],
+        ipAddress,
+      ),
     );
 
     return SignInMapper.toResponse(result);

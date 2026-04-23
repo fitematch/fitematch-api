@@ -7,6 +7,10 @@ import {
   ActivationCodeSchemaFactory,
 } from '@src/modules/auth/infrastructure/database/mongoose/schemas/activation-code.schema';
 import {
+  SessionSchema,
+  SessionSchemaFactory,
+} from '@src/modules/auth/infrastructure/database/mongoose/schemas/session.schema';
+import {
   UserSchema,
   UserSchemaFactory,
 } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
@@ -33,16 +37,15 @@ const importedControllers = [
 
 @Module({
   imports: [
-    JwtModule.register({
-      secret: process.env.JWT_SECRET ?? 'default_jwt_secret',
-      signOptions: {
-        expiresIn: '1d',
-      },
-    }),
+    JwtModule.register({}),
     MongooseModule.forFeature([
       {
         name: ActivationCodeSchema.name,
         schema: ActivationCodeSchemaFactory,
+      },
+      {
+        name: SessionSchema.name,
+        schema: SessionSchemaFactory,
       },
       {
         name: UserSchema.name,

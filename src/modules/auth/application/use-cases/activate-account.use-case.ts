@@ -7,10 +7,12 @@ import {
 import {
   ACTIVATE_ACCOUNT_REPOSITORY,
   ACTIVATION_CODE_REPOSITORY,
+  HASH_SERVICE,
 } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import type { ActivateAccountUseCaseInterface } from '@src/modules/auth/application/contracts/use-cases/activate-account.use-case.interface';
 import type { ActivateAccountRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/activate-account.repository.interface';
 import type { ActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/activation-code.repository.interface';
+import type { HashServiceInterface } from '@src/modules/auth/application/contracts/services/hash.service.interface';
 import { ActivateAccountInputDto } from '@src/modules/auth/application/dto/input/activate-account.input.dto';
 import { ActivateAccountOutputDto } from '@src/modules/auth/application/dto/output/activate-account.output.dto';
 import { ActivationCodeTypeEnum } from '@src/modules/auth/domain/enums/activation-code-type.enum';
@@ -22,6 +24,8 @@ export class ActivateAccountUseCase implements ActivateAccountUseCaseInterface {
     private readonly activateAccountRepository: ActivateAccountRepositoryInterface,
     @Inject(ACTIVATION_CODE_REPOSITORY)
     private readonly activationCodeRepository: ActivationCodeRepositoryInterface,
+    @Inject(HASH_SERVICE)
+    private readonly hashService: HashServiceInterface,
   ) {}
 
   public async execute(
@@ -37,11 +41,11 @@ export class ActivateAccountUseCase implements ActivateAccountUseCaseInterface {
       throw new BadRequestException('Account already activated.');
     }
 
-    const activationCode = await this.activationCodeRepository.findValidCode(
-      user.id,
-      input.code,
-      ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
-    );
+    const activationCode =
+      await this.activationCodeRepository.findActiveCodeByUserIdAndType(
+        user.id,
+        ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
+      );
 
     if (!activationCode) {
       throw new BadRequestException('Invalid activation code.');
@@ -49,6 +53,22 @@ export class ActivateAccountUseCase implements ActivateAccountUseCaseInterface {
 
     if (activationCode.expiresAt.getTime() < Date.now()) {
       throw new BadRequestException('Activation code expired.');
+    }
+
+    if (activationCode.attemptsCount >= activationCode.maxAttempts) {
+      throw new BadRequestException(
+        'Activation code blocked by too many attempts.',
+      );
+    }
+
+    const codeMatches = await this.hashService.compare(
+      input.code,
+      activationCode.codeHash,
+    );
+
+    if (!codeMatches) {
+      await this.activationCodeRepository.incrementAttempts(activationCode.id);
+      throw new BadRequestException('Invalid activation code.');
     }
 
     await this.activationCodeRepository.markAsUsed(activationCode.id);

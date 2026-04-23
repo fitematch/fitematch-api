@@ -22,7 +22,8 @@ describe('SignUpUseCase', () => {
     activationCodeRepository = {
       create: jest.fn(),
       invalidateActiveCodes: jest.fn(),
-      findValidCode: jest.fn(),
+      findActiveCodeByUserIdAndType: jest.fn(),
+      incrementAttempts: jest.fn(),
       markAsUsed: jest.fn(),
     } as jest.Mocked<ActivationCodeRepositoryInterface>;
     hashService = {
@@ -59,15 +60,19 @@ describe('SignUpUseCase', () => {
         };
 
         signUpRepository.existsByEmail.mockResolvedValue(false);
-        hashService.hash.mockResolvedValue('hashed-password');
+        hashService.hash
+          .mockResolvedValueOnce('hashed-password')
+          .mockResolvedValueOnce('hashed-activation-code');
         signUpRepository.create.mockResolvedValue(createdUser);
         activationCodeRepository.invalidateActiveCodes.mockResolvedValue();
         activationCodeRepository.create.mockResolvedValue({
           id: 'activation-1',
           userId: 'user-1',
-          code: '123456',
+          codeHash: 'hashed-activation-code',
           type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
           expiresAt: new Date('2026-04-21T12:15:00.000Z'),
+          attemptsCount: 0,
+          maxAttempts: 5,
           createdAt: new Date('2026-04-21T12:00:00.000Z'),
           updatedAt: new Date('2026-04-21T12:00:00.000Z'),
         });
@@ -82,7 +87,7 @@ describe('SignUpUseCase', () => {
         expect(signUpRepository.existsByEmail).toHaveBeenCalledWith(
           input.email,
         );
-        expect(hashService.hash).toHaveBeenCalledWith(input.password);
+        expect(hashService.hash).toHaveBeenNthCalledWith(1, input.password);
         expect(signUpRepository.create).toHaveBeenCalledWith({
           ...input,
           password: 'hashed-password',
@@ -94,11 +99,14 @@ describe('SignUpUseCase', () => {
           createdUser.id,
           ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
         );
+        expect(hashService.hash).toHaveBeenNthCalledWith(2, '123456');
         expect(activationCodeRepository.create).toHaveBeenCalledWith({
           userId: createdUser.id,
-          code: '123456',
+          codeHash: 'hashed-activation-code',
           type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
           expiresAt: expect.any(Date),
+          attemptsCount: 0,
+          maxAttempts: 5,
         });
 
         codeSpy.mockRestore();

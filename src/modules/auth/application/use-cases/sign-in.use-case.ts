@@ -1,11 +1,13 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import {
   HASH_SERVICE,
+  SESSION_REPOSITORY,
   SIGN_IN_REPOSITORY,
   TOKEN_SERVICE,
 } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import type { SignInUseCaseInterface } from '@src/modules/auth/application/contracts/use-cases/sign-in.use-case.interface';
 import type { SignInRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/sign-in.repository.interface';
+import type { SessionRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/session.repository.interface';
 import type { HashServiceInterface } from '@src/modules/auth/application/contracts/services/hash.service.interface';
 import type {
   AccessTokenPayload,
@@ -19,6 +21,8 @@ export class SignInUseCase implements SignInUseCaseInterface {
   constructor(
     @Inject(SIGN_IN_REPOSITORY)
     private readonly signInRepository: SignInRepositoryInterface,
+    @Inject(SESSION_REPOSITORY)
+    private readonly sessionRepository: SessionRepositoryInterface,
     @Inject(HASH_SERVICE)
     private readonly hashService: HashServiceInterface,
     @Inject(TOKEN_SERVICE)
@@ -55,6 +59,16 @@ export class SignInUseCase implements SignInUseCaseInterface {
     const refreshToken = await this.tokenService.generateRefreshToken({
       sub: user.id,
       email: user.email,
+    });
+
+    const refreshTokenHash = await this.hashService.hash(refreshToken);
+
+    await this.sessionRepository.create({
+      userId: user.id,
+      refreshTokenHash,
+      userAgent: input.userAgent,
+      ipAddress: input.ipAddress,
+      expiresAt: this.tokenService.getRefreshTokenExpiresAt(),
     });
 
     return {

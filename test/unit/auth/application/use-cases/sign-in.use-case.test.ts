@@ -1,4 +1,5 @@
 import { UnauthorizedException } from '@nestjs/common';
+import type { SessionRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/session.repository.interface';
 import type { SignInRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/sign-in.repository.interface';
 import type { HashServiceInterface } from '@src/modules/auth/application/contracts/services/hash.service.interface';
 import type {
@@ -14,6 +15,7 @@ import { PermissionEnum } from '@src/shared/domain/enums/permission.enum';
 describe('SignInUseCase', () => {
   let useCase: SignInUseCase;
   let signInRepository: jest.Mocked<SignInRepositoryInterface>;
+  let sessionRepository: jest.Mocked<SessionRepositoryInterface>;
   let hashService: jest.Mocked<HashServiceInterface>;
   let tokenService: jest.Mocked<TokenServiceInterface>;
 
@@ -21,6 +23,13 @@ describe('SignInUseCase', () => {
     signInRepository = {
       findByEmail: jest.fn(),
     } as jest.Mocked<SignInRepositoryInterface>;
+    sessionRepository = {
+      create: jest.fn(),
+      findValidByUserId: jest.fn(),
+      findValidByHash: jest.fn(),
+      revokeById: jest.fn(),
+      revokeAllByUserId: jest.fn(),
+    } as jest.Mocked<SessionRepositoryInterface>;
     hashService = {
       hash: jest.fn(),
       compare: jest.fn(),
@@ -29,9 +38,15 @@ describe('SignInUseCase', () => {
       generateAccessToken: jest.fn(),
       generateRefreshToken: jest.fn(),
       verifyRefreshToken: jest.fn(),
+      getRefreshTokenExpiresAt: jest.fn(),
     } as jest.Mocked<TokenServiceInterface>;
 
-    useCase = new SignInUseCase(signInRepository, hashService, tokenService);
+    useCase = new SignInUseCase(
+      signInRepository,
+      sessionRepository,
+      hashService,
+      tokenService,
+    );
   });
 
   describe('execute', () => {
@@ -40,6 +55,8 @@ describe('SignInUseCase', () => {
         const input = {
           email: 'rebecca@fitematch.com',
           password: 'plain-password',
+          userAgent: 'jest',
+          ipAddress: '127.0.0.1',
         };
         const user = {
           id: 'user-1',
@@ -58,6 +75,22 @@ describe('SignInUseCase', () => {
         signInRepository.findByEmail.mockResolvedValue(user);
         hashService.compare.mockResolvedValue(true);
         tokenService.generateAccessToken.mockResolvedValue('access-token');
+        tokenService.generateRefreshToken.mockResolvedValue('refresh-token');
+        hashService.hash.mockResolvedValue('hashed-refresh-token');
+        tokenService.getRefreshTokenExpiresAt.mockReturnValue(
+          new Date('2026-04-29T12:00:00.000Z'),
+        );
+        sessionRepository.create.mockResolvedValue({
+          id: 'session-1',
+          userId: user.id,
+          refreshTokenHash: 'hashed-refresh-token',
+          userAgent: input.userAgent,
+          ipAddress: input.ipAddress,
+          expiresAt: new Date('2026-04-29T12:00:00.000Z'),
+          revokedAt: undefined,
+          createdAt: new Date('2026-04-22T12:00:00.000Z'),
+          updatedAt: new Date('2026-04-22T12:00:00.000Z'),
+        });
 
         const result = await useCase.execute(input);
 
@@ -71,6 +104,7 @@ describe('SignInUseCase', () => {
 
         expect(result).toEqual({
           accessToken: 'access-token',
+          refreshToken: 'refresh-token',
           user: {
             id: user.id,
             name: user.name,
@@ -89,6 +123,18 @@ describe('SignInUseCase', () => {
         expect(tokenService.generateAccessToken).toHaveBeenCalledWith(
           expectedPayload,
         );
+        expect(tokenService.generateRefreshToken).toHaveBeenCalledWith({
+          sub: user.id,
+          email: user.email,
+        });
+        expect(hashService.hash).toHaveBeenCalledWith('refresh-token');
+        expect(sessionRepository.create).toHaveBeenCalledWith({
+          userId: user.id,
+          refreshTokenHash: 'hashed-refresh-token',
+          userAgent: input.userAgent,
+          ipAddress: input.ipAddress,
+          expiresAt: new Date('2026-04-29T12:00:00.000Z'),
+        });
       });
     });
 
@@ -97,6 +143,8 @@ describe('SignInUseCase', () => {
         const input = {
           email: 'missing@fitematch.com',
           password: 'plain-password',
+          userAgent: 'jest',
+          ipAddress: '127.0.0.1',
         };
 
         signInRepository.findByEmail.mockResolvedValue(null);
@@ -107,6 +155,7 @@ describe('SignInUseCase', () => {
         expect(signInRepository.findByEmail).toHaveBeenCalledWith(input.email);
         expect(hashService.compare).not.toHaveBeenCalled();
         expect(tokenService.generateAccessToken).not.toHaveBeenCalled();
+        expect(sessionRepository.create).not.toHaveBeenCalled();
       });
     });
 
@@ -115,6 +164,8 @@ describe('SignInUseCase', () => {
         const input = {
           email: 'rebecca@fitematch.com',
           password: 'wrong-password',
+          userAgent: 'jest',
+          ipAddress: '127.0.0.1',
         };
         const user = {
           id: 'user-1',
@@ -136,6 +187,7 @@ describe('SignInUseCase', () => {
           user.password,
         );
         expect(tokenService.generateAccessToken).not.toHaveBeenCalled();
+        expect(sessionRepository.create).not.toHaveBeenCalled();
       });
     });
 
@@ -144,6 +196,8 @@ describe('SignInUseCase', () => {
         const input = {
           email: 'rebecca@fitematch.com',
           password: 'plain-password',
+          userAgent: 'jest',
+          ipAddress: '127.0.0.1',
         };
         const user = {
           id: 'user-1',
@@ -170,6 +224,7 @@ describe('SignInUseCase', () => {
           adminRole: undefined,
           permissions: undefined,
         });
+        expect(sessionRepository.create).not.toHaveBeenCalled();
       });
     });
   });

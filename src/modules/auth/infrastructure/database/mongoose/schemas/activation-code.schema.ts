@@ -13,7 +13,7 @@ export class ActivationCodeSchema {
   userId!: string;
 
   @Prop({ required: true })
-  code!: string;
+  codeHash!: string;
 
   @Prop({
     required: true,
@@ -27,6 +27,12 @@ export class ActivationCodeSchema {
   @Prop()
   usedAt?: Date;
 
+  @Prop({ required: true, default: 0 })
+  attemptsCount!: number;
+
+  @Prop({ required: true, default: 5 })
+  maxAttempts!: number;
+
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -34,4 +40,5 @@ export class ActivationCodeSchema {
 export const ActivationCodeSchemaFactory =
   SchemaFactory.createForClass(ActivationCodeSchema);
 
+ActivationCodeSchemaFactory.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 ActivationCodeSchemaFactory.index({ userId: 1, type: 1, usedAt: 1 });
