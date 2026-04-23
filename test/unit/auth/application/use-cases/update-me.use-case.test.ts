@@ -2,6 +2,7 @@ import type { UpdateMeRepositoryInterface } from '@src/modules/auth/application/
 import { UpdateMeUseCase } from '@src/modules/auth/application/use-cases/update-me.use-case';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
+import { AvailabilityShiftEnum } from '@src/shared/domain/enums/availability-shift.enum';
 
 describe('UpdateMeUseCase', () => {
   let useCase: UpdateMeUseCase;
@@ -22,12 +23,23 @@ describe('UpdateMeUseCase', () => {
           userId: 'user-1',
           name: 'Rebecca Chambers',
           birthday: '1998-07-29',
+          candidateProfile: {
+            contacts: {
+              phone: {
+                country: '+55',
+                number: '11999999999',
+                isWhatsapp: true,
+              },
+            },
+            availability: [AvailabilityShiftEnum.MORNING],
+          },
         };
         const output = {
           id: 'user-1',
           name: 'Rebecca Chambers',
           email: 'rebecca@fitematch.com',
           birthday: '1998-07-29',
+          candidateProfile: input.candidateProfile,
           productRole: ProductRoleEnum.RECRUITER,
           status: UserStatusEnum.ACTIVE,
           createdAt: new Date('2026-04-21T12:00:00.000Z'),

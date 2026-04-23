@@ -23,7 +23,7 @@ import { AvailabilityShiftEnum } from '@src/shared/domain/enums/availability-shi
 import { ShoesSizeUnitEnum } from '@src/shared/domain/enums/shoes-size-unit.enum';
 import { CourseTypeEnum } from '@src/shared/domain/enums/course-type.enum';
 
-class CandidateDocumentRGRequestDto {
+export class CandidateDocumentRGRequestDto {
   @IsOptional()
   @IsString()
   number?: string;
@@ -37,13 +37,13 @@ class CandidateDocumentRGRequestDto {
   state?: string;
 }
 
-class CandidateDocumentCPFRequestDto {
+export class CandidateDocumentCPFRequestDto {
   @IsOptional()
   @IsString()
   number?: string;
 }
 
-class CandidateDocumentCREFRequestDto {
+export class CandidateDocumentCREFRequestDto {
   @IsOptional()
   @IsString()
   number?: string;
@@ -57,7 +57,7 @@ class CandidateDocumentCREFRequestDto {
   isActive?: boolean;
 }
 
-class CandidateDocumentPassportRequestDto {
+export class CandidateDocumentPassportRequestDto {
   @IsOptional()
   @IsString()
   number?: string;
@@ -71,7 +71,7 @@ class CandidateDocumentPassportRequestDto {
   expirationDate?: string;
 }
 
-class CandidateDocumentsRequestDto {
+export class CandidateDocumentsRequestDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => CandidateDocumentRGRequestDto)
@@ -93,7 +93,7 @@ class CandidateDocumentsRequestDto {
   passport?: CandidateDocumentPassportRequestDto;
 }
 
-class PhoneRequestDto {
+export class PhoneRequestDto {
   @IsOptional()
   @IsString()
   country?: string;
@@ -111,7 +111,7 @@ class PhoneRequestDto {
   isTelegram?: boolean;
 }
 
-class AddressRequestDto {
+export class AddressRequestDto {
   @IsOptional()
   @IsString()
   street?: string;
@@ -145,7 +145,7 @@ class AddressRequestDto {
   zipCode?: string;
 }
 
-class SocialRequestDto {
+export class SocialRequestDto {
   @IsOptional()
   @IsString()
   facebook?: string;
@@ -171,7 +171,7 @@ class SocialRequestDto {
   linkedin?: string;
 }
 
-class CandidateContactsRequestDto {
+export class CandidateContactsRequestDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => PhoneRequestDto)
@@ -188,20 +188,20 @@ class CandidateContactsRequestDto {
   social?: SocialRequestDto;
 }
 
-class RecruiterContactsRequestDto {
+export class RecruiterContactsRequestDto {
   @IsOptional()
   @ValidateNested()
   @Type(() => PhoneRequestDto)
   phone?: PhoneRequestDto;
 }
 
-class CandidateMediaRequestDto {
+export class CandidateMediaRequestDto {
   @IsOptional()
   @IsString()
   resumeUrl?: string;
 }
 
-class DiversityRequestDto {
+export class DiversityRequestDto {
   @IsOptional()
   @IsEnum(GenderIdentityEnum)
   genderIdentity?: GenderIdentityEnum;
@@ -211,7 +211,7 @@ class DiversityRequestDto {
   sexualOrientation?: SexualOrientationEnum;
 }
 
-class PhysicalAttributesRequestDto {
+export class PhysicalAttributesRequestDto {
   @IsOptional()
   @IsNumber()
   height?: number;
@@ -221,7 +221,7 @@ class PhysicalAttributesRequestDto {
   weight?: number;
 }
 
-class UniformRequestDto {
+export class UniformRequestDto {
   @IsOptional()
   @IsEnum(ClothingSizeEnum)
   tShirtSize?: ClothingSizeEnum;
@@ -247,7 +247,7 @@ class UniformRequestDto {
   shoeSizeUnit?: ShoesSizeUnitEnum;
 }
 
-class EducationRequestDto {
+export class EducationRequestDto {
   @IsString()
   courseName!: string;
 
@@ -268,7 +268,7 @@ class EducationRequestDto {
   isOngoing!: boolean;
 }
 
-class ProfessionalExperienceRequestDto {
+export class ProfessionalExperienceRequestDto {
   @IsString()
   companyName!: string;
 
@@ -286,7 +286,7 @@ class ProfessionalExperienceRequestDto {
   isCurrent!: boolean;
 }
 
-class CandidateProfileRequestDto {
+export class CandidateProfileRequestDto {
   @IsOptional()
   @IsObject()
   @ValidateNested()
@@ -341,7 +341,7 @@ class CandidateProfileRequestDto {
   availability?: AvailabilityShiftEnum[];
 }
 
-class RecruiterProfileRequestDto {
+export class RecruiterProfileRequestDto {
   @IsOptional()
   @IsString()
   companyId?: string;

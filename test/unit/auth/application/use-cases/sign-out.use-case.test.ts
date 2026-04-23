@@ -57,7 +57,7 @@ describe('SignOutUseCase', () => {
       const result = await useCase.execute(input);
 
       expect(result).toEqual({
-        message: 'Signed out successfully.',
+        message: 'Signed out successfully!',
       });
       expect(tokenService.verifyRefreshToken).toHaveBeenCalledWith(
         input.refreshToken,

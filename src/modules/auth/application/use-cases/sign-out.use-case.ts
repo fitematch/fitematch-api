@@ -49,7 +49,7 @@ export class SignOutUseCase implements SignOutUseCaseInterface {
     await this.sessionRepository.revokeById(session.id);
 
     return {
-      message: 'Signed out successfully.',
+      message: 'Signed out successfully!',
     };
   }
 }

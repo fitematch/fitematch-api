@@ -20,7 +20,7 @@ export class SignOutController {
     description: 'Signs out the user. The client must clear local tokens.',
   })
   @ApiOkResponse({
-    description: 'Signed out successfully.',
+    description: 'Signed out successfully!',
     type: SignOutResponseDto,
   })
   @Post('sign-out')

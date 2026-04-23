@@ -19,28 +19,29 @@ export class UpdateMeRepository implements UpdateMeRepositoryInterface {
   public async update(
     input: UpdateMeInputDto,
   ): Promise<UpdateMeOutputDto | null> {
-    const updatedUser = await this.userModel
+    const updatedUser = (await this.userModel
       .findByIdAndUpdate(
         input.userId,
         {
           ...(input.name !== undefined && { name: input.name }),
           ...(input.birthday !== undefined && { birthday: input.birthday }),
+          ...(input.candidateProfile !== undefined && {
+            candidateProfile: input.candidateProfile,
+          }),
+          ...(input.recruiterProfile !== undefined && {
+            recruiterProfile: input.recruiterProfile,
+          }),
         },
         {
           returnDocument: 'after',
         },
       )
       .lean()
-      .exec();
+      .exec()) as (UpdateMeOutputDto & { _id: { toString(): string } }) | null;
 
     if (!updatedUser) {
       return null;
     }
-
-    const timestamps = updatedUser as typeof updatedUser & {
-      createdAt?: Date;
-      updatedAt?: Date;
-    };
 
     return {
       id: updatedUser._id.toString(),
@@ -49,11 +50,13 @@ export class UpdateMeRepository implements UpdateMeRepositoryInterface {
       birthday: updatedUser.birthday
         ? new Date(updatedUser.birthday).toISOString().split('T')[0]
         : undefined,
+      candidateProfile: updatedUser.candidateProfile,
+      recruiterProfile: updatedUser.recruiterProfile,
       productRole: updatedUser.productRole,
       adminRole: updatedUser.adminRole,
       status: updatedUser.status,
-      createdAt: timestamps.createdAt,
-      updatedAt: timestamps.updatedAt,
+      createdAt: updatedUser.createdAt,
+      updatedAt: updatedUser.updatedAt,
     };
   }
 }
