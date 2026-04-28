@@ -5,9 +5,11 @@ import {
   ApplySchema,
   type ApplyDocument,
 } from '@src/modules/apply/infrastructure/database/mongoose/schemas/apply.schema';
+import { ApplyDatabaseMapper } from '@src/modules/apply/infrastructure/database/mappers/apply-database.mapper';
 import type { ListApplyRepositoryInterface } from '@src/modules/apply/application/contracts/repositories/list-apply.repository.interface';
 import type { ListApplyInputDto } from '@src/modules/apply/application/dto/input/list-apply.input.dto';
 import type { ListApplyRepositoryOutputDto } from '@src/modules/apply/application/dto/output/list-apply.repository-output.dto';
+import ApplyEntity from '../../domain/entities/apply.entity';
 
 type ListApplyLeanDocument = Omit<ListApplyRepositoryOutputDto, '_id'> & {
   _id: { toString(): string };
@@ -56,5 +58,11 @@ export class ListApplyRepository implements ListApplyRepositoryInterface {
       createdAt: apply.createdAt,
       updatedAt: apply.updatedAt,
     }));
+  }
+
+  async findByUserId(userId: string): Promise<ApplyEntity[]> {
+    const applies = await this.applyModel.find({ userId }).exec();
+
+    return applies.map((apply) => ApplyDatabaseMapper.toEntity(apply));
   }
 }

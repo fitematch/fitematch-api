@@ -22,6 +22,8 @@ import { CreateActivationCodeController } from '@src/modules/auth/adapters/http/
 import { ActivateAccountController } from '@src/modules/auth/adapters/http/controllers/activate-account.controller';
 import { RefreshTokenController } from '@src/modules/auth/adapters/http/controllers/refresh-token.controller';
 import { SignOutController } from '@src/modules/auth/adapters/http/controllers/sign-out.controller';
+import { ListAuthSessionsController } from '@src/modules/auth/adapters/http/controllers/list-auth-sessions.controller';
+import { RevokeAuthSessionController } from '@src/modules/auth/adapters/http/controllers/revoke-auth-session.controller';
 import { JwtStrategy } from '@src/modules/auth/infrastructure/strategies/jwt.strategy';
 
 const importedControllers = [
@@ -33,6 +35,8 @@ const importedControllers = [
   ActivateAccountController,
   RefreshTokenController,
   SignOutController,
+  ListAuthSessionsController,
+  RevokeAuthSessionController,
 ];
 
 @Module({

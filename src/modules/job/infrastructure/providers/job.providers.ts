@@ -10,6 +10,8 @@ import {
   UPDATE_JOB_USE_CASE,
   DELETE_JOB_REPOSITORY,
   DELETE_JOB_USE_CASE,
+  LIST_MY_JOBS_REPOSITORY,
+  LIST_MY_JOBS_USE_CASE,
 } from '@src/modules/job/application/contracts/tokens/job.tokens';
 import { ListJobUseCase } from '@src/modules/job/application/use-cases/list-job.use-case';
 import { ListJobRepository } from '@src/modules/job/infrastructure/repositories/list-job.repository';
@@ -21,6 +23,8 @@ import { UpdateJobUseCase } from '@src/modules/job/application/use-cases/update-
 import { UpdateJobRepository } from '@src/modules/job/infrastructure/repositories/update-job.repository';
 import { DeleteJobUseCase } from '@src/modules/job/application/use-cases/delete-job.use-case';
 import { DeleteJobRepository } from '@src/modules/job/infrastructure/repositories/delete-job.repository';
+import { ListMyJobsUseCase } from '@src/modules/job/application/use-cases/list-my-jobs.use-case';
+import { ListMyJobsRepository } from '@src/modules/job/infrastructure/repositories/list-my-jobs.repository';
 
 export const jobProviders: Provider[] = [
   {
@@ -62,5 +66,13 @@ export const jobProviders: Provider[] = [
   {
     provide: DELETE_JOB_REPOSITORY,
     useClass: DeleteJobRepository,
+  },
+  {
+    provide: LIST_MY_JOBS_USE_CASE,
+    useClass: ListMyJobsUseCase,
+  },
+  {
+    provide: LIST_MY_JOBS_REPOSITORY,
+    useClass: ListMyJobsRepository,
   },
 ];

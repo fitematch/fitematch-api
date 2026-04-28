@@ -10,6 +10,7 @@ import { CreateJobController } from '@src/modules/job/adapters/http/controllers/
 import { ReadJobController } from '@src/modules/job/adapters/http/controllers/read-job.controller';
 import { UpdateJobController } from './adapters/http/controllers/update-job.controller';
 import { DeleteJobController } from '@src/modules/job/adapters/http/controllers/delete-job.controller';
+import { ListMyJobsController } from '@src/modules/job/adapters/http/controllers/list-my-jobs.controller';
 
 const importedControllers = [
   ListJobController,
@@ -17,6 +18,7 @@ const importedControllers = [
   ReadJobController,
   UpdateJobController,
   DeleteJobController,
+  ListMyJobsController,
 ];
 
 @Module({

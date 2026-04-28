@@ -10,6 +10,10 @@ import {
   UPDATE_APPLY_USE_CASE,
   DELETE_APPLY_REPOSITORY,
   DELETE_APPLY_USE_CASE,
+  LIST_MY_APPLIES_REPOSITORY,
+  LIST_MY_APPLIES_USE_CASE,
+  LIST_APPLIES_BY_JOB_REPOSITORY,
+  LIST_APPLIES_BY_JOB_USE_CASE,
 } from '@src/modules/apply/application/contracts/tokens/apply.tokens';
 import { ListApplyUseCase } from '@src/modules/apply/application/use-cases/list-apply.use-case';
 import { ListApplyRepository } from '@src/modules/apply/infrastructure/repositories/list-apply.repository';
@@ -21,6 +25,10 @@ import { UpdateApplyUseCase } from '@src/modules/apply/application/use-cases/upd
 import { UpdateApplyRepository } from '@src/modules/apply/infrastructure/repositories/update-apply.repository';
 import { DeleteApplyUseCase } from '@src/modules/apply/application/use-cases/delete-apply.use-case';
 import { DeleteApplyRepository } from '@src/modules/apply/infrastructure/repositories/delete-apply.repository';
+import { ListMyAppliesUseCase } from '@src/modules/apply/application/use-cases/list-my-applies.use-case';
+import { ListMyAppliesRepository } from '@src/modules/apply/infrastructure/repositories/list-my-applies.repository';
+import { ListAppliesByJobUseCase } from '@src/modules/apply/application/use-cases/list-applies-by-job.use-case';
+import { ListAppliesByJobRepository } from '@src/modules/apply/infrastructure/repositories/list-applies-by-job.repository';
 
 export const applyProviders: Provider[] = [
   {
@@ -62,5 +70,21 @@ export const applyProviders: Provider[] = [
   {
     provide: DELETE_APPLY_REPOSITORY,
     useClass: DeleteApplyRepository,
+  },
+  {
+    provide: LIST_MY_APPLIES_USE_CASE,
+    useClass: ListMyAppliesUseCase,
+  },
+  {
+    provide: LIST_MY_APPLIES_REPOSITORY,
+    useClass: ListMyAppliesRepository,
+  },
+  {
+    provide: LIST_APPLIES_BY_JOB_USE_CASE,
+    useClass: ListAppliesByJobUseCase,
+  },
+  {
+    provide: LIST_APPLIES_BY_JOB_REPOSITORY,
+    useClass: ListAppliesByJobRepository,
   },
 ];

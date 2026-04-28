@@ -10,6 +10,8 @@ import { CreateApplyController } from '@src/modules/apply/adapters/http/controll
 import { ReadApplyController } from '@src/modules/apply/adapters/http/controllers/read-apply.controller';
 import { UpdateApplyController } from '@src/modules/apply/adapters/http/controllers/update-apply.controller';
 import { DeleteApplyController } from '@src/modules/apply/adapters/http/controllers/delete-apply.controller';
+import { ListMyAppliesController } from '@src/modules/apply/adapters/http/controllers/list-my-applies.controller';
+import { ListAppliesByJobController } from '@src/modules/apply/adapters/http/controllers/list-applies-by-job.controller';
 
 const importedControllers = [
   ListApplyController,
@@ -17,6 +19,8 @@ const importedControllers = [
   ReadApplyController,
   UpdateApplyController,
   DeleteApplyController,
+  ListMyAppliesController,
+  ListAppliesByJobController,
 ];
 
 @Module({

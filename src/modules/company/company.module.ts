@@ -10,6 +10,7 @@ import { CreateCompanyController } from '@src/modules/company/adapters/http/cont
 import { ReadCompanyController } from '@src/modules/company/adapters/http/controllers/read-company.controller';
 import { UpdateCompanyController } from '@src/modules/company/adapters/http/controllers/update-company.controller';
 import { DeleteCompanyController } from '@src/modules/company/adapters/http/controllers/delete-company.controller';
+import { ListPublicCompaniesController } from '@src/modules/company/adapters/http/controllers/list-public-companies.controller';
 
 const importedControllers = [
   ListCompanyController,
@@ -17,6 +18,7 @@ const importedControllers = [
   ReadCompanyController,
   UpdateCompanyController,
   DeleteCompanyController,
+  ListPublicCompaniesController,
 ];
 
 @Module({

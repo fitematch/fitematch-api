@@ -19,6 +19,10 @@ import {
   TOKEN_SERVICE,
   UPDATE_ME_REPOSITORY,
   UPDATE_ME_USE_CASE,
+  LIST_AUTH_SESSIONS_REPOSITORY,
+  LIST_AUTH_SESSIONS_USE_CASE,
+  REVOKE_AUTH_SESSION_REPOSITORY,
+  REVOKE_AUTH_SESSION_USE_CASE,
 } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import { SignUpUseCase } from '@src/modules/auth/application/use-cases/sign-up.use-case';
 import { SignUpRepository } from '@src/modules/auth/infrastructure/repositories/sign-up.repository';
@@ -39,6 +43,10 @@ import { RefreshTokenUseCase } from '@src/modules/auth/application/use-cases/ref
 import { RefreshTokenRepository } from '@src/modules/auth/infrastructure/repositories/refresh-token.repository';
 import { SessionRepository } from '@src/modules/auth/infrastructure/repositories/session.repository';
 import { JwtTokenService } from '@src/modules/auth/infrastructure/services/jwt-token.service';
+import { ListAuthSessionsUseCase } from '@src/modules/auth/application/use-cases/list-auth-sessions.use-case';
+import { ListAuthSessionsRepository } from '@src/modules/auth/infrastructure/repositories/list-auth-sessions.repository';
+import { RevokeAuthSessionUseCase } from '@src/modules/auth/application/use-cases/revoke-auth-session.use-case';
+import { RevokeAuthSessionRepository } from '@src/modules/auth/infrastructure/repositories/revoke-auth-session.repository';
 
 export const authProviders: Provider[] = [
   {
@@ -116,5 +124,21 @@ export const authProviders: Provider[] = [
   {
     provide: SESSION_REPOSITORY,
     useClass: SessionRepository,
+  },
+  {
+    provide: LIST_AUTH_SESSIONS_USE_CASE,
+    useClass: ListAuthSessionsUseCase,
+  },
+  {
+    provide: LIST_AUTH_SESSIONS_REPOSITORY,
+    useClass: ListAuthSessionsRepository,
+  },
+  {
+    provide: REVOKE_AUTH_SESSION_USE_CASE,
+    useClass: RevokeAuthSessionUseCase,
+  },
+  {
+    provide: REVOKE_AUTH_SESSION_REPOSITORY,
+    useClass: RevokeAuthSessionRepository,
   },
 ];
