@@ -15,10 +15,10 @@ import { ListPublicCompaniesController } from '@src/modules/company/adapters/htt
 const importedControllers = [
   ListCompanyController,
   CreateCompanyController,
+  ListPublicCompaniesController,
   ReadCompanyController,
   UpdateCompanyController,
   DeleteCompanyController,
-  ListPublicCompaniesController,
 ];
 
 @Module({

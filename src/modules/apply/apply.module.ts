@@ -16,11 +16,11 @@ import { ListAppliesByJobController } from '@src/modules/apply/adapters/http/con
 const importedControllers = [
   ListApplyController,
   CreateApplyController,
+  ListMyAppliesController,
+  ListAppliesByJobController,
   ReadApplyController,
   UpdateApplyController,
   DeleteApplyController,
-  ListMyAppliesController,
-  ListAppliesByJobController,
 ];
 
 @Module({
