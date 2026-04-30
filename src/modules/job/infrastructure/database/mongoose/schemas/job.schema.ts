@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
+import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
 
 export type JobDocument = HydratedDocument<JobSchema>;
 
@@ -98,6 +99,12 @@ export class JobSchema {
 
   @Prop({ type: JobMediaSchema })
   media?: JobMediaSchema;
+
+  @Prop({
+    required: true,
+    enum: JobContractTypeEnum,
+  })
+  contractType!: JobContractTypeEnum;
 
   @Prop({
     required: true,

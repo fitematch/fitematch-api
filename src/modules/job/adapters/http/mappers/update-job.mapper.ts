@@ -24,6 +24,7 @@ export class UpdateJobMapper {
           }
         : undefined,
       media: job.media,
+      contractType: job.contractType,
       status: job.status,
       createdAt: job.createdAt,
       updatedAt: job.updatedAt,

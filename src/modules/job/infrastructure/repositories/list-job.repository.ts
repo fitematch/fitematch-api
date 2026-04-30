@@ -57,6 +57,7 @@ export class ListJobRepository implements ListJobRepositoryInterface {
       requirements: job.requirements,
       benefits: job.benefits,
       media: job.media,
+      contractType: job.contractType,
       status: job.status,
       createdAt: job.createdAt,
       updatedAt: job.updatedAt,

@@ -5,6 +5,7 @@ import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 import { JobMediaEntity } from '@src/modules/job/domain/entities/job-media.entity';
+import { JobContractTypeEnum } from '../enums/job-contract-type.enum';
 
 export interface LanguageRequirement {
   name: LanguagesEnum;
@@ -43,6 +44,7 @@ export interface JobEntity {
   requirements?: RequirementsEntity;
   benefits?: BenefitsEntity;
   media?: JobMediaEntity;
+  contractType: JobContractTypeEnum;
   status: JobStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;

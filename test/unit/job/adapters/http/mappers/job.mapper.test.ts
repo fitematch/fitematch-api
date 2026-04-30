@@ -5,6 +5,7 @@ import { UpdateJobMapper } from '@src/modules/job/adapters/http/mappers/update-j
 import type { CreateJobOutputDto } from '@src/modules/job/application/dto/output/create-job.output.dto';
 import type { ListJobOutputDto } from '@src/modules/job/application/dto/output/list-job.output.dto';
 import type { ReadJobOutputDto } from '@src/modules/job/application/dto/output/read-job.output.dto';
+import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 
 const createJob: CreateJobOutputDto = {
@@ -18,6 +19,7 @@ const createJob: CreateJobOutputDto = {
     salary: 3500,
     healthInsurance: true,
   },
+  contractType: JobContractTypeEnum.CLT,
   status: JobStatusEnum.ACTIVE,
 };
 

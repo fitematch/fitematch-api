@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 
 class JobCompanyAddressResponseDto {
@@ -60,12 +61,15 @@ export class ListJobResponseDto {
   @ApiProperty()
   slots!: number;
 
-  @ApiProperty({ enum: JobStatusEnum })
-  status!: JobStatusEnum;
+  @ApiProperty({ enum: JobContractTypeEnum })
+  contractType!: JobContractTypeEnum;
 
   @ApiProperty({
     required: false,
     type: JobCompanyResponseDto,
   })
   company?: JobCompanyResponseDto;
+
+  @ApiProperty({ enum: JobStatusEnum })
+  status!: JobStatusEnum;
 }

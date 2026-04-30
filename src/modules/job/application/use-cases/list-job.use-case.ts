@@ -44,6 +44,7 @@ export class ListJobUseCase implements ListJobUseCaseInterface {
         requirements: job.requirements,
         benefits: job.benefits,
         media: job.media,
+        contractType: job.contractType,
         company: company
           ? {
               id: company._id,

@@ -7,6 +7,7 @@ import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
 import { LanguagesLevelEnum } from '@src/shared/domain/enums/languages-levels.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
+import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
 
 describe('ListMyJobsUseCase', () => {
   let useCase: ListMyJobsUseCase;
@@ -76,6 +77,7 @@ describe('ListMyJobsUseCase', () => {
             media: {
               coverUrl: 'https://cdn.example.com/job-1-cover.png',
             },
+            contractType: JobContractTypeEnum.CLT,
             status: JobStatusEnum.ACTIVE,
             createdAt: new Date('2026-04-28T10:00:00.000Z'),
             updatedAt: new Date('2026-04-28T10:30:00.000Z'),
@@ -108,6 +110,7 @@ describe('ListMyJobsUseCase', () => {
               transportationVoucher: true,
             },
             media: {},
+            contractType: JobContractTypeEnum.PJ,
             status: JobStatusEnum.PENDING,
             createdAt: new Date('2026-04-28T11:00:00.000Z'),
             updatedAt: new Date('2026-04-28T11:20:00.000Z'),

@@ -36,6 +36,9 @@ export class UpdateJobRepository implements UpdateJobRepositoryInterface {
           }),
           ...(input.benefits !== undefined && { benefits: input.benefits }),
           ...(input.media !== undefined && { media: input.media }),
+          ...(input.contractType !== undefined && {
+            contractType: input.contractType,
+          }),
           ...(input.status !== undefined && { status: input.status }),
         },
         { returnDocument: 'after' },
@@ -55,6 +58,7 @@ export class UpdateJobRepository implements UpdateJobRepositoryInterface {
       requirements: updated.requirements,
       benefits: updated.benefits,
       media: updated.media,
+      contractType: updated.contractType,
       status: updated.status,
       createdAt: updated.createdAt,
       updatedAt: updated.updatedAt,

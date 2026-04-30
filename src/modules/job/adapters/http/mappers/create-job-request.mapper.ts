@@ -12,6 +12,7 @@ export class CreateJobRequestMapper {
       requirements: body.requirements,
       benefits: body.benefits,
       media: body.media,
+      contractType: body.contractType,
       status: body.status,
     };
   }

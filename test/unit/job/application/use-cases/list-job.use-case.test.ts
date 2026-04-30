@@ -7,6 +7,7 @@ import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
 import { LanguagesLevelEnum } from '@src/shared/domain/enums/languages-levels.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
+import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
 
 describe('ListJobUseCase', () => {
   let useCase: ListJobUseCase;
@@ -76,6 +77,7 @@ describe('ListJobUseCase', () => {
               alimentationVoucher: true,
               transportationVoucher: true,
             },
+            contractType: JobContractTypeEnum.CLT,
             status: JobStatusEnum.ACTIVE,
             createdAt: new Date('2024-01-01T00:00:00.000Z'),
             updatedAt: new Date('2024-01-02T00:00:00.000Z'),
@@ -107,6 +109,7 @@ describe('ListJobUseCase', () => {
               salary: 2800,
               transportationVoucher: true,
             },
+            contractType: JobContractTypeEnum.PJ,
             status: JobStatusEnum.PENDING,
             createdAt: new Date('2024-02-01T00:00:00.000Z'),
             updatedAt: new Date('2024-02-03T00:00:00.000Z'),
@@ -192,6 +195,7 @@ describe('ListJobUseCase', () => {
               alimentationVoucher: true,
               transportationVoucher: true,
             },
+            contractType: JobContractTypeEnum.FULL_TIME,
             status: JobStatusEnum.ACTIVE,
             createdAt,
             updatedAt,
@@ -286,6 +290,7 @@ describe('ListJobUseCase', () => {
               alimentationVoucher: true,
               transportationVoucher: true,
             },
+            contractType: JobContractTypeEnum.FULL_TIME,
             company: {
               id: 'company-2',
               tradeName: 'Fit Co',

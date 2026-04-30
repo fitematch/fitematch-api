@@ -5,6 +5,7 @@ import { LanguagesLevelEnum } from '@src/shared/domain/enums/languages-levels.en
 import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 import type { JobMediaEntity } from '@src/modules/job/domain/entities/job-media.entity';
+import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
 
 export class UpdateJobOutputDto {
   _id!: string;
@@ -41,6 +42,7 @@ export class UpdateJobOutputDto {
   };
 
   media?: JobMediaEntity;
+  contractType!: JobContractTypeEnum;
 
   status!: JobStatusEnum;
   createdAt?: Date;

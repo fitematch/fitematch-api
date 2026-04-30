@@ -49,6 +49,7 @@ export class ListJobMapper {
             media: job.company.media,
           }
         : undefined,
+      contractType: job.contractType,
       status: job.status,
       createdAt: job.createdAt,
       updatedAt: job.updatedAt,

@@ -17,6 +17,7 @@ export class JobDatabaseMapper {
       requirements: document.requirements as RequirementsEntity | undefined,
       benefits: document.benefits as BenefitsEntity | undefined,
       media: document.media,
+      contractType: document.contractType,
       status: document.status,
       createdAt: document.createdAt,
       updatedAt: document.updatedAt,

@@ -58,6 +58,7 @@ export class CreateJobRepository implements CreateJobRepositoryInterface {
         requirements: input.requirements,
         benefits: input.benefits,
         media: input.media,
+        contractType: input.contractType,
         status: input.status,
       });
       const job = createdJob.toObject() as CreatedJobPlain;
@@ -72,6 +73,7 @@ export class CreateJobRepository implements CreateJobRepositoryInterface {
         requirements: job.requirements,
         benefits: job.benefits,
         media: job.media,
+        contractType: job.contractType,
         status: job.status,
         createdAt: job.createdAt,
         updatedAt: job.updatedAt,

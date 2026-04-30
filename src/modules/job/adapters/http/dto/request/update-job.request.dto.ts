@@ -5,6 +5,7 @@ import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
 import { LanguagesLevelEnum } from '@src/shared/domain/enums/languages-levels.enum';
 import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
+import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
 
 class LanguageRequirementRequestDto {
   @ApiProperty({ enum: LanguagesEnum })
@@ -93,6 +94,9 @@ export class UpdateJobRequestDto {
 
   @ApiPropertyOptional({ type: JobMediaRequestDto })
   media?: JobMediaRequestDto;
+
+  @ApiProperty({ enum: JobContractTypeEnum, required: false })
+  contractType?: JobContractTypeEnum;
 
   @ApiPropertyOptional({ enum: JobStatusEnum })
   status?: JobStatusEnum;

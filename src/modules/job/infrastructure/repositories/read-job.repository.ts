@@ -35,6 +35,7 @@ export class ReadJobRepository implements ReadJobRepositoryInterface {
       requirements: job.requirements,
       benefits: job.benefits,
       media: job.media,
+      contractType: job.contractType,
       status: job.status,
       createdAt: job.createdAt,
       updatedAt: job.updatedAt,

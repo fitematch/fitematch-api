@@ -7,6 +7,7 @@ import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
 import { LanguagesLevelEnum } from '@src/shared/domain/enums/languages-levels.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
+import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
 
 describe('ReadJobUseCase', () => {
   let useCase: ReadJobUseCase;
@@ -77,6 +78,7 @@ describe('ReadJobUseCase', () => {
             alimentationVoucher: true,
             transportationVoucher: true,
           },
+          contractType: JobContractTypeEnum.CLT,
           status: JobStatusEnum.PENDING,
           createdAt: new Date('2026-04-18T04:24:41.570Z'),
           updatedAt: new Date('2026-04-18T05:24:41.570Z'),

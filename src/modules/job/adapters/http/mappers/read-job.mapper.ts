@@ -24,6 +24,7 @@ export class ReadJobMapper {
           }
         : undefined,
       media: job.media,
+      contractType: job.contractType,
       company: job.company
         ? {
             id: job.company.id,
