@@ -27,6 +27,7 @@ export class ReadJobRepository implements ReadJobRepositoryInterface {
 
     return {
       _id: job._id.toString(),
+      slug: job.slug,
       companyId: job.companyId,
       title: job.title,
       description: job.description,

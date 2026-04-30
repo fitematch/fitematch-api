@@ -1,5 +1,6 @@
 import { ListJobUseCase } from '@src/modules/job/application/use-cases/list-job.use-case';
 import type { ListJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/list-job.repository.interface';
+import type { ListJobCompaniesRepository } from '@src/modules/job/application/contracts/repositories/list-job-companies.repository';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 import { EducationLevelEnum } from '@src/shared/domain/enums/education-level.enum';
 import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
@@ -10,13 +11,18 @@ import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
 describe('ListJobUseCase', () => {
   let useCase: ListJobUseCase;
   let listJobRepository: jest.Mocked<ListJobRepositoryInterface>;
+  let listJobCompaniesRepository: jest.Mocked<ListJobCompaniesRepository>;
 
   beforeEach(() => {
     listJobRepository = {
       list: jest.fn(),
     } as jest.Mocked<ListJobRepositoryInterface>;
 
-    useCase = new ListJobUseCase(listJobRepository);
+    listJobCompaniesRepository = {
+      findByIds: jest.fn(),
+    } as jest.Mocked<ListJobCompaniesRepository>;
+
+    useCase = new ListJobUseCase(listJobRepository, listJobCompaniesRepository);
   });
 
   describe('execute', () => {
@@ -108,12 +114,21 @@ describe('ListJobUseCase', () => {
         ];
 
         listJobRepository.list.mockResolvedValue(jobs);
+        listJobCompaniesRepository.findByIds.mockResolvedValue([]);
 
         const result = await useCase.execute(input);
 
-        expect(result).toEqual(jobs);
+        expect(result).toEqual(
+          jobs.map((job) => ({
+            ...job,
+            company: undefined,
+          })),
+        );
         expect(listJobRepository.list).toHaveBeenCalledWith(input);
         expect(listJobRepository.list).toHaveBeenCalledTimes(1);
+        expect(listJobCompaniesRepository.findByIds).toHaveBeenCalledWith([
+          'company-1',
+        ]);
       });
 
       it('should map all job fields from repository output', async () => {
@@ -182,6 +197,37 @@ describe('ListJobUseCase', () => {
             updatedAt,
           },
         ]);
+        listJobCompaniesRepository.findByIds.mockResolvedValue([
+          {
+            _id: 'company-2',
+            slug: 'fit-co',
+            tradeName: 'Fit Co',
+            legalName: 'Fit Co Ltda',
+            contacts: {
+              email: 'jobs@fitco.com',
+              website: 'https://fitco.com',
+              address: {
+                street: 'Rua A',
+                number: '10',
+                complement: 'Sala 2',
+                neighborhood: 'Centro',
+                city: 'Sao Paulo',
+                state: 'SP',
+                country: 'Brasil',
+                zipCode: '01001000',
+              },
+            },
+            documents: {},
+            media: {
+              logoUrl: 'https://cdn.example.com/fitco.png',
+            },
+            audit: {},
+            approval: {},
+            status: 'ACTIVE' as never,
+            createdAt,
+            updatedAt,
+          } as never,
+        ]);
 
         const result = await useCase.execute(input);
 
@@ -240,6 +286,27 @@ describe('ListJobUseCase', () => {
               alimentationVoucher: true,
               transportationVoucher: true,
             },
+            company: {
+              id: 'company-2',
+              tradeName: 'Fit Co',
+              contacts: {
+                email: 'jobs@fitco.com',
+                website: 'https://fitco.com',
+                address: {
+                  street: 'Rua A',
+                  number: '10',
+                  complement: 'Sala 2',
+                  neighborhood: 'Centro',
+                  city: 'Sao Paulo',
+                  state: 'SP',
+                  country: 'Brasil',
+                  zipCode: '01001000',
+                },
+              },
+              media: {
+                logoUrl: 'https://cdn.example.com/fitco.png',
+              },
+            },
             status: JobStatusEnum.ACTIVE,
             createdAt,
             updatedAt,
@@ -253,6 +320,7 @@ describe('ListJobUseCase', () => {
         const input = { search: 'missing-job' };
 
         listJobRepository.list.mockResolvedValue([]);
+        listJobCompaniesRepository.findByIds.mockResolvedValue([]);
 
         const result = await useCase.execute(input);
 

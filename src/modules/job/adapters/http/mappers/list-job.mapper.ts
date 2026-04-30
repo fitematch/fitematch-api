@@ -24,6 +24,31 @@ export class ListJobMapper {
           }
         : undefined,
       media: job.media,
+      company: job.company
+        ? {
+            id: job.company.id,
+            tradeName: job.company.tradeName,
+            contacts: job.company.contacts
+              ? {
+                  email: job.company.contacts.email,
+                  website: job.company.contacts.website,
+                  address: job.company.contacts.address
+                    ? {
+                        street: job.company.contacts.address.street,
+                        number: job.company.contacts.address.number,
+                        complement: job.company.contacts.address.complement,
+                        neighborhood: job.company.contacts.address.neighborhood,
+                        city: job.company.contacts.address.city,
+                        state: job.company.contacts.address.state,
+                        country: job.company.contacts.address.country,
+                        zipCode: job.company.contacts.address.zipCode,
+                      }
+                    : undefined,
+                }
+              : undefined,
+            media: job.company.media,
+          }
+        : undefined,
       status: job.status,
       createdAt: job.createdAt,
       updatedAt: job.updatedAt,

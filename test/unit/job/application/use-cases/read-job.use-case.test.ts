@@ -1,5 +1,6 @@
 import { ReadJobUseCase } from '@src/modules/job/application/use-cases/read-job.use-case';
 import type { ReadJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/read-job.repository.interface';
+import type { ListJobCompaniesRepository } from '@src/modules/job/application/contracts/repositories/list-job-companies.repository';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 import { EducationLevelEnum } from '@src/shared/domain/enums/education-level.enum';
 import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
@@ -10,13 +11,18 @@ import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
 describe('ReadJobUseCase', () => {
   let useCase: ReadJobUseCase;
   let readJobRepository: jest.Mocked<ReadJobRepositoryInterface>;
+  let listJobCompaniesRepository: jest.Mocked<ListJobCompaniesRepository>;
 
   beforeEach(() => {
     readJobRepository = {
       read: jest.fn(),
     } as jest.Mocked<ReadJobRepositoryInterface>;
 
-    useCase = new ReadJobUseCase(readJobRepository);
+    listJobCompaniesRepository = {
+      findByIds: jest.fn(),
+    } as jest.Mocked<ListJobCompaniesRepository>;
+
+    useCase = new ReadJobUseCase(readJobRepository, listJobCompaniesRepository);
   });
 
   describe('execute', () => {
@@ -26,6 +32,7 @@ describe('ReadJobUseCase', () => {
 
         const output = {
           _id: 'job-id-1',
+          slug: 'personal-trainer-senior',
           companyId: 'company-1',
           title: 'Personal Trainer Senior',
           description:
@@ -74,14 +81,71 @@ describe('ReadJobUseCase', () => {
           createdAt: new Date('2026-04-18T04:24:41.570Z'),
           updatedAt: new Date('2026-04-18T05:24:41.570Z'),
         };
+        listJobCompaniesRepository.findByIds.mockResolvedValue([
+          {
+            _id: 'company-1',
+            slug: 'fitematch',
+            tradeName: 'Fitematch',
+            legalName: 'Fitematch Ltda',
+            contacts: {
+              email: 'hr@fitematch.com',
+              website: 'https://fitematch.com',
+              address: {
+                street: 'Rua B',
+                number: '20',
+                complement: 'Andar 1',
+                neighborhood: 'Centro',
+                city: 'Sao Paulo',
+                state: 'SP',
+                country: 'Brasil',
+                zipCode: '01310000',
+              },
+            },
+            documents: {},
+            media: {
+              logoUrl: 'https://cdn.fitematch.com/logo.png',
+            },
+            audit: {},
+            approval: {},
+            status: 'ACTIVE' as never,
+            createdAt: new Date('2026-04-18T04:24:41.570Z'),
+            updatedAt: new Date('2026-04-18T05:24:41.570Z'),
+          } as never,
+        ]);
 
         readJobRepository.read.mockResolvedValue(output);
 
         const result = await useCase.execute(input);
 
-        expect(result).toEqual(output);
+        expect(result).toEqual({
+          ...output,
+          company: {
+            id: 'company-1',
+            tradeName: 'Fitematch',
+            contacts: {
+              email: 'hr@fitematch.com',
+              website: 'https://fitematch.com',
+              address: {
+                street: 'Rua B',
+                number: '20',
+                complement: 'Andar 1',
+                neighborhood: 'Centro',
+                city: 'Sao Paulo',
+                state: 'SP',
+                country: 'Brasil',
+                zipCode: '01310000',
+              },
+            },
+            media: {
+              logoUrl: 'https://cdn.fitematch.com/logo.png',
+            },
+          },
+        });
         expect(readJobRepository.read).toHaveBeenCalledWith(input);
         expect(readJobRepository.read).toHaveBeenCalledTimes(1);
+        expect(listJobCompaniesRepository.findByIds).toHaveBeenCalledWith([
+          'company-1',
+        ]);
       });
     });
 
@@ -96,6 +160,7 @@ describe('ReadJobUseCase', () => {
         expect(result).toBeNull();
         expect(readJobRepository.read).toHaveBeenCalledWith(input);
         expect(readJobRepository.read).toHaveBeenCalledTimes(1);
+        expect(listJobCompaniesRepository.findByIds).not.toHaveBeenCalled();
       });
     });
 
@@ -109,6 +174,7 @@ describe('ReadJobUseCase', () => {
         await expect(useCase.execute(input)).rejects.toThrow(errorMessage);
         expect(readJobRepository.read).toHaveBeenCalledWith(input);
         expect(readJobRepository.read).toHaveBeenCalledTimes(1);
+        expect(listJobCompaniesRepository.findByIds).not.toHaveBeenCalled();
       });
     });
   });

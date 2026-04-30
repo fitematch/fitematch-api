@@ -3,9 +3,11 @@ import { ListJobMapper } from '@src/modules/job/adapters/http/mappers/list-job.m
 import { ReadJobMapper } from '@src/modules/job/adapters/http/mappers/read-job.mapper';
 import { UpdateJobMapper } from '@src/modules/job/adapters/http/mappers/update-job.mapper';
 import type { CreateJobOutputDto } from '@src/modules/job/application/dto/output/create-job.output.dto';
+import type { ListJobOutputDto } from '@src/modules/job/application/dto/output/list-job.output.dto';
+import type { ReadJobOutputDto } from '@src/modules/job/application/dto/output/read-job.output.dto';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 
-const job: CreateJobOutputDto = {
+const createJob: CreateJobOutputDto = {
   _id: 'job-1',
   slug: 'personal-trainer',
   companyId: 'company-1',
@@ -19,27 +21,54 @@ const job: CreateJobOutputDto = {
   status: JobStatusEnum.ACTIVE,
 };
 
+const listJob: ListJobOutputDto = {
+  ...createJob,
+  company: {
+    id: 'company-1',
+    tradeName: 'Fitematch Gym',
+    contacts: {
+      email: 'contato@fitematch.com',
+      website: 'https://fitematch.com',
+      address: {
+        city: 'Sao Paulo',
+      },
+    },
+    media: {
+      logoUrl: 'https://cdn.example.com/company-logo.png',
+    },
+  },
+};
+
+const readJob: ReadJobOutputDto = {
+  ...createJob,
+  company: listJob.company,
+};
+
 describe('Job Mappers', () => {
   it('should format salary in create mapper', () => {
-    const result = CreateJobMapper.toResponse(job);
+    const result = CreateJobMapper.toResponse(createJob);
 
     expect(result.benefits?.salary).toBe('R$\u00a03.500,00');
   });
 
   it('should format salary in list mapper', () => {
-    const result = ListJobMapper.toResponse(job);
+    const result = ListJobMapper.toResponse(listJob);
 
     expect(result.benefits?.salary).toBe('R$\u00a03.500,00');
+    expect(result.company?.media?.logoUrl).toBe(
+      'https://cdn.example.com/company-logo.png',
+    );
   });
 
   it('should format salary in read mapper', () => {
-    const result = ReadJobMapper.toResponse(job);
+    const result = ReadJobMapper.toResponse(readJob);
 
     expect(result.benefits?.salary).toBe('R$\u00a03.500,00');
+    expect(result.company?.contacts?.email).toBe('contato@fitematch.com');
   });
 
   it('should format salary in update mapper', () => {
-    const result = UpdateJobMapper.toResponse(job);
+    const result = UpdateJobMapper.toResponse(createJob);
 
     expect((result.benefits as { salary?: string } | undefined)?.salary).toBe(
       'R$\u00a03.500,00',

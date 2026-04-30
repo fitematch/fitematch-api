@@ -39,6 +39,27 @@ export class ListJobResponseDto {
   media?: {
     coverUrl?: string;
   };
+  company?: {
+    id: string;
+    tradeName: string;
+    contacts?: {
+      email?: string;
+      website?: string;
+      address?: {
+        street?: string;
+        number?: string;
+        complement?: string;
+        neighborhood?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+        zipCode?: string;
+      };
+    };
+    media?: {
+      logoUrl?: string;
+    };
+  };
   status!: JobStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;

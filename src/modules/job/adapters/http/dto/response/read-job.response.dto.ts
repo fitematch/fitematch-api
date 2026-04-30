@@ -7,6 +7,7 @@ import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 
 export class ReadJobResponseDto {
   _id!: string;
+  slug!: string;
   companyId!: string;
   title!: string;
   description!: string;
@@ -37,6 +38,27 @@ export class ReadJobResponseDto {
   };
   media?: {
     coverUrl?: string;
+  };
+  company?: {
+    id: string;
+    tradeName: string;
+    contacts?: {
+      email?: string;
+      website?: string;
+      address?: {
+        street?: string;
+        number?: string;
+        complement?: string;
+        neighborhood?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+        zipCode?: string;
+      };
+    };
+    media?: {
+      logoUrl?: string;
+    };
   };
   status!: JobStatusEnum;
   createdAt?: Date;

@@ -8,6 +8,7 @@ import type { JobMediaEntity } from '@src/modules/job/domain/entities/job-media.
 
 export class ReadJobOutputDto {
   _id!: string;
+  slug!: string;
   companyId!: string;
   title!: string;
   description!: string;
@@ -37,6 +38,27 @@ export class ReadJobOutputDto {
     transportationVoucher?: boolean;
   };
   media?: JobMediaEntity;
+  company?: {
+    id: string;
+    tradeName: string;
+    contacts?: {
+      email?: string;
+      website?: string;
+      address?: {
+        street?: string;
+        number?: string;
+        complement?: string;
+        neighborhood?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+        zipCode?: string;
+      };
+    };
+    media?: {
+      logoUrl?: string;
+    };
+  };
   status!: JobStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;
