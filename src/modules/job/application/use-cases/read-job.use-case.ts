@@ -40,6 +40,12 @@ export class ReadJobUseCase implements ReadJobUseCaseInterface {
             contacts: {
               email: company.contacts?.email,
               website: company.contacts?.website,
+              phone: {
+                country: company.contacts?.phone?.country,
+                number: company.contacts?.phone?.number,
+                isWhatsapp: company.contacts?.phone?.isWhatsapp,
+                isTelegram: company.contacts?.phone?.isTelegram,
+              },
               address: {
                 street: company.contacts?.address?.street,
                 number: company.contacts?.address?.number,

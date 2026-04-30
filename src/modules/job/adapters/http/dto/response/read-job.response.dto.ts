@@ -47,6 +47,12 @@ export class ReadJobResponseDto {
     contacts?: {
       email?: string;
       website?: string;
+      phone?: {
+        country?: string;
+        number?: string;
+        isWhatsapp?: boolean;
+        isTelegram?: boolean;
+      };
       address?: {
         street?: string;
         number?: string;

@@ -31,8 +31,15 @@ const listJob: ListJobOutputDto = {
     contacts: {
       email: 'contato@fitematch.com',
       website: 'https://fitematch.com',
+      phone: {
+        country: '+55',
+        number: '11987654321',
+        isWhatsapp: true,
+        isTelegram: false,
+      },
       address: {
         city: 'Sao Paulo',
+        zipCode: '12345678',
       },
     },
     media: {
@@ -60,6 +67,8 @@ describe('Job Mappers', () => {
     expect(result.company?.media?.logoUrl).toBe(
       'https://cdn.example.com/company-logo.png',
     );
+    expect(result.company?.contacts?.phone?.number).toBe('(11) 98765-4321');
+    expect(result.company?.contacts?.address?.zipCode).toBe('12345-678');
   });
 
   it('should format salary in read mapper', () => {
@@ -67,6 +76,8 @@ describe('Job Mappers', () => {
 
     expect(result.benefits?.salary).toBe('R$\u00a03.500,00');
     expect(result.company?.contacts?.email).toBe('contato@fitematch.com');
+    expect(result.company?.contacts?.phone?.number).toBe('(11) 98765-4321');
+    expect(result.company?.contacts?.address?.zipCode).toBe('12345-678');
   });
 
   it('should format salary in update mapper', () => {

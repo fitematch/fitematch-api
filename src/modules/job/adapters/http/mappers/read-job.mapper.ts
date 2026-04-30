@@ -1,10 +1,12 @@
 import type { ReadJobOutputDto } from '@src/modules/job/application/dto/output/read-job.output.dto';
 import type { ReadJobResponseDto } from '@src/modules/job/adapters/http/dto/response/read-job.response.dto';
 import CurrencyUtils from '@src/shared/utils/currency.utils';
+import { MaskUtils } from '@src/shared/utils/mask.utils';
 
 export class ReadJobMapper {
   static toResponse(job: ReadJobOutputDto): ReadJobResponseDto {
     const currencyUtils = new CurrencyUtils();
+    const maskUtils = new MaskUtils();
 
     return {
       _id: job._id,
@@ -33,6 +35,16 @@ export class ReadJobMapper {
               ? {
                   email: job.company.contacts.email,
                   website: job.company.contacts.website,
+                  phone: job.company.contacts.phone
+                    ? {
+                        ...job.company.contacts.phone,
+                        number: job.company.contacts.phone.number
+                          ? maskUtils.formatPhone(
+                              job.company.contacts.phone.number,
+                            )
+                          : undefined,
+                      }
+                    : undefined,
                   address: job.company.contacts.address
                     ? {
                         street: job.company.contacts.address.street,
@@ -42,7 +54,11 @@ export class ReadJobMapper {
                         city: job.company.contacts.address.city,
                         state: job.company.contacts.address.state,
                         country: job.company.contacts.address.country,
-                        zipCode: job.company.contacts.address.zipCode,
+                        zipCode: job.company.contacts.address.zipCode
+                          ? maskUtils.formatCEP(
+                              job.company.contacts.address.zipCode,
+                            )
+                          : undefined,
                       }
                     : undefined,
                 }

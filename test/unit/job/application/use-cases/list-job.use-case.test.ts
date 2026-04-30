@@ -210,6 +210,12 @@ describe('ListJobUseCase', () => {
             contacts: {
               email: 'jobs@fitco.com',
               website: 'https://fitco.com',
+              phone: {
+                country: '+55',
+                number: '11987654321',
+                isWhatsapp: true,
+                isTelegram: false,
+              },
               address: {
                 street: 'Rua A',
                 number: '10',
@@ -297,6 +303,12 @@ describe('ListJobUseCase', () => {
               contacts: {
                 email: 'jobs@fitco.com',
                 website: 'https://fitco.com',
+                phone: {
+                  country: '+55',
+                  number: '11987654321',
+                  isWhatsapp: true,
+                  isTelegram: false,
+                },
                 address: {
                   street: 'Rua A',
                   number: '10',

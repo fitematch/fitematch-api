@@ -92,6 +92,12 @@ describe('ReadJobUseCase', () => {
             contacts: {
               email: 'hr@fitematch.com',
               website: 'https://fitematch.com',
+              phone: {
+                country: '+55',
+                number: '11987654321',
+                isWhatsapp: true,
+                isTelegram: false,
+              },
               address: {
                 street: 'Rua B',
                 number: '20',
@@ -127,6 +133,12 @@ describe('ReadJobUseCase', () => {
             contacts: {
               email: 'hr@fitematch.com',
               website: 'https://fitematch.com',
+              phone: {
+                country: '+55',
+                number: '11987654321',
+                isWhatsapp: true,
+                isTelegram: false,
+              },
               address: {
                 street: 'Rua B',
                 number: '20',
