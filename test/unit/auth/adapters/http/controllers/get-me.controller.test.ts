@@ -23,7 +23,7 @@ describe('GetMeController', () => {
     describe('when the authenticated user exists', () => {
       it('should return the mapped authenticated user profile', async () => {
         const user = {
-          sub: 'user-1',
+          id: 'user-1',
           email: 'rebecca@fitematch.com',
           productRole: ProductRoleEnum.RECRUITER,
           adminRole: AdminRoleEnum.SUPER_ADMIN,
@@ -74,7 +74,7 @@ describe('GetMeController', () => {
           },
         });
         expect(getMeUseCase.execute).toHaveBeenCalledWith({
-          userId: user.sub,
+          userId: user.id,
         });
       });
     });
@@ -85,8 +85,9 @@ describe('GetMeController', () => {
 
         await expect(
           controller.handle({
-            sub: 'missing-user',
+            id: 'missing-user',
             email: 'missing@fitematch.com',
+            productRole: ProductRoleEnum.RECRUITER,
           }),
         ).rejects.toThrow(
           new NotFoundException('Authenticated user not found.'),

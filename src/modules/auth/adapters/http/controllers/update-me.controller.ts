@@ -21,7 +21,7 @@ import { UpdateMeRequestMapper } from '@src/modules/auth/adapters/http/mappers/u
 import { UpdateMeMapper } from '@src/modules/auth/adapters/http/mappers/update-me.mapper';
 import { JwtAuthGuard } from '@src/modules/auth/adapters/http/guards/jwt-auth.guard';
 import { CurrentUser } from '@src/modules/auth/adapters/http/decorators/current-user.decorator';
-import type { JwtPayloadType } from '@src/modules/auth/domain/types/jwt-payload.type';
+import type { AuthUserPayload } from '@src/modules/auth/application/dto/auth-user-payload';
 
 @ApiTags('Auth')
 @ApiBearerAuth('JWT')
@@ -46,7 +46,7 @@ export class UpdateMeController {
   @UseGuards(JwtAuthGuard)
   @Patch('me')
   public async handle(
-    @CurrentUser() user: JwtPayloadType,
+    @CurrentUser() user: AuthUserPayload,
     @Body() body: UpdateMeRequestDto,
   ): Promise<UpdateMeResponseDto> {
     const result = await this.updateMeUseCase.execute(

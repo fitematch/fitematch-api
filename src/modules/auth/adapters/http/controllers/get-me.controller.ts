@@ -18,7 +18,7 @@ import { GetMeResponseDto } from '@src/modules/auth/adapters/http/dto/response/g
 import { GetMeMapper } from '@src/modules/auth/adapters/http/mappers/get-me.mapper';
 import { JwtAuthGuard } from '@src/modules/auth/adapters/http/guards/jwt-auth.guard';
 import { CurrentUser } from '@src/modules/auth/adapters/http/decorators/current-user.decorator';
-import type { JwtPayloadType } from '@src/modules/auth/domain/types/jwt-payload.type';
+import type { AuthUserPayload } from '@src/modules/auth/application/dto/auth-user-payload';
 
 @ApiTags('Auth')
 @ApiBearerAuth('JWT')
@@ -43,10 +43,10 @@ export class GetMeController {
   @UseGuards(JwtAuthGuard)
   @Get('me')
   public async handle(
-    @CurrentUser() user: JwtPayloadType,
+    @CurrentUser() user: AuthUserPayload,
   ): Promise<GetMeResponseDto> {
     const result = await this.getMeUseCase.execute({
-      userId: user.sub,
+      userId: user.id,
     });
 
     if (!result) {

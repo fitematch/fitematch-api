@@ -11,7 +11,7 @@ describe('UpdateMeRequestMapper', () => {
   describe('toInput', () => {
     it('should map authenticated user and body to update me input with profiles', () => {
       const user = {
-        sub: 'user-1',
+        id: 'user-1',
         email: 'candidate@fitematch.com',
         productRole: ProductRoleEnum.CANDIDATE,
       };
@@ -101,7 +101,7 @@ describe('UpdateMeRequestMapper', () => {
       const result = UpdateMeRequestMapper.toInput(user, body);
 
       expect(result).toEqual({
-        userId: user.sub,
+        userId: user.id,
         name: body.name,
         birthday: body.birthday,
         candidateProfile: {
