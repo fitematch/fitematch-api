@@ -5,7 +5,6 @@ import {
   Inject,
   Param,
   Patch,
-  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -18,15 +17,9 @@ import {
 
 import { REVOKE_AUTH_SESSION_USE_CASE } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import type { RevokeAuthSessionUseCaseInterface } from '@src/modules/auth/application/contracts/use-cases/revoke-auth-session.use-case.interface';
-
 import { JwtAuthGuard } from '@src/modules/auth/adapters/http/guards/jwt-auth.guard';
 import { CurrentUser } from '@src/modules/auth/adapters/http/decorators/current-user.decorator';
-
-interface AuthenticatedUserPayload {
-  id?: string;
-  sub?: string;
-  userId?: string;
-}
+import type { AuthUserPayload } from '@src/modules/auth/application/dto/auth-user-payload';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -45,17 +38,11 @@ export class RevokeAuthSessionController {
   @ApiNoContentResponse()
   async handle(
     @Param('sessionId') sessionId: string,
-    @CurrentUser() user: AuthenticatedUserPayload,
+    @CurrentUser() user: AuthUserPayload,
   ): Promise<void> {
-    const userId = user.id ?? user.sub ?? user.userId;
-
-    if (!userId) {
-      throw new UnauthorizedException('Authenticated user id not found.');
-    }
-
     await this.useCase.execute({
       sessionId,
-      userId,
+      userId: user.id,
     });
   }
 }

@@ -6,11 +6,13 @@ import { SoftSkillsEnum } from '@src/shared/domain/enums/soft-skills.enum';
 import { HardSkillsEnum } from '@src/shared/domain/enums/hard-skills.enum';
 import type { JobMediaEntity } from '@src/modules/job/domain/entities/job-media.entity';
 import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
+import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 
 export class UpdateJobInputDto {
   _id!: string;
 
-  companyId?: string;
+  productRole!: ProductRoleEnum;
+  recruiterCompanyId?: string;
   title?: string;
   description?: string;
   slots?: number;

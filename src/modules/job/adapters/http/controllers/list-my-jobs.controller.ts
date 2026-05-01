@@ -11,16 +11,11 @@ import type { ListMyJobsUseCaseInterface } from '@src/modules/job/application/co
 import { ListMyJobsResponseDto } from '@src/modules/job/adapters/http/dto/response/list-my-jobs-response.dto';
 import { ListMyJobsMapper } from '@src/modules/job/adapters/http/mappers/list-my-jobs.mapper';
 import { JwtAuthGuard } from '@src/modules/auth/adapters/http/guards/jwt-auth.guard';
+import { ProductRoleGuard } from '@src/modules/auth/adapters/http/guards/product-role.guard';
+import { ProductRoles } from '@src/modules/auth/adapters/http/decorators/product-roles.decorator';
 import { CurrentUser } from '@src/modules/auth/adapters/http/decorators/current-user.decorator';
-
-interface AuthenticatedUserPayload {
-  id: string;
-  sub?: string;
-  userId?: string;
-  recruiterProfile?: {
-    companyId?: string;
-  };
-}
+import type { AuthUserPayload } from '@src/modules/auth/application/dto/auth-user-payload';
+import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 
 @ApiTags('Job')
 @Controller('job')
@@ -31,7 +26,8 @@ export class ListMyJobsController {
   ) {}
 
   @Get('me')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, ProductRoleGuard)
+  @ProductRoles(ProductRoleEnum.RECRUITER)
   @ApiBearerAuth()
   @ApiOperation({ summary: 'List authenticated recruiter jobs' })
   @ApiOkResponse({
@@ -39,7 +35,7 @@ export class ListMyJobsController {
     isArray: true,
   })
   async handle(
-    @CurrentUser() user: AuthenticatedUserPayload,
+    @CurrentUser() user: AuthUserPayload,
   ): Promise<ListMyJobsResponseDto[]> {
     const output = await this.listMyJobsUseCase.execute({
       companyId: user.recruiterProfile?.companyId,

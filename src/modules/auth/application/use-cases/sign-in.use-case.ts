@@ -47,9 +47,16 @@ export class SignInUseCase implements SignInUseCaseInterface {
 
     const accessPayload: AccessTokenPayload = {
       sub: user.id,
+      id: user.id,
       email: user.email,
       productRole: user.productRole,
       adminRole: user.adminRole,
+      recruiterProfile: user.recruiterProfile
+        ? {
+            companyId: user.recruiterProfile.companyId,
+            position: user.recruiterProfile.position,
+          }
+        : undefined,
       permissions: user.permissions,
     };
 

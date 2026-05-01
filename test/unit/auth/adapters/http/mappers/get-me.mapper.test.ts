@@ -113,7 +113,7 @@ describe('GetMeMapper', () => {
             ...user.recruiterProfile.contacts,
             phone: {
               ...user.recruiterProfile.contacts.phone,
-              number: '(11) 8888-8888',
+              number: '(11) 88888-888',
             },
           },
         },

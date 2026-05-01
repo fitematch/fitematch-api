@@ -1,27 +1,49 @@
-import { BadRequestException, Inject, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
-import type { ListAppliesByJobRepository } from '@src/modules/apply/application/contracts/repositories/list-applies-by-job.repository';
 import { LIST_APPLIES_BY_JOB_REPOSITORY } from '@src/modules/apply/application/contracts/tokens/apply.tokens';
-import { ListAppliesByJobInput } from '@src/modules/apply/application/dto/input/list-applies-by-job.input';
-import { ListAppliesByJobOutput } from '@src/modules/apply/application/dto/output/list-applies-by-job.output';
+import type { ListAppliesByJobRepository } from '@src/modules/apply/application/contracts/repositories/list-applies-by-job.repository';
+import type { ListAppliesByJobInput } from '@src/modules/apply/application/dto/input/list-applies-by-job.input';
+import type { ListAppliesByJobOutput } from '@src/modules/apply/application/dto/output/list-applies-by-job.output';
+import type { ListAppliesByJobUseCaseInterface } from '@src/modules/apply/application/contracts/use-cases/list-applies-by-job.use-case.interface';
+import { READ_JOB_REPOSITORY } from '@src/modules/job/application/contracts/tokens/job.tokens';
+import type { ReadJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/read-job.repository.interface';
 
 @Injectable()
-export class ListAppliesByJobUseCase {
+export class ListAppliesByJobUseCase implements ListAppliesByJobUseCaseInterface {
   constructor(
     @Inject(LIST_APPLIES_BY_JOB_REPOSITORY)
-    private readonly listAppliesByJobRepository: ListAppliesByJobRepository,
+    private readonly repository: ListAppliesByJobRepository,
+
+    @Inject(READ_JOB_REPOSITORY)
+    private readonly readJobRepository: ReadJobRepositoryInterface,
   ) {}
 
   async execute(
     input: ListAppliesByJobInput,
   ): Promise<ListAppliesByJobOutput[]> {
-    if (!input.jobId) {
-      throw new BadRequestException('Job id is required.');
+    const job = await this.readJobRepository.read({
+      _id: input.jobId,
+    });
+
+    if (!job) {
+      throw new NotFoundException('Job not found!');
     }
 
-    const applies = await this.listAppliesByJobRepository.findByJobId(
-      input.jobId,
-    );
+    if (
+      !input.recruiterCompanyId ||
+      job.companyId !== input.recruiterCompanyId
+    ) {
+      throw new ForbiddenException(
+        'You are not allowed to list applies for this job!',
+      );
+    }
+
+    const applies = await this.repository.findByJobId(input.jobId);
 
     return applies.map((apply) => ({
       id: apply._id,

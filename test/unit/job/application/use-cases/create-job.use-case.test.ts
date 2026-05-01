@@ -2,6 +2,7 @@ import { ConflictException } from '@nestjs/common';
 import { CreateJobUseCase } from '@src/modules/job/application/use-cases/create-job.use-case';
 import type { CreateJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/create-job.repository.interface';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
+import { JobContractTypeEnum } from '@src/modules/job/domain/enums/job-contract-type.enum';
 import { EducationLevelEnum } from '@src/shared/domain/enums/education-level.enum';
 import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
 import { LanguagesLevelEnum } from '@src/shared/domain/enums/languages-levels.enum';
@@ -31,6 +32,7 @@ describe('CreateJobUseCase', () => {
           title: 'Personal Trainer',
           description: 'Responsible for training and monitoring gym clients.',
           slots: 2,
+          contractType: JobContractTypeEnum.CLT,
           requirements: {
             educationLevel: [EducationLevelEnum.BACHELOR],
             minExperienceYears: 2,
@@ -98,6 +100,7 @@ describe('CreateJobUseCase', () => {
           title: 'Personal Trainer Senior',
           description: 'Responsible for training and monitoring gym clients.',
           slots: 2,
+          contractType: JobContractTypeEnum.CLT,
         };
 
         const expected = {
@@ -132,6 +135,7 @@ describe('CreateJobUseCase', () => {
           title: 'Personal Trainer Senior',
           description: 'Responsible for training and monitoring gym clients.',
           slots: 2,
+          contractType: JobContractTypeEnum.CLT,
         };
 
         const expected = {
@@ -180,6 +184,7 @@ describe('CreateJobUseCase', () => {
           title: 'Fitness Coordinator',
           description: 'Coordinates training planning and gym floor team.',
           slots: 1,
+          contractType: JobContractTypeEnum.PJ,
           requirements: {
             educationLevel: [
               EducationLevelEnum.BACHELOR,
@@ -254,6 +259,7 @@ describe('CreateJobUseCase', () => {
           title: '  Personal Trainer Senior  ',
           description: 'Responsible for training and monitoring gym clients.',
           slots: 2,
+          contractType: JobContractTypeEnum.CLT,
         };
 
         createJobRepository.existsDuplicate.mockResolvedValue(true);
@@ -281,6 +287,7 @@ describe('CreateJobUseCase', () => {
           title: 'Error Job',
           description: 'Invalid job for error scenario.',
           slots: 1,
+          contractType: JobContractTypeEnum.CLT,
         };
         const errorMessage = 'Repository error';
 

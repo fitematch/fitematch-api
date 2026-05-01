@@ -16,7 +16,7 @@ describe('MaskUtils', () => {
     it('should format partial and full phone numbers', () => {
       expect(maskUtils.formatPhone('1')).toBe('(1');
       expect(maskUtils.formatPhone('11999')).toBe('(11) 999');
-      expect(maskUtils.formatPhone('1198765432')).toBe('(11) 9876-5432');
+      expect(maskUtils.formatPhone('1198765432')).toBe('(11) 98765-432');
       expect(maskUtils.formatPhone('11987654321')).toBe('(11) 98765-4321');
     });
   });

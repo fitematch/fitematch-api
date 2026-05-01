@@ -15,7 +15,7 @@ import {
 } from '@nestjs/swagger';
 import { UPDATE_ME_USE_CASE } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import type { UpdateMeUseCaseInterface } from '@src/modules/auth/application/contracts/use-cases/update-me.use-case.interface';
-import { UpdateMeRequestDto } from '@src/modules/auth/adapters/http/dto/request/update-me.request.dto';
+import type { UpdateMeRequestDto } from '@src/modules/auth/adapters/http/dto/request/update-me.request.dto';
 import { UpdateMeResponseDto } from '@src/modules/auth/adapters/http/dto/response/update-me.response.dto';
 import { UpdateMeRequestMapper } from '@src/modules/auth/adapters/http/mappers/update-me-request.mapper';
 import { UpdateMeMapper } from '@src/modules/auth/adapters/http/mappers/update-me.mapper';

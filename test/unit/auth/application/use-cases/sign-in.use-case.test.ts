@@ -96,9 +96,11 @@ describe('SignInUseCase', () => {
 
         const expectedPayload: AccessTokenPayload = {
           sub: user.id,
+          id: user.id,
           email: user.email,
           productRole: user.productRole,
           adminRole: user.adminRole,
+          recruiterProfile: undefined,
           permissions: user.permissions,
         };
 
@@ -219,9 +221,11 @@ describe('SignInUseCase', () => {
         );
         expect(tokenService.generateAccessToken).toHaveBeenCalledWith({
           sub: user.id,
+          id: user.id,
           email: user.email,
           productRole: user.productRole,
           adminRole: undefined,
+          recruiterProfile: undefined,
           permissions: undefined,
         });
         expect(sessionRepository.create).not.toHaveBeenCalled();

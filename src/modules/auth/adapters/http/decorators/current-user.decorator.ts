@@ -1,10 +1,22 @@
-import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import type { JwtPayloadType } from '@src/modules/auth/domain/types/jwt-payload.type';
+import {
+  createParamDecorator,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
 
-export const CurrentUser = createParamDecorator(
-  (_data: unknown, ctx: ExecutionContext): JwtPayloadType => {
-    const request = ctx.switchToHttp().getRequest<{ user: JwtPayloadType }>();
+import type { AuthUserPayload } from '@src/modules/auth/application/dto/auth-user-payload';
 
-    return request.user;
+type CurrentUserDecorator = () => ParameterDecorator;
+
+export const CurrentUser: CurrentUserDecorator = createParamDecorator(
+  (_data: unknown, ctx: ExecutionContext): AuthUserPayload => {
+    const request = ctx.switchToHttp().getRequest<{ user?: AuthUserPayload }>();
+    const user = request.user;
+
+    if (!user) {
+      throw new UnauthorizedException('Authenticated user not found.');
+    }
+
+    return user;
   },
 );

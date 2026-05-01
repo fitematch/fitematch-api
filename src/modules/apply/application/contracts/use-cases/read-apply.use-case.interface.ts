@@ -2,5 +2,5 @@ import type { ReadApplyInputDto } from '@src/modules/apply/application/dto/input
 import type { ReadApplyOutputDto } from '@src/modules/apply/application/dto/output/read-apply.output.dto';
 
 export interface ReadApplyUseCaseInterface {
-  execute(input: ReadApplyInputDto): Promise<ReadApplyOutputDto | null>;
+  execute(input: ReadApplyInputDto): Promise<ReadApplyOutputDto>;
 }

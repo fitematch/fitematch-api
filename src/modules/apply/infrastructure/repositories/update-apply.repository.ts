@@ -1,12 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import type { Model } from 'mongoose';
+
 import {
   ApplySchema,
   type ApplyDocument,
 } from '@src/modules/apply/infrastructure/database/mongoose/schemas/apply.schema';
 import type { UpdateApplyRepositoryInterface } from '@src/modules/apply/application/contracts/repositories/update-apply.repository.interface';
 import type { UpdateApplyInputDto } from '@src/modules/apply/application/dto/input/update-apply.input.dto';
+import type { ReadApplyOutputDto } from '@src/modules/apply/application/dto/output/read-apply.output.dto';
 import type { UpdateApplyOutputDto } from '@src/modules/apply/application/dto/output/update-apply.output.dto';
 
 @Injectable()
@@ -15,6 +17,25 @@ export class UpdateApplyRepository implements UpdateApplyRepositoryInterface {
     @InjectModel(ApplySchema.name)
     private readonly applyModel: Model<ApplyDocument>,
   ) {}
+
+  async readById(_id: string): Promise<ReadApplyOutputDto | null> {
+    const apply = (await this.applyModel.findById(_id).lean().exec()) as
+      | (ReadApplyOutputDto & { _id: { toString(): string } })
+      | null;
+
+    if (!apply) {
+      return null;
+    }
+
+    return {
+      _id: apply._id.toString(),
+      jobId: apply.jobId,
+      userId: apply.userId,
+      status: apply.status,
+      createdAt: apply.createdAt,
+      updatedAt: apply.updatedAt,
+    };
+  }
 
   async update(
     input: UpdateApplyInputDto,

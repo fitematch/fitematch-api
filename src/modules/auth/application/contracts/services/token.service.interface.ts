@@ -1,8 +1,13 @@
 export interface AccessTokenPayload {
   sub: string;
+  id?: string;
   email: string;
   productRole?: string;
   adminRole?: string;
+  recruiterProfile?: {
+    companyId?: string;
+    position?: string;
+  };
   permissions?: string[];
 }
 

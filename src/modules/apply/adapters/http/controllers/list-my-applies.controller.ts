@@ -1,10 +1,4 @@
-import {
-  Controller,
-  Get,
-  Inject,
-  UnauthorizedException,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Inject, UseGuards } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiOkResponse,
@@ -18,13 +12,11 @@ import { ListMyAppliesResponseDto } from '@src/modules/apply/adapters/http/dto/r
 import { ListMyAppliesMapper } from '@src/modules/apply/adapters/http/mappers/list-my-applies.mapper';
 
 import { JwtAuthGuard } from '@src/modules/auth/adapters/http/guards/jwt-auth.guard';
+import { ProductRoleGuard } from '@src/modules/auth/adapters/http/guards/product-role.guard';
+import { ProductRoles } from '@src/modules/auth/adapters/http/decorators/product-roles.decorator';
 import { CurrentUser } from '@src/modules/auth/adapters/http/decorators/current-user.decorator';
-
-interface AuthenticatedUserPayload {
-  id?: string;
-  sub?: string;
-  userId?: string;
-}
+import type { AuthUserPayload } from '@src/modules/auth/application/dto/auth-user-payload';
+import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 
 @ApiTags('Apply')
 @Controller('apply')
@@ -35,21 +27,16 @@ export class ListMyAppliesController {
   ) {}
 
   @Get('me')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard, ProductRoleGuard)
+  @ProductRoles(ProductRoleEnum.CANDIDATE)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'List authenticated user applies' })
+  @ApiOperation({ summary: 'List authenticated candidate applies' })
   @ApiOkResponse({ type: ListMyAppliesResponseDto, isArray: true })
   async handle(
-    @CurrentUser() user: AuthenticatedUserPayload,
+    @CurrentUser() user: AuthUserPayload,
   ): Promise<ListMyAppliesResponseDto[]> {
-    const userId = user.id ?? user.sub ?? user.userId;
-
-    if (!userId) {
-      throw new UnauthorizedException('Authenticated user id not found.');
-    }
-
     const output = await this.listMyAppliesUseCase.execute({
-      userId,
+      userId: user.id,
     });
 
     return ListMyAppliesMapper.toResponseList(output);

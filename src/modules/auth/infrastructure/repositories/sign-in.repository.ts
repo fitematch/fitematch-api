@@ -32,6 +32,7 @@ export class SignInRepository implements SignInRepositoryInterface {
       status: user.status,
       productRole: user.productRole,
       adminRole: user.adminRole,
+      recruiterProfile: user.recruiterProfile,
     };
   }
 }

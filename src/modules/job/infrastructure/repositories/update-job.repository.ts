@@ -1,14 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import type { Model } from 'mongoose';
+
 import {
   JobSchema,
   type JobDocument,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
 import type { UpdateJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/update-job.repository.interface';
 import type { UpdateJobInputDto } from '@src/modules/job/application/dto/input/update-job.input.dto';
+import type { ReadJobOutputDto } from '@src/modules/job/application/dto/output/read-job.output.dto';
 import type { UpdateJobOutputDto } from '@src/modules/job/application/dto/output/update-job.output.dto';
-import { SlugUtils } from '@src/shared/utils/slug.utils';
 
 @Injectable()
 export class UpdateJobRepository implements UpdateJobRepositoryInterface {
@@ -17,16 +18,38 @@ export class UpdateJobRepository implements UpdateJobRepositoryInterface {
     private readonly jobModel: Model<JobDocument>,
   ) {}
 
+  async readById(_id: string): Promise<ReadJobOutputDto | null> {
+    const job = (await this.jobModel.findById(_id).lean().exec()) as
+      | (ReadJobOutputDto & { _id: { toString(): string } })
+      | null;
+
+    if (!job) {
+      return null;
+    }
+
+    return {
+      _id: job._id.toString(),
+      slug: job.slug,
+      companyId: job.companyId,
+      title: job.title,
+      description: job.description,
+      slots: job.slots,
+      requirements: job.requirements,
+      benefits: job.benefits,
+      media: job.media,
+      contractType: job.contractType,
+      status: job.status,
+      createdAt: job.createdAt,
+      updatedAt: job.updatedAt,
+    };
+  }
+
   async update(input: UpdateJobInputDto): Promise<UpdateJobOutputDto | null> {
-    const updated = (await this.jobModel
+    const updatedJob = (await this.jobModel
       .findByIdAndUpdate(
         input._id,
         {
-          ...(input.companyId !== undefined && { companyId: input.companyId }),
           ...(input.title !== undefined && { title: input.title }),
-          ...(input.title !== undefined && {
-            normalizedTitle: SlugUtils.generate(input.title),
-          }),
           ...(input.description !== undefined && {
             description: input.description,
           }),
@@ -41,27 +64,31 @@ export class UpdateJobRepository implements UpdateJobRepositoryInterface {
           }),
           ...(input.status !== undefined && { status: input.status }),
         },
-        { returnDocument: 'after' },
+        {
+          returnDocument: 'after',
+        },
       )
       .lean()
       .exec()) as (UpdateJobOutputDto & { _id: { toString(): string } }) | null;
 
-    if (!updated) return null;
+    if (!updatedJob) {
+      return null;
+    }
 
     return {
-      _id: updated._id.toString(),
-      slug: updated.slug,
-      companyId: updated.companyId,
-      title: updated.title,
-      description: updated.description,
-      slots: updated.slots,
-      requirements: updated.requirements,
-      benefits: updated.benefits,
-      media: updated.media,
-      contractType: updated.contractType,
-      status: updated.status,
-      createdAt: updated.createdAt,
-      updatedAt: updated.updatedAt,
+      _id: updatedJob._id.toString(),
+      slug: updatedJob.slug,
+      companyId: updatedJob.companyId,
+      title: updatedJob.title,
+      description: updatedJob.description,
+      slots: updatedJob.slots,
+      requirements: updatedJob.requirements,
+      benefits: updatedJob.benefits,
+      media: updatedJob.media,
+      contractType: updatedJob.contractType,
+      status: updatedJob.status,
+      createdAt: updatedJob.createdAt,
+      updatedAt: updatedJob.updatedAt,
     };
   }
 }
