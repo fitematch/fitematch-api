@@ -14,6 +14,10 @@ import {
   UserSchema,
   UserSchemaFactory,
 } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
+import {
+  CompanySchema,
+  CompanySchemaFactory,
+} from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import { SignUpController } from '@src/modules/auth/adapters/http/controllers/sign-up.controller';
 import { SignInController } from '@src/modules/auth/adapters/http/controllers/sign-in.controller';
 import { GetMeController } from '@src/modules/auth/adapters/http/controllers/get-me.controller';
@@ -54,6 +58,10 @@ const importedControllers = [
       {
         name: UserSchema.name,
         schema: UserSchemaFactory,
+      },
+      {
+        name: CompanySchema.name,
+        schema: CompanySchemaFactory,
       },
     ]),
   ],

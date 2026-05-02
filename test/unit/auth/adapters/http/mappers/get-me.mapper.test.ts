@@ -53,6 +53,7 @@ describe('GetMeMapper', () => {
         },
         recruiterProfile: {
           companyId: 'company-1',
+          tradeName: 'Fitematch',
           position: 'Recruiter',
           contacts: {
             phone: {
