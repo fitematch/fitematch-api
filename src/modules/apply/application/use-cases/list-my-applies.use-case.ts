@@ -21,6 +21,7 @@ export class ListMyAppliesUseCase {
       id: apply._id,
       jobId: apply.jobId,
       userId: apply.userId,
+      details: apply.details,
       status: apply.status,
       createdAt: apply.createdAt,
       updatedAt: apply.updatedAt,

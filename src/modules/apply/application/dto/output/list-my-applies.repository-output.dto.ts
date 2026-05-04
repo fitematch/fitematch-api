@@ -1,15 +1,15 @@
 import { ApplicationStatusEnum } from '@src/modules/apply/domain/enums/application-status.enum';
 
-export interface ListMyAppliesOutput {
-  id: string;
-  jobId: string;
-  userId: string;
-  details: {
+export class ListMyAppliesRepositoryOutputDto {
+  _id!: string;
+  jobId!: string;
+  userId!: string;
+  status!: ApplicationStatusEnum;
+  details!: {
     jobTitle: string;
     tradeName: string;
     logoUrl: string;
   };
-  status: ApplicationStatusEnum;
   createdAt?: Date;
   updatedAt?: Date;
 }

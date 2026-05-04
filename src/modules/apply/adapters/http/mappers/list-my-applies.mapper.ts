@@ -7,6 +7,7 @@ export class ListMyAppliesMapper {
       id: output.id,
       jobId: output.jobId,
       userId: output.userId,
+      details: output.details,
       status: output.status,
       createdAt: output.createdAt,
       updatedAt: output.updatedAt,

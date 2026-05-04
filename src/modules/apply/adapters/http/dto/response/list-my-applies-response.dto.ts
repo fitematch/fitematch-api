@@ -1,5 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ApplicationStatusEnum } from '../../../../domain/enums/application-status.enum';
+import { ApplicationStatusEnum } from '@src/modules/apply/domain/enums/application-status.enum';
+
+export class JobAppliesDetailsDto {
+  @ApiProperty()
+  jobTitle!: string;
+
+  @ApiProperty()
+  tradeName!: string;
+
+  @ApiProperty()
+  logoUrl!: string;
+}
 
 export class ListMyAppliesResponseDto {
   @ApiProperty()
@@ -10,6 +21,9 @@ export class ListMyAppliesResponseDto {
 
   @ApiProperty()
   userId!: string;
+
+  @ApiProperty()
+  details!: JobAppliesDetailsDto;
 
   @ApiProperty({ enum: ApplicationStatusEnum })
   status!: ApplicationStatusEnum;
