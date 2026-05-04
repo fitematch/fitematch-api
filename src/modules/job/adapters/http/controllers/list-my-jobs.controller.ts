@@ -38,6 +38,7 @@ export class ListMyJobsController {
     @CurrentUser() user: AuthUserPayload,
   ): Promise<ListMyJobsResponseDto[]> {
     const output = await this.listMyJobsUseCase.execute({
+      userId: user.id,
       companyId: user.recruiterProfile?.companyId,
     });
 

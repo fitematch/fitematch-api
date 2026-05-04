@@ -15,6 +15,7 @@ describe('ListMyJobsUseCase', () => {
 
   beforeEach(() => {
     listMyJobsRepository = {
+      findRecruiterCompanyId: jest.fn(),
       findByCompanyId: jest.fn(),
     } as jest.Mocked<ListMyJobsRepository>;
 
@@ -24,11 +25,18 @@ describe('ListMyJobsUseCase', () => {
   describe('execute', () => {
     describe('when recruiter has no company linked', () => {
       it('should throw a bad request exception', async () => {
-        await expect(useCase.execute({ companyId: '' })).rejects.toThrow(
+        listMyJobsRepository.findRecruiterCompanyId.mockResolvedValueOnce(null);
+
+        await expect(
+          useCase.execute({ userId: 'user-1', companyId: '' }),
+        ).rejects.toThrow(
           new BadRequestException(
             'Recruiter does not have a company linked to profile.',
           ),
         );
+        expect(
+          listMyJobsRepository.findRecruiterCompanyId,
+        ).toHaveBeenCalledWith('user-1');
         expect(listMyJobsRepository.findByCompanyId).not.toHaveBeenCalled();
       });
     });
@@ -36,6 +44,7 @@ describe('ListMyJobsUseCase', () => {
     describe('when jobs are found', () => {
       it('should return the mapped list of recruiter jobs', async () => {
         const input = {
+          userId: 'user-1',
           companyId: 'company-1',
         };
 
@@ -200,12 +209,35 @@ describe('ListMyJobsUseCase', () => {
           input.companyId,
         );
         expect(listMyJobsRepository.findByCompanyId).toHaveBeenCalledTimes(1);
+        expect(
+          listMyJobsRepository.findRecruiterCompanyId,
+        ).not.toHaveBeenCalled();
+      });
+
+      it('should use fallback company id when profile company id is missing', async () => {
+        listMyJobsRepository.findRecruiterCompanyId.mockResolvedValueOnce(
+          'company-1',
+        );
+        listMyJobsRepository.findByCompanyId.mockResolvedValue([]);
+
+        await useCase.execute({
+          userId: 'user-1',
+          companyId: '',
+        });
+
+        expect(
+          listMyJobsRepository.findRecruiterCompanyId,
+        ).toHaveBeenCalledWith('user-1');
+        expect(listMyJobsRepository.findByCompanyId).toHaveBeenCalledWith(
+          'company-1',
+        );
       });
     });
 
     describe('when no jobs are found', () => {
       it('should return an empty array', async () => {
         const input = {
+          userId: 'user-1',
           companyId: 'missing-company-id',
         };
 
@@ -224,6 +256,7 @@ describe('ListMyJobsUseCase', () => {
     describe('when the repository throws an error', () => {
       it('should propagate the error', async () => {
         const input = {
+          userId: 'user-1',
           companyId: 'company-id-error',
         };
         const error = new Error('Repository error');

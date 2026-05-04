@@ -14,15 +14,17 @@ export class ListMyJobsUseCase implements ListMyJobsUseCaseInterface {
   ) {}
 
   async execute(input: ListMyJobsInput): Promise<ListMyJobsOutput[]> {
-    if (!input.companyId) {
+    const companyId =
+      input.companyId ||
+      (await this.listMyJobsRepository.findRecruiterCompanyId(input.userId));
+
+    if (!companyId) {
       throw new BadRequestException(
         'Recruiter does not have a company linked to profile.',
       );
     }
 
-    const jobs = await this.listMyJobsRepository.findByCompanyId(
-      input.companyId,
-    );
+    const jobs = await this.listMyJobsRepository.findByCompanyId(companyId);
 
     return jobs.map((job) => ({
       id: job._id,

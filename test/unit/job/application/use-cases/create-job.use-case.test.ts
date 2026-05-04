@@ -15,6 +15,11 @@ describe('CreateJobUseCase', () => {
 
   beforeEach(() => {
     createJobRepository = {
+      findCompanySlugContext: jest.fn().mockResolvedValue({
+        tradeName: 'Smart Fit',
+        city: 'Sao Paulo',
+        state: 'SP',
+      }),
       existsBySlug: jest.fn().mockResolvedValue(false),
       existsDuplicate: jest.fn().mockResolvedValue(false),
       create: jest.fn(),
@@ -91,6 +96,9 @@ describe('CreateJobUseCase', () => {
           status: JobStatusEnum.PENDING,
         });
         expect(createJobRepository.create).toHaveBeenCalledTimes(1);
+        expect(
+          createJobRepository.findCompanySlugContext,
+        ).not.toHaveBeenCalled();
       });
 
       it('should generate the slug from title when the informed slug is empty', async () => {
@@ -106,7 +114,7 @@ describe('CreateJobUseCase', () => {
         const expected = {
           ...input,
           _id: 'job-3',
-          slug: 'personal-trainer-senior',
+          slug: 'personal-trainer-senior-smart-fit-sao-paulo-sp',
           status: JobStatusEnum.PENDING,
           createdAt: new Date('2024-01-01T00:00:00.000Z'),
           updatedAt: new Date('2024-01-02T00:00:00.000Z'),
@@ -122,9 +130,12 @@ describe('CreateJobUseCase', () => {
           input.title,
           [JobStatusEnum.PENDING, JobStatusEnum.ACTIVE],
         );
+        expect(createJobRepository.findCompanySlugContext).toHaveBeenCalledWith(
+          input.companyId,
+        );
         expect(createJobRepository.create).toHaveBeenCalledWith({
           ...input,
-          slug: 'personal-trainer-senior',
+          slug: 'personal-trainer-senior-smart-fit-sao-paulo-sp',
           status: JobStatusEnum.PENDING,
         });
       });
@@ -141,7 +152,7 @@ describe('CreateJobUseCase', () => {
         const expected = {
           ...input,
           _id: 'job-4',
-          slug: 'personal-trainer-senior-1',
+          slug: 'personal-trainer-senior-smart-fit-sao-paulo-sp-1',
           status: JobStatusEnum.PENDING,
           createdAt: new Date('2024-01-01T00:00:00.000Z'),
           updatedAt: new Date('2024-01-02T00:00:00.000Z'),
@@ -162,15 +173,41 @@ describe('CreateJobUseCase', () => {
         );
         expect(createJobRepository.existsBySlug).toHaveBeenNthCalledWith(
           1,
-          'personal-trainer-senior',
+          'personal-trainer-senior-smart-fit-sao-paulo-sp',
         );
         expect(createJobRepository.existsBySlug).toHaveBeenNthCalledWith(
           2,
-          'personal-trainer-senior-1',
+          'personal-trainer-senior-smart-fit-sao-paulo-sp-1',
         );
         expect(createJobRepository.create).toHaveBeenCalledWith({
           ...input,
-          slug: 'personal-trainer-senior-1',
+          slug: 'personal-trainer-senior-smart-fit-sao-paulo-sp-1',
+          status: JobStatusEnum.PENDING,
+        });
+      });
+
+      it('should fall back to title when company context is not found', async () => {
+        const input = {
+          companyId: 'missing-company',
+          title: 'Professor Judo',
+          description: 'Aulas coletivas e acompanhamento tecnico.',
+          slots: 1,
+          contractType: JobContractTypeEnum.CLT,
+        };
+
+        createJobRepository.findCompanySlugContext.mockResolvedValueOnce(null);
+        createJobRepository.create.mockResolvedValue({
+          ...input,
+          _id: 'job-9',
+          slug: 'professor-judo',
+          status: JobStatusEnum.PENDING,
+        });
+
+        await useCase.execute(input);
+
+        expect(createJobRepository.create).toHaveBeenCalledWith({
+          ...input,
+          slug: 'professor-judo',
           status: JobStatusEnum.PENDING,
         });
       });
@@ -249,6 +286,9 @@ describe('CreateJobUseCase', () => {
           slug: 'fitness-coordinator',
         });
         expect(createJobRepository.create).toHaveBeenCalledTimes(1);
+        expect(
+          createJobRepository.findCompanySlugContext,
+        ).not.toHaveBeenCalled();
       });
     });
 
@@ -274,6 +314,9 @@ describe('CreateJobUseCase', () => {
           input.title,
           [JobStatusEnum.PENDING, JobStatusEnum.ACTIVE],
         );
+        expect(
+          createJobRepository.findCompanySlugContext,
+        ).not.toHaveBeenCalled();
         expect(createJobRepository.existsBySlug).not.toHaveBeenCalled();
         expect(createJobRepository.create).not.toHaveBeenCalled();
       });

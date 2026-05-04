@@ -3,6 +3,11 @@ import { CreateJobOutputDto } from '@src/modules/job/application/dto/output/crea
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 
 export interface CreateJobRepositoryInterface {
+  findCompanySlugContext(companyId: string): Promise<{
+    tradeName?: string;
+    city?: string;
+    state?: string;
+  } | null>;
   existsBySlug(slug: string): Promise<boolean>;
   existsDuplicate(
     companyId: string,

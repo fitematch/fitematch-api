@@ -1,19 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import type { Model } from 'mongoose';
-
-import type { ListMyJobsRepository as ListMyJobsRepositoryContract } from '@src/modules/job/application/contracts/repositories/list-my-jobs.repository';
-import type { JobEntity } from '@src/modules/job/domain/entities/job.entity';
-import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import {
   JobSchema,
-  JobDocument,
+  type JobDocument,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
+import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import { UserSchema } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
-import { JobDatabaseMapper } from '@src/modules/job/infrastructure/database/mapper/job-database.mapper';
+import type { DeleteMyJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/delete-my-job.repository.interface';
+import type { DeleteMyJobInputDto } from '@src/modules/job/application/dto/input/delete-my-job.input.dto';
 
 @Injectable()
-export class ListMyJobsRepository implements ListMyJobsRepositoryContract {
+export class DeleteMyJobRepository implements DeleteMyJobRepositoryInterface {
   constructor(
     @InjectModel(JobSchema.name)
     private readonly jobModel: Model<JobDocument>,
@@ -52,14 +50,17 @@ export class ListMyJobsRepository implements ListMyJobsRepositoryContract {
     return companyId;
   }
 
-  async findByCompanyId(companyId: string): Promise<JobEntity[]> {
-    const jobs = await this.jobModel
-      .find({
-        companyId,
+  async delete(
+    input: DeleteMyJobInputDto & { companyId: string },
+  ): Promise<boolean> {
+    const deletedJob = await this.jobModel
+      .findOneAndDelete({
+        _id: input._id,
+        companyId: input.companyId,
       })
-      .sort({ createdAt: -1 })
+      .lean()
       .exec();
 
-    return jobs.map((job) => JobDatabaseMapper.toEntity(job));
+    return !!deletedJob;
   }
 }

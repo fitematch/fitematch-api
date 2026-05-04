@@ -28,7 +28,9 @@ export class CreateJobUseCase implements CreateJobUseCaseInterface {
     }
 
     const requestedSlug = SlugUtils.generate(input.slug ?? '');
-    const baseSlug = requestedSlug || SlugUtils.generate(input.title);
+    const baseSlug =
+      requestedSlug ||
+      (await this.buildDefaultSlug(input.companyId, input.title));
     const slug = await this.generateUniqueSlug(baseSlug);
 
     return this.createJobRepository.create({
@@ -48,5 +50,19 @@ export class CreateJobUseCase implements CreateJobUseCaseInterface {
     }
 
     return slug;
+  }
+
+  private async buildDefaultSlug(
+    companyId: string,
+    title: string,
+  ): Promise<string> {
+    const company =
+      await this.createJobRepository.findCompanySlugContext(companyId);
+
+    return SlugUtils.generate(
+      [title, company?.tradeName, company?.city, company?.state]
+        .filter(Boolean)
+        .join(' '),
+    );
   }
 }

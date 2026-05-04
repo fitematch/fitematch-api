@@ -12,8 +12,15 @@ import {
   DELETE_JOB_USE_CASE,
   LIST_MY_JOBS_REPOSITORY,
   LIST_MY_JOBS_USE_CASE,
+  CREATE_MY_JOB_REPOSITORY,
+  CREATE_MY_JOB_USE_CASE,
+  UPDATE_MY_JOB_REPOSITORY,
+  UPDATE_MY_JOB_USE_CASE,
+  DELETE_MY_JOB_REPOSITORY,
+  DELETE_MY_JOB_USE_CASE,
   LIST_JOB_COMPANIES_REPOSITORY,
 } from '@src/modules/job/application/contracts/tokens/job.tokens';
+
 import { ListJobUseCase } from '@src/modules/job/application/use-cases/list-job.use-case';
 import { ListJobRepository } from '@src/modules/job/infrastructure/repositories/list-job.repository';
 import { CreateJobUseCase } from '@src/modules/job/application/use-cases/create-job.use-case';
@@ -27,6 +34,12 @@ import { DeleteJobRepository } from '@src/modules/job/infrastructure/repositorie
 import { ListMyJobsUseCase } from '@src/modules/job/application/use-cases/list-my-jobs.use-case';
 import { ListMyJobsRepository } from '@src/modules/job/infrastructure/repositories/list-my-jobs.repository';
 import { ListJobCompaniesRepository } from '@src/modules/job/infrastructure/repositories/list-job-companies.repository';
+import { CreateMyJobUseCase } from '@src/modules/job/application/use-cases/create-my-job.use-case';
+import { CreateMyJobRepository } from '@src/modules/job/infrastructure/repositories/create-my-job.repository';
+import { UpdateMyJobUseCase } from '@src/modules/job/application/use-cases/update-my-job.use-case';
+import { UpdateMyJobRepository } from '@src/modules/job/infrastructure/repositories/update-my-job.repository';
+import { DeleteMyJobUseCase } from '@src/modules/job/application/use-cases/delete-my-job.use-case';
+import { DeleteMyJobRepository } from '@src/modules/job/infrastructure/repositories/delete-my-job.repository';
 
 export const jobProviders: Provider[] = [
   {
@@ -76,6 +89,30 @@ export const jobProviders: Provider[] = [
   {
     provide: LIST_MY_JOBS_REPOSITORY,
     useClass: ListMyJobsRepository,
+  },
+  {
+    provide: CREATE_MY_JOB_USE_CASE,
+    useClass: CreateMyJobUseCase,
+  },
+  {
+    provide: CREATE_MY_JOB_REPOSITORY,
+    useClass: CreateMyJobRepository,
+  },
+  {
+    provide: UPDATE_MY_JOB_USE_CASE,
+    useClass: UpdateMyJobUseCase,
+  },
+  {
+    provide: UPDATE_MY_JOB_REPOSITORY,
+    useClass: UpdateMyJobRepository,
+  },
+  {
+    provide: DELETE_MY_JOB_USE_CASE,
+    useClass: DeleteMyJobUseCase,
+  },
+  {
+    provide: DELETE_MY_JOB_REPOSITORY,
+    useClass: DeleteMyJobRepository,
   },
   {
     provide: LIST_JOB_COMPANIES_REPOSITORY,

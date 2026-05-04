@@ -1,30 +1,90 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import type { Model } from 'mongoose';
-import type { CreateJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/create-job.repository.interface';
-import type { CreateJobInputDto } from '@src/modules/job/application/dto/input/create-job.input.dto';
-import type { CreateJobOutputDto } from '@src/modules/job/application/dto/output/create-job.output.dto';
+import type { CreateMyJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/create-my-job.repository.interface';
+import type { CreateMyJobInputDto } from '@src/modules/job/application/dto/input/create-my-job.input.dto';
+import type { CreateMyJobOutputDto } from '@src/modules/job/application/dto/output/create-my-job.output.dto';
 import { JobStatusEnum } from '@src/modules/job/domain/enums/job-status.enum';
 import {
   JobSchema,
   type JobDocument,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
 import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
+import { UserSchema } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
 import { SlugUtils } from '@src/shared/utils/slug.utils';
 
-type CreatedJobPlain = Omit<CreateJobOutputDto, '_id'> & {
+type CreatedJobPlain = Omit<CreateMyJobOutputDto, '_id'> & {
   _id: { toString(): string };
 };
 
 @Injectable()
-export class CreateJobRepository implements CreateJobRepositoryInterface {
+export class CreateMyJobRepository implements CreateMyJobRepositoryInterface {
   constructor(
     @InjectModel(JobSchema.name)
     private readonly jobModel: Model<JobDocument>,
 
     @InjectModel(CompanySchema.name)
     private readonly companyModel: Model<CompanySchema>,
+
+    @InjectModel(UserSchema.name)
+    private readonly userModel: Model<UserSchema>,
   ) {}
+
+  async findRecruiterCompanyId(
+    userId: string,
+    requestedCompanyId?: string,
+  ): Promise<string | null> {
+    const user = await this.userModel.findById(userId).lean().exec();
+
+    if (requestedCompanyId) {
+      const ownsCompany =
+        user?.recruiterProfile?.companyId === requestedCompanyId ||
+        !!(await this.companyModel
+          .findOne({
+            _id: requestedCompanyId,
+            'audit.createdByUserId': userId,
+          })
+          .lean()
+          .exec());
+
+      if (!ownsCompany) {
+        return null;
+      }
+
+      if (user?.recruiterProfile?.companyId !== requestedCompanyId) {
+        await this.userModel
+          .findByIdAndUpdate(userId, {
+            $set: { 'recruiterProfile.companyId': requestedCompanyId },
+          })
+          .exec();
+      }
+
+      return requestedCompanyId;
+    }
+
+    if (user?.recruiterProfile?.companyId) {
+      return user.recruiterProfile.companyId;
+    }
+
+    const company = await this.companyModel
+      .findOne({ 'audit.createdByUserId': userId }, { _id: 1 })
+      .lean()
+      .exec();
+
+    if (!company) {
+      return null;
+    }
+
+    const resolvedCompanyId = company._id.toString();
+
+    await this.userModel
+      .findByIdAndUpdate(userId, {
+        $set: { 'recruiterProfile.companyId': resolvedCompanyId },
+      })
+      .exec();
+
+    return resolvedCompanyId;
+  }
 
   async findCompanySlugContext(companyId: string): Promise<{
     tradeName?: string;
@@ -63,6 +123,7 @@ export class CreateJobRepository implements CreateJobRepositoryInterface {
     statuses: JobStatusEnum[],
   ): Promise<boolean> {
     const normalizedTitle = SlugUtils.generate(title);
+
     const job = await this.jobModel
       .findOne({
         companyId,
@@ -75,7 +136,9 @@ export class CreateJobRepository implements CreateJobRepositoryInterface {
     return !!job;
   }
 
-  async create(input: CreateJobInputDto): Promise<CreateJobOutputDto> {
+  async create(
+    input: CreateMyJobInputDto & { companyId: string },
+  ): Promise<CreateMyJobOutputDto> {
     try {
       const createdJob = await this.jobModel.create({
         slug: input.slug,
@@ -90,6 +153,7 @@ export class CreateJobRepository implements CreateJobRepositoryInterface {
         contractType: input.contractType,
         status: input.status,
       });
+
       const job = createdJob.toObject() as CreatedJobPlain;
 
       return {
