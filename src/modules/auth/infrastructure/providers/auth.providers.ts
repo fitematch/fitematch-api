@@ -5,6 +5,7 @@ import {
   ACTIVATION_CODE_REPOSITORY,
   CREATE_ACTIVATION_CODE_REPOSITORY,
   CREATE_ACTIVATION_CODE_USE_CASE,
+  EMAIL_PROVIDER,
   GET_ME_REPOSITORY,
   GET_ME_USE_CASE,
   HASH_SERVICE,
@@ -47,6 +48,7 @@ import { ListAuthSessionsUseCase } from '@src/modules/auth/application/use-cases
 import { ListAuthSessionsRepository } from '@src/modules/auth/infrastructure/repositories/list-auth-sessions.repository';
 import { RevokeAuthSessionUseCase } from '@src/modules/auth/application/use-cases/revoke-auth-session.use-case';
 import { RevokeAuthSessionRepository } from '@src/modules/auth/infrastructure/repositories/revoke-auth-session.repository';
+import { MailtrapEmailProvider } from '@src/modules/auth/infrastructure/providers/mailtrap-email.provider';
 
 export const authProviders: Provider[] = [
   {
@@ -140,5 +142,9 @@ export const authProviders: Provider[] = [
   {
     provide: REVOKE_AUTH_SESSION_REPOSITORY,
     useClass: RevokeAuthSessionRepository,
+  },
+  {
+    provide: EMAIL_PROVIDER,
+    useClass: MailtrapEmailProvider,
   },
 ];

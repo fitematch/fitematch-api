@@ -1,4 +1,5 @@
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import type { EmailProviderInterface } from '@src/modules/auth/application/contracts/providers/email-provider.interface';
 import type { ActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/activation-code.repository.interface';
 import type { CreateActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/create-activation-code.repository.interface';
 import type { HashServiceInterface } from '@src/modules/auth/application/contracts/services/hash.service.interface';
@@ -11,6 +12,7 @@ describe('CreateActivationCodeUseCase', () => {
   let createActivationCodeRepository: jest.Mocked<CreateActivationCodeRepositoryInterface>;
   let activationCodeRepository: jest.Mocked<ActivationCodeRepositoryInterface>;
   let hashService: jest.Mocked<HashServiceInterface>;
+  let emailProvider: jest.Mocked<EmailProviderInterface>;
 
   beforeEach(() => {
     createActivationCodeRepository = {
@@ -27,11 +29,15 @@ describe('CreateActivationCodeUseCase', () => {
       hash: jest.fn(),
       compare: jest.fn(),
     } as jest.Mocked<HashServiceInterface>;
+    emailProvider = {
+      sendActivationCode: jest.fn(),
+    } as jest.Mocked<EmailProviderInterface>;
 
     useCase = new CreateActivationCodeUseCase(
       createActivationCodeRepository,
       activationCodeRepository,
       hashService,
+      emailProvider,
     );
   });
 
@@ -43,6 +49,7 @@ describe('CreateActivationCodeUseCase', () => {
         };
         const user = {
           id: 'user-1',
+          name: 'John Doe',
           email: input.email,
           status: 'pending',
         };
@@ -89,6 +96,12 @@ describe('CreateActivationCodeUseCase', () => {
           attemptsCount: 0,
           maxAttempts: 5,
         });
+        expect(emailProvider.sendActivationCode).toHaveBeenCalledWith({
+          to: user.email,
+          name: user.name,
+          code: '123456',
+          expiresInMinutes: 15,
+        });
 
         codeSpy.mockRestore();
       });
@@ -113,6 +126,7 @@ describe('CreateActivationCodeUseCase', () => {
         ).not.toHaveBeenCalled();
         expect(hashService.hash).not.toHaveBeenCalled();
         expect(activationCodeRepository.create).not.toHaveBeenCalled();
+        expect(emailProvider.sendActivationCode).not.toHaveBeenCalled();
       });
     });
 
@@ -124,6 +138,7 @@ describe('CreateActivationCodeUseCase', () => {
 
         createActivationCodeRepository.findByEmail.mockResolvedValue({
           id: 'user-1',
+          name: 'Active User',
           email: input.email,
           status: 'active',
         });
@@ -139,6 +154,7 @@ describe('CreateActivationCodeUseCase', () => {
         ).not.toHaveBeenCalled();
         expect(hashService.hash).not.toHaveBeenCalled();
         expect(activationCodeRepository.create).not.toHaveBeenCalled();
+        expect(emailProvider.sendActivationCode).not.toHaveBeenCalled();
       });
     });
 
@@ -150,6 +166,7 @@ describe('CreateActivationCodeUseCase', () => {
 
         createActivationCodeRepository.findByEmail.mockResolvedValue({
           id: 'user-1',
+          name: 'John Doe',
           email: input.email,
           status: 'pending',
         });
@@ -171,6 +188,7 @@ describe('CreateActivationCodeUseCase', () => {
         );
         expect(hashService.hash).not.toHaveBeenCalled();
         expect(activationCodeRepository.create).not.toHaveBeenCalled();
+        expect(emailProvider.sendActivationCode).not.toHaveBeenCalled();
       });
     });
   });

@@ -4,15 +4,17 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import type { EmailProviderInterface } from '@src/modules/auth/application/contracts/providers/email-provider.interface';
+import type { ActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/activation-code.repository.interface';
+import type { CreateActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/create-activation-code.repository.interface';
+import type { HashServiceInterface } from '@src/modules/auth/application/contracts/services/hash.service.interface';
 import {
   ACTIVATION_CODE_REPOSITORY,
   CREATE_ACTIVATION_CODE_REPOSITORY,
+  EMAIL_PROVIDER,
   HASH_SERVICE,
 } from '@src/modules/auth/application/contracts/tokens/auth.tokens';
 import type { CreateActivationCodeUseCaseInterface } from '@src/modules/auth/application/contracts/use-cases/create-activation-code.use-case.interface';
-import type { CreateActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/create-activation-code.repository.interface';
-import type { ActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/activation-code.repository.interface';
-import type { HashServiceInterface } from '@src/modules/auth/application/contracts/services/hash.service.interface';
 import { CreateActivationCodeInputDto } from '@src/modules/auth/application/dto/input/create-activation-code.input.dto';
 import { CreateActivationCodeOutputDto } from '@src/modules/auth/application/dto/output/create-activation-code.output.dto';
 import { ActivationCodeTypeEnum } from '@src/modules/auth/domain/enums/activation-code-type.enum';
@@ -23,10 +25,15 @@ export class CreateActivationCodeUseCase implements CreateActivationCodeUseCaseI
   constructor(
     @Inject(CREATE_ACTIVATION_CODE_REPOSITORY)
     private readonly createActivationCodeRepository: CreateActivationCodeRepositoryInterface,
+
     @Inject(ACTIVATION_CODE_REPOSITORY)
     private readonly activationCodeRepository: ActivationCodeRepositoryInterface,
+
     @Inject(HASH_SERVICE)
     private readonly hashService: HashServiceInterface,
+
+    @Inject(EMAIL_PROVIDER)
+    private readonly emailProvider: EmailProviderInterface,
   ) {}
 
   public async execute(
@@ -51,14 +58,24 @@ export class CreateActivationCodeUseCase implements CreateActivationCodeUseCaseI
 
     const activationCode = ActivationCodeUtils.generateSixDigits();
     const codeHash = await this.hashService.hash(activationCode);
+    const expiresInMinutes = Number(
+      process.env.ACTIVATION_CODE_EXPIRES_IN_MINUTES || 15,
+    );
 
     await this.activationCodeRepository.create({
       userId: user.id,
       codeHash,
       type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
-      expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+      expiresAt: new Date(Date.now() + expiresInMinutes * 60 * 1000),
       attemptsCount: 0,
       maxAttempts: 5,
+    });
+
+    await this.emailProvider.sendActivationCode({
+      to: user.email,
+      name: user.name,
+      code: activationCode,
+      expiresInMinutes,
     });
 
     return {

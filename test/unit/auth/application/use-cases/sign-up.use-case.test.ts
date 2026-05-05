@@ -1,4 +1,5 @@
 import { BadRequestException, ConflictException } from '@nestjs/common';
+import type { EmailProviderInterface } from '@src/modules/auth/application/contracts/providers/email-provider.interface';
 import type { ActivationCodeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/activation-code.repository.interface';
 import type { SignUpRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/sign-up.repository.interface';
 import type { HashServiceInterface } from '@src/modules/auth/application/contracts/services/hash.service.interface';
@@ -13,6 +14,7 @@ describe('SignUpUseCase', () => {
   let signUpRepository: jest.Mocked<SignUpRepositoryInterface>;
   let activationCodeRepository: jest.Mocked<ActivationCodeRepositoryInterface>;
   let hashService: jest.Mocked<HashServiceInterface>;
+  let emailProvider: jest.Mocked<EmailProviderInterface>;
 
   beforeEach(() => {
     signUpRepository = {
@@ -30,11 +32,15 @@ describe('SignUpUseCase', () => {
       hash: jest.fn(),
       compare: jest.fn(),
     } as jest.Mocked<HashServiceInterface>;
+    emailProvider = {
+      sendActivationCode: jest.fn(),
+    } as jest.Mocked<EmailProviderInterface>;
 
     useCase = new SignUpUseCase(
       signUpRepository,
       activationCodeRepository,
       hashService,
+      emailProvider,
     );
   });
 
@@ -108,6 +114,12 @@ describe('SignUpUseCase', () => {
           attemptsCount: 0,
           maxAttempts: 5,
         });
+        expect(emailProvider.sendActivationCode).toHaveBeenCalledWith({
+          to: createdUser.email,
+          name: createdUser.name,
+          code: '123456',
+          expiresInMinutes: 15,
+        });
 
         codeSpy.mockRestore();
       });
@@ -129,6 +141,7 @@ describe('SignUpUseCase', () => {
         expect(signUpRepository.existsByEmail).not.toHaveBeenCalled();
         expect(hashService.hash).not.toHaveBeenCalled();
         expect(signUpRepository.create).not.toHaveBeenCalled();
+        expect(emailProvider.sendActivationCode).not.toHaveBeenCalled();
       });
     });
 
@@ -156,6 +169,7 @@ describe('SignUpUseCase', () => {
           activationCodeRepository.invalidateActiveCodes,
         ).not.toHaveBeenCalled();
         expect(activationCodeRepository.create).not.toHaveBeenCalled();
+        expect(emailProvider.sendActivationCode).not.toHaveBeenCalled();
       });
     });
 
@@ -180,6 +194,66 @@ describe('SignUpUseCase', () => {
         );
         expect(hashService.hash).toHaveBeenCalledWith(input.password);
         expect(activationCodeRepository.create).not.toHaveBeenCalled();
+        expect(emailProvider.sendActivationCode).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('when activation email sending fails', () => {
+      it('should still return the created user', async () => {
+        const input = {
+          name: 'John Doe',
+          email: 'john@fitematch.com',
+          password: 'plain-password',
+          birthday: '1995-01-10',
+          productRole: ProductRoleEnum.CANDIDATE,
+        };
+        const createdUser = {
+          id: 'user-1',
+          name: input.name,
+          email: input.email,
+          birthday: input.birthday,
+          productRole: input.productRole,
+          status: UserStatusEnum.PENDING,
+          createdAt: new Date('2026-04-21T12:00:00.000Z'),
+          updatedAt: new Date('2026-04-21T12:00:00.000Z'),
+        };
+
+        signUpRepository.existsByEmail.mockResolvedValue(false);
+        hashService.hash
+          .mockResolvedValueOnce('hashed-password')
+          .mockResolvedValueOnce('hashed-activation-code');
+        signUpRepository.create.mockResolvedValue(createdUser);
+        activationCodeRepository.invalidateActiveCodes.mockResolvedValue();
+        activationCodeRepository.create.mockResolvedValue({
+          id: 'activation-1',
+          userId: 'user-1',
+          codeHash: 'hashed-activation-code',
+          type: ActivationCodeTypeEnum.ACCOUNT_ACTIVATION,
+          expiresAt: new Date('2026-04-21T12:15:00.000Z'),
+          attemptsCount: 0,
+          maxAttempts: 5,
+          createdAt: new Date('2026-04-21T12:00:00.000Z'),
+          updatedAt: new Date('2026-04-21T12:00:00.000Z'),
+        });
+        emailProvider.sendActivationCode.mockRejectedValue(
+          new Error('Mailtrap unavailable'),
+        );
+
+        const codeSpy = jest
+          .spyOn(ActivationCodeUtils, 'generateSixDigits')
+          .mockReturnValue('123456');
+
+        const result = await useCase.execute(input);
+
+        expect(result).toEqual(createdUser);
+        expect(emailProvider.sendActivationCode).toHaveBeenCalledWith({
+          to: createdUser.email,
+          name: createdUser.name,
+          code: '123456',
+          expiresInMinutes: 15,
+        });
+
+        codeSpy.mockRestore();
       });
     });
   });

@@ -28,6 +28,7 @@ export class CreateActivationCodeRepository implements CreateActivationCodeRepos
 
     return {
       id: user._id.toString(),
+      name: user.name,
       email: user.email,
       status: user.status,
     };
