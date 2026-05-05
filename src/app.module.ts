@@ -8,6 +8,7 @@ import { CompanyModule } from '@src/modules/company/company.module';
 import { JobModule } from '@src/modules/job/job.module';
 import { ApplyModule } from '@src/modules/apply/apply.module';
 import { AuthModule } from '@src/modules/auth/auth.module';
+import { UploadModule } from '@src/modules/upload/upload.module';
 
 const importedModules = [
   HealthCheckModule,
@@ -16,6 +17,7 @@ const importedModules = [
   CompanyModule,
   JobModule,
   ApplyModule,
+  UploadModule,
 ];
 @Module({
   imports: [
