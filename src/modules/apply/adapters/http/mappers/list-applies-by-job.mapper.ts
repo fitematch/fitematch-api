@@ -9,6 +9,7 @@ export class ListAppliesByJobMapper {
       id: output.id,
       jobId: output.jobId,
       userId: output.userId,
+      user: output.user,
       status: output.status,
       createdAt: output.createdAt,
       updatedAt: output.updatedAt,
