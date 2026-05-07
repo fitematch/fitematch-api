@@ -1,9 +1,7 @@
 services:
   database:
-    networks:
-      - fitematch
     container_name: fitematch-database
-    image: mongo:latest
+    image: mongo:8.0
     env_file:
       - .env
     restart: unless-stopped
@@ -12,24 +10,28 @@ services:
     ports:
       - ${DATABASE_BIND_PORT}:${DATABASE_PORT}
     command: ['mongod', '--port', '${DATABASE_PORT}']
-
-  api:
-    depends_on:
-      - database
     networks:
       - fitematch
+
+  api:
     container_name: fitematch-api
     build:
       context: .
-    image: api
+      dockerfile: Dockerfile
+      target: development
+    image: fitematch-api:development
     env_file:
       - .env
-    restart: always
+    restart: unless-stopped
+    depends_on:
+      - database
     volumes:
       - ./:/app
       - /app/node_modules
     ports:
       - ${APPLICATION_BIND_PORT}:${APPLICATION_PORT}
+    networks:
+      - fitematch
 
 networks:
   fitematch:

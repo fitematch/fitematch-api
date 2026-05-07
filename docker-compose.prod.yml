@@ -1,0 +1,19 @@
+services:
+  api:
+    container_name: fitematch-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: fitematch-api:production
+    env_file:
+      - .env.production
+    restart: unless-stopped
+    ports:
+      - ${APPLICATION_BIND_PORT}:${APPLICATION_PORT}
+    networks:
+      - fitematch
+
+networks:
+  fitematch:
+    driver: bridge

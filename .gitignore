@@ -35,12 +35,10 @@ lerna-debug.log*
 !.vscode/launch.json
 !.vscode/extensions.json
 
-# dotenv environment variable files
 .env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
+.env.*
+!.env.example
+!.env.production.example
 
 # temp directory
 .temp
@@ -56,7 +54,10 @@ pids
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Database
-.mongodb/
+.mongodb
+
+# Uploads
+uploads
 
 #IA
 .codex
