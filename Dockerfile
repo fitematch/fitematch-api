@@ -25,7 +25,7 @@ ENV NODE_ENV=production
 ENV TZ=America/Sao_Paulo
 COPY package*.json ./
 RUN npm install -g npm@latest \
-  && npm ci --omit=dev \
+  && npm ci --omit=dev --ignore-scripts \
   && npm cache clean --force
 COPY --from=builder /app/dist ./dist
 USER node
