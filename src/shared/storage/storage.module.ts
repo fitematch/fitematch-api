@@ -17,9 +17,12 @@ import { S3StorageProvider } from '@src/shared/storage/providers/s3-storage.prov
         localStorageProvider: LocalStorageProvider,
         s3StorageProvider: S3StorageProvider,
       ) => {
-        const storageDriver = process.env.STORAGE_DRIVER || 'local';
+        const uploadProviderDriver =
+          process.env.UPLOAD_PROVIDER_DRIVER ||
+          process.env.STORAGE_DRIVER ||
+          'local';
 
-        return storageDriver === 's3'
+        return uploadProviderDriver === 's3'
           ? s3StorageProvider
           : localStorageProvider;
       },
