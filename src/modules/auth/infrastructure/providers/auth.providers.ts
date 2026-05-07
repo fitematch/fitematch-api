@@ -49,6 +49,7 @@ import { ListAuthSessionsRepository } from '@src/modules/auth/infrastructure/rep
 import { RevokeAuthSessionUseCase } from '@src/modules/auth/application/use-cases/revoke-auth-session.use-case';
 import { RevokeAuthSessionRepository } from '@src/modules/auth/infrastructure/repositories/revoke-auth-session.repository';
 import { MailtrapEmailProvider } from '@src/modules/auth/infrastructure/providers/mailtrap-email.provider';
+import { AwsSesEmailProvider } from '@src/modules/auth/infrastructure/providers/aws-ses-email.provider';
 
 export const authProviders: Provider[] = [
   {
@@ -143,8 +144,21 @@ export const authProviders: Provider[] = [
     provide: REVOKE_AUTH_SESSION_REPOSITORY,
     useClass: RevokeAuthSessionRepository,
   },
+  MailtrapEmailProvider,
+  AwsSesEmailProvider,
   {
     provide: EMAIL_PROVIDER,
-    useClass: MailtrapEmailProvider,
+    inject: [MailtrapEmailProvider, AwsSesEmailProvider],
+    useFactory: (
+      mailtrapEmailProvider: MailtrapEmailProvider,
+      awsSesEmailProvider: AwsSesEmailProvider,
+    ) => {
+      const emailProviderDriver =
+        process.env.EMAIL_PROVIDER_DRIVER || 'mailtrap';
+
+      return emailProviderDriver === 'aws-ses'
+        ? awsSesEmailProvider
+        : mailtrapEmailProvider;
+    },
   },
 ];
