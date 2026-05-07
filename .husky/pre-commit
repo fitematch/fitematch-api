@@ -1,1 +1,25 @@
+#!/usr/bin/env sh
+
+STAGED_FILES=$(git diff --cached --name-only)
+
+if [ -z "$STAGED_FILES" ]; then
+  echo "⚠️ No staged files found."
+  exit 0
+fi
+
+echo ""
+echo "🔍 Running lint-staged..."
+echo ""
+
 npx lint-staged
+
+if [ $? -ne 0 ]; then
+  echo ""
+  echo "❌ Pre-commit failed."
+  echo ""
+  exit 1
+fi
+
+echo ""
+echo "✅ Pre-commit passed."
+echo ""
