@@ -89,5 +89,40 @@
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^6.0.2"
+  },
+  "jest": {
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/test"
+    ],
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "**/*.use-case.ts",
+      "**/*.service.ts",
+      "**/*.utils.ts",
+      "!**/node_modules/**",
+      "!**/dist/**",
+      "!**/test/**"
+    ],
+    "coverageDirectory": "<rootDir>/test/coverage",
+    "coverageReporters": [
+      "json",
+      "lcov",
+      "text",
+      "clover"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "testRegex": ".*\\.test\\.ts$",
+    "moduleNameMapper": {
+      "^@src/(.*)$": "<rootDir>/src/$1"
+    }
   }
 }
