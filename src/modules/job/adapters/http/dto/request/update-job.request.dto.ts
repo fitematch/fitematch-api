@@ -73,7 +73,7 @@ class JobMediaRequestDto {
   coverUrl?: string;
 }
 
-export class UpdateJobRequestDto {
+export class UpdateMyJobRequestDto {
   @ApiPropertyOptional()
   companyId?: string;
 
