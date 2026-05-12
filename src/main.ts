@@ -29,7 +29,19 @@ async function bootstrap() {
   const documentFactory = () => SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/docs', app, documentFactory);
 
-  app.enableCors();
+  app.enableCors({
+    origin: [
+      'http://fitematch.com.br',
+      'http://www.fitematch.com.br',
+      'http://dashboard.fitematch.com.br',
+      'http://api.fitematch.com.br',
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:3002',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
   app.useStaticAssets(
     path.join(
       process.cwd(),
