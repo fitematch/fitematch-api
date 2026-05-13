@@ -31,10 +31,10 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'http://fitematch.com.br',
-      'http://www.fitematch.com.br',
-      'http://dashboard.fitematch.com.br',
-      'http://api.fitematch.com.br',
+      'https://fitematch.com.br',
+      'https://www.fitematch.com.br',
+      'https://dashboard.fitematch.com.br',
+      'https://api.fitematch.com.br',
       'http://localhost:3000',
       'http://localhost:3001',
       'http://localhost:3002',
