@@ -4,6 +4,7 @@ import { SendEmailCommand, SESv2Client } from '@aws-sdk/client-sesv2';
 import type {
   EmailProviderInterface,
   SendActivationCodeEmailInput,
+  SendEmailInput,
 } from '@src/modules/auth/application/contracts/providers/email-provider.interface';
 import { activationCodeEmailTemplate } from '@src/modules/auth/infrastructure/providers/templates/activation-code-email.template';
 
@@ -21,6 +22,18 @@ export class AwsSesEmailProvider implements EmailProviderInterface {
   public async sendActivationCode(
     input: SendActivationCodeEmailInput,
   ): Promise<void> {
+    await this.sendEmail({
+      to: input.to,
+      subject: 'Seu codigo de ativacao fitematch',
+      html: activationCodeEmailTemplate({
+        name: input.name,
+        code: input.code,
+        expiresInMinutes: input.expiresInMinutes,
+      }),
+    });
+  }
+
+  public async sendEmail(input: SendEmailInput): Promise<void> {
     const senderEmail = process.env.AWS_SES_SENDER_EMAIL;
     const senderName = process.env.AWS_SES_SENDER_NAME || 'fitematch';
 
@@ -39,24 +52,18 @@ export class AwsSesEmailProvider implements EmailProviderInterface {
         new SendEmailCommand({
           FromEmailAddress: `"${senderName}" <${senderEmail}>`,
           Destination: {
-            ToAddresses: [
-              input.name ? `"${input.name}" <${input.to}>` : input.to,
-            ],
+            ToAddresses: [input.to],
           },
           Content: {
             Simple: {
               Subject: {
                 Charset: 'UTF-8',
-                Data: 'Seu codigo de ativacao fitematch',
+                Data: input.subject,
               },
               Body: {
                 Html: {
                   Charset: 'UTF-8',
-                  Data: activationCodeEmailTemplate({
-                    name: input.name,
-                    code: input.code,
-                    expiresInMinutes: input.expiresInMinutes,
-                  }),
+                  Data: input.html,
                 },
               },
             },
@@ -68,7 +75,7 @@ export class AwsSesEmailProvider implements EmailProviderInterface {
         error instanceof Error ? error.message : 'Unknown AWS SES error';
 
       throw new InternalServerErrorException(
-        `AWS SES failed to send activation email: ${message}`,
+        `AWS SES failed to send email: ${message}`,
       );
     }
   }

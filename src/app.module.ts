@@ -10,6 +10,7 @@ import { ApplyModule } from '@src/modules/apply/apply.module';
 import { AuthModule } from '@src/modules/auth/auth.module';
 import { UploadModule } from '@src/modules/upload/upload.module';
 import { DashboardModule } from '@src/modules/dashboard/dashboard.module';
+import { EmailTemplateModule } from '@src/modules/email-template/email-template.module';
 
 const importedModules = [
   HealthCheckModule,
@@ -20,6 +21,7 @@ const importedModules = [
   ApplyModule,
   UploadModule,
   DashboardModule,
+  EmailTemplateModule,
 ];
 @Module({
   imports: [

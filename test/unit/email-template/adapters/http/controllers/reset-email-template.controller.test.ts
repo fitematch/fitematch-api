@@ -1,0 +1,46 @@
+import { NotFoundException } from '@nestjs/common';
+import { ResetEmailTemplateController } from '@src/modules/email-template/adapters/http/controllers/reset-email-template.controller';
+import type { ResetEmailTemplateUseCaseInterface } from '@src/modules/email-template/application/contracts/use-cases/reset-email-template.use-case.interface';
+
+describe('ResetEmailTemplateController', () => {
+  let controller: ResetEmailTemplateController;
+  let useCase: jest.Mocked<ResetEmailTemplateUseCaseInterface>;
+
+  beforeEach(() => {
+    useCase = {
+      execute: jest.fn(),
+    } as jest.Mocked<ResetEmailTemplateUseCaseInterface>;
+
+    controller = new ResetEmailTemplateController(useCase);
+  });
+
+  it('should return the reset template', async () => {
+    useCase.execute.mockResolvedValue({
+      id: 'template-1',
+      slug: 'activation-code',
+      name: 'Activation Code',
+      description: 'Activation email',
+      subject: 'Default subject',
+      preheader: 'Default preheader',
+      body: '<p>Default body</p>',
+      defaultSubject: 'Default subject',
+      defaultPreheader: 'Default preheader',
+      defaultBody: '<p>Default body</p>',
+      variables: [],
+      isSystem: true,
+    });
+
+    const result = await controller.handle({ id: 'template-1' });
+
+    expect(result.subject).toBe('Default subject');
+    expect(useCase.execute).toHaveBeenCalledWith({ id: 'template-1' });
+  });
+
+  it('should throw not found when template does not exist', async () => {
+    useCase.execute.mockResolvedValue(null);
+
+    await expect(controller.handle({ id: 'missing-template' })).rejects.toThrow(
+      new NotFoundException('Email template not found.'),
+    );
+  });
+});

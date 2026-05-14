@@ -5,12 +5,25 @@ import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 import type {
   EmailProviderInterface,
   SendActivationCodeEmailInput,
+  SendEmailInput,
 } from '@src/modules/auth/application/contracts/providers/email-provider.interface';
 import { activationCodeEmailTemplate } from '@src/modules/auth/infrastructure/providers/templates/activation-code-email.template';
 
 @Injectable()
 export class MailtrapEmailProvider implements EmailProviderInterface {
   async sendActivationCode(input: SendActivationCodeEmailInput): Promise<void> {
+    await this.sendEmail({
+      to: input.to,
+      subject: 'Seu codigo de ativacao fitematch',
+      html: activationCodeEmailTemplate({
+        name: input.name,
+        code: input.code,
+        expiresInMinutes: input.expiresInMinutes,
+      }),
+    });
+  }
+
+  async sendEmail(input: SendEmailInput): Promise<void> {
     const host = process.env.MAILTRAP_HOST || 'sandbox.smtp.mailtrap.io';
     const port = Number(process.env.MAILTRAP_PORT || '2525');
     const user = process.env.MAILTRAP_USER;
@@ -50,13 +63,9 @@ export class MailtrapEmailProvider implements EmailProviderInterface {
 
       await transporter.sendMail({
         from: `"${senderName}" <${senderEmail}>`,
-        to: input.name ? `"${input.name}" <${input.to}>` : input.to,
-        subject: 'Seu codigo de ativacao fitematch',
-        html: activationCodeEmailTemplate({
-          name: input.name,
-          code: input.code,
-          expiresInMinutes: input.expiresInMinutes,
-        }),
+        to: input.to,
+        subject: input.subject,
+        html: input.html,
       });
     } catch (error: unknown) {
       const smtpError = error as SMTPTransport.SentMessageInfo &
@@ -71,7 +80,7 @@ export class MailtrapEmailProvider implements EmailProviderInterface {
         .filter((value): value is string => Boolean(value))
         .join(' | ');
       throw new InternalServerErrorException(
-        `Mailtrap failed to send activation email: ${details ? `${message} (${details})` : message}`,
+        `Mailtrap failed to send email: ${details ? `${message} (${details})` : message}`,
       );
     }
   }

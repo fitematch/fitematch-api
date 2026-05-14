@@ -131,4 +131,74 @@ describe('CreateMyJobUseCase', () => {
       ),
     );
   });
+
+  it('uses provided slug without loading company context when it is valid', async () => {
+    const input = {
+      userId: 'user-1',
+      title: 'Professor Judo',
+      slug: 'Vaga Professor Judo 2026',
+      description: 'Aulas e acompanhamento tecnico.',
+      slots: 1,
+      contractType: JobContractTypeEnum.CLT,
+    };
+
+    repository.create.mockResolvedValue({
+      ...input,
+      _id: 'job-3',
+      companyId: 'company-1',
+      slug: 'vaga-professor-judo-2026',
+      status: JobStatusEnum.PENDING,
+    });
+
+    await useCase.execute(input);
+
+    expect(repository.findCompanySlugContext).not.toHaveBeenCalled();
+    expect(repository.existsBySlug).toHaveBeenCalledWith(
+      'vaga-professor-judo-2026',
+    );
+    expect(repository.create).toHaveBeenCalledWith({
+      ...input,
+      companyId: 'company-1',
+      slug: 'vaga-professor-judo-2026',
+      status: JobStatusEnum.PENDING,
+    });
+  });
+
+  it('adds suffix when generated slug already exists', async () => {
+    const input = {
+      userId: 'user-1',
+      title: 'Professor Judo',
+      description: 'Aulas e acompanhamento tecnico.',
+      slots: 1,
+      contractType: JobContractTypeEnum.CLT,
+    };
+
+    repository.existsBySlug
+      .mockResolvedValueOnce(true)
+      .mockResolvedValueOnce(false);
+    repository.create.mockResolvedValue({
+      ...input,
+      _id: 'job-4',
+      companyId: 'company-1',
+      slug: 'professor-judo-tecfit-campinas-sp-1',
+      status: JobStatusEnum.PENDING,
+    });
+
+    await useCase.execute(input);
+
+    expect(repository.existsBySlug).toHaveBeenNthCalledWith(
+      1,
+      'professor-judo-tecfit-campinas-sp',
+    );
+    expect(repository.existsBySlug).toHaveBeenNthCalledWith(
+      2,
+      'professor-judo-tecfit-campinas-sp-1',
+    );
+    expect(repository.create).toHaveBeenCalledWith({
+      ...input,
+      companyId: 'company-1',
+      slug: 'professor-judo-tecfit-campinas-sp-1',
+      status: JobStatusEnum.PENDING,
+    });
+  });
 });

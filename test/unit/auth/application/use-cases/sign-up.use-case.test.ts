@@ -34,6 +34,7 @@ describe('SignUpUseCase', () => {
     } as jest.Mocked<HashServiceInterface>;
     emailProvider = {
       sendActivationCode: jest.fn(),
+      sendEmail: jest.fn(),
     } as jest.Mocked<EmailProviderInterface>;
 
     useCase = new SignUpUseCase(
