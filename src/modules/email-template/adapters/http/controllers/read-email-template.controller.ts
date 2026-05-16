@@ -27,7 +27,7 @@ import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 
 @ApiTags('Email Template')
 @ApiBearerAuth('JWT')
-@Controller('email-template')
+@Controller('email-templates')
 export class ReadEmailTemplateController {
   constructor(
     @Inject(READ_EMAIL_TEMPLATE_USE_CASE)
@@ -36,9 +36,9 @@ export class ReadEmailTemplateController {
 
   @ApiOperation({
     summary: 'Read email template',
-    description: 'Returns an email template by id.',
+    description: 'Returns an email template by slug.',
   })
-  @ApiParam({ name: 'id', type: String })
+  @ApiParam({ name: 'slug', type: String })
   @ApiOkResponse({
     description: 'Email template returned successfully.',
     type: EmailTemplateResponseDto,
@@ -48,7 +48,7 @@ export class ReadEmailTemplateController {
   })
   @UseGuards(JwtAuthGuard, AdminRoleGuard)
   @AdminRoles(AdminRoleEnum.ADMIN, AdminRoleEnum.SUPER_ADMIN)
-  @Get(':id')
+  @Get(':slug')
   async handle(
     @Param() params: ReadEmailTemplateParamsDto,
   ): Promise<EmailTemplateResponseDto> {

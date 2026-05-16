@@ -16,7 +16,6 @@ describe('ListEmailTemplateController', () => {
   it('should return the mapped template list', async () => {
     useCase.execute.mockResolvedValue([
       {
-        id: 'template-1',
         slug: 'activation-code',
         name: 'Activation Code',
         description: 'Activation email',
@@ -28,6 +27,9 @@ describe('ListEmailTemplateController', () => {
         defaultBody: '<p>Body</p>',
         variables: [],
         isSystem: true,
+        isActive: true,
+        category: 'auth',
+        version: 1,
       },
     ]);
 
@@ -35,7 +37,6 @@ describe('ListEmailTemplateController', () => {
 
     expect(result).toEqual([
       {
-        id: 'template-1',
         slug: 'activation-code',
         name: 'Activation Code',
         description: 'Activation email',
@@ -47,6 +48,11 @@ describe('ListEmailTemplateController', () => {
         defaultBody: '<p>Body</p>',
         variables: [],
         isSystem: true,
+        isActive: true,
+        category: 'auth',
+        version: 1,
+        createdAt: undefined,
+        updatedAt: undefined,
       },
     ]);
   });

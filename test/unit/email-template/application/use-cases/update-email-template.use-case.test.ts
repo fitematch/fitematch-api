@@ -16,22 +16,24 @@ describe('UpdateEmailTemplateUseCase', () => {
 
   it('should ensure defaults and update a template', async () => {
     const input = {
-      id: 'template-1',
+      slug: 'activation-code',
+      name: 'Activation code',
+      description: 'Activation email',
       subject: 'New subject',
       preheader: 'New preheader',
       body: '<p>New body</p>',
+      isActive: true,
+      category: 'auth',
     };
 
     const output = {
       ...input,
-      slug: 'activation-code',
-      name: 'Activation Code',
-      description: 'Activation email',
       defaultSubject: 'Default subject',
       defaultPreheader: 'Default preheader',
       defaultBody: '<p>Default body</p>',
       variables: [],
       isSystem: true,
+      version: 1,
     };
 
     repository.ensureDefaults.mockResolvedValue();

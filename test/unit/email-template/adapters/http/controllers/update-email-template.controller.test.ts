@@ -16,7 +16,6 @@ describe('UpdateEmailTemplateController', () => {
 
   it('should return the updated template', async () => {
     useCase.execute.mockResolvedValue({
-      id: 'template-1',
       slug: 'activation-code',
       name: 'Activation Code',
       description: 'Activation email',
@@ -28,23 +27,34 @@ describe('UpdateEmailTemplateController', () => {
       defaultBody: '<p>Default body</p>',
       variables: [],
       isSystem: true,
+      isActive: true,
+      category: 'auth',
+      version: 1,
     });
 
     const result = await controller.handle(
-      { id: 'template-1' },
+      { slug: 'activation-code' },
       {
+        name: 'Activation Code',
+        description: 'Activation email',
         subject: 'New subject',
         preheader: 'New preheader',
         body: '<p>New body</p>',
+        isActive: true,
+        category: 'auth',
       },
     );
 
     expect(result.subject).toBe('New subject');
     expect(useCase.execute).toHaveBeenCalledWith({
-      id: 'template-1',
+      slug: 'activation-code',
+      name: 'Activation Code',
+      description: 'Activation email',
       subject: 'New subject',
       preheader: 'New preheader',
       body: '<p>New body</p>',
+      isActive: true,
+      category: 'auth',
     });
   });
 
@@ -53,11 +63,15 @@ describe('UpdateEmailTemplateController', () => {
 
     await expect(
       controller.handle(
-        { id: 'missing-template' },
+        { slug: 'missing-template' },
         {
+          name: 'Activation Code',
+          description: 'Activation email',
           subject: 'Subject',
           preheader: 'Preheader',
           body: '<p>Body</p>',
+          isActive: true,
+          category: 'auth',
         },
       ),
     ).rejects.toThrow(new NotFoundException('Email template not found.'));

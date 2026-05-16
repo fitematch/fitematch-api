@@ -24,4 +24,7 @@ export const jobApprovedEmailTemplate: DefaultEmailTemplateDefinition = {
     commonEmailTemplateVariables.jobTitle,
   ],
   isSystem: true,
+  isActive: true,
+  category: 'job',
+  version: 1,
 };

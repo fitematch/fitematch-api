@@ -17,20 +17,20 @@ class EmailTemplateVariableSchema {
   timestamps: true,
 })
 export class EmailTemplateSchema {
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true, unique: true, lowercase: true, trim: true })
   slug!: string;
 
   @Prop({ required: true })
   name!: string;
 
-  @Prop({ required: true })
-  description!: string;
+  @Prop({ type: String })
+  description?: string | null;
 
   @Prop({ required: true })
   subject!: string;
 
-  @Prop({ required: true })
-  preheader!: string;
+  @Prop({ type: String })
+  preheader?: string | null;
 
   @Prop({ required: true })
   body!: string;
@@ -38,8 +38,8 @@ export class EmailTemplateSchema {
   @Prop({ required: true })
   defaultSubject!: string;
 
-  @Prop({ required: true })
-  defaultPreheader!: string;
+  @Prop({ type: String })
+  defaultPreheader?: string | null;
 
   @Prop({ required: true })
   defaultBody!: string;
@@ -49,6 +49,15 @@ export class EmailTemplateSchema {
 
   @Prop({ required: true, default: true })
   isSystem!: boolean;
+
+  @Prop({ required: true, default: true })
+  isActive!: boolean;
+
+  @Prop({ type: String })
+  category?: string | null;
+
+  @Prop({ required: true, default: 1 })
+  version!: number;
 
   createdAt?: Date;
   updatedAt?: Date;

@@ -8,10 +8,14 @@ export class UpdateEmailTemplateRequestMapper {
     body: UpdateEmailTemplateRequestDto,
   ): UpdateEmailTemplateInputDto {
     return {
-      id: params.id,
+      slug: params.slug,
+      name: body.name,
+      description: body.description,
       subject: body.subject,
       preheader: body.preheader,
       body: body.body,
+      isActive: body.isActive,
+      category: body.category,
     };
   }
 }

@@ -26,4 +26,7 @@ export const companyRejectedEmailTemplate: DefaultEmailTemplateDefinition = {
     commonEmailTemplateVariables.reason,
   ],
   isSystem: true,
+  isActive: true,
+  category: 'company',
+  version: 1,
 };

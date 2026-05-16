@@ -4,7 +4,6 @@ import type { EmailTemplateOutputDto } from '@src/modules/email-template/applica
 export class EmailTemplateMapper {
   static toResponse(output: EmailTemplateOutputDto): EmailTemplateResponseDto {
     return {
-      id: output.id,
       slug: output.slug,
       name: output.name,
       description: output.description,
@@ -16,6 +15,9 @@ export class EmailTemplateMapper {
       defaultBody: output.defaultBody,
       variables: output.variables,
       isSystem: output.isSystem,
+      isActive: output.isActive,
+      category: output.category,
+      version: output.version,
       createdAt: output.createdAt,
       updatedAt: output.updatedAt,
     };

@@ -24,7 +24,7 @@ export class TestEmailTemplateUseCase implements TestEmailTemplateUseCaseInterfa
     await this.testEmailTemplateRepository.ensureDefaults();
 
     const templateInput: ReadEmailTemplateInputDto = {
-      id: input.id,
+      slug: input.slug,
     };
 
     const template = await this.testEmailTemplateRepository.read(templateInput);
@@ -39,7 +39,10 @@ export class TestEmailTemplateUseCase implements TestEmailTemplateUseCaseInterfa
       to: input.email,
       subject: EmailTemplateRenderer.render(template.subject, variables),
       html: EmailTemplateRenderer.buildHtml({
-        preheader: EmailTemplateRenderer.render(template.preheader, variables),
+        preheader: EmailTemplateRenderer.render(
+          template.preheader ?? '',
+          variables,
+        ),
         body: EmailTemplateRenderer.render(template.body, variables),
       }),
     });

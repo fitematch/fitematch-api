@@ -26,7 +26,7 @@ export class TestEmailTemplateRepository implements TestEmailTemplateRepositoryI
     input: ReadEmailTemplateInputDto,
   ): Promise<EmailTemplateOutputDto | null> {
     const template = await this.emailTemplateModel
-      .findById(input.id)
+      .findOne({ slug: input.slug.trim().toLowerCase() })
       .lean()
       .exec();
 

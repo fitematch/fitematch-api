@@ -1,6 +1,7 @@
-import { IsMongoId } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class TestEmailTemplateParamsDto {
-  @IsMongoId()
-  id!: string;
+  @IsString()
+  @IsNotEmpty()
+  slug!: string;
 }

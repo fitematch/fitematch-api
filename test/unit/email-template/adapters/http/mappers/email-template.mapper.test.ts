@@ -4,7 +4,6 @@ import { TestEmailTemplateMapper } from '@src/modules/email-template/adapters/ht
 describe('EmailTemplateMappers', () => {
   it('should map an email template output to response', () => {
     const output = {
-      id: 'template-1',
       slug: 'activation-code',
       name: 'Activation Code',
       description: 'Activation email',
@@ -21,6 +20,9 @@ describe('EmailTemplateMappers', () => {
         },
       ],
       isSystem: true,
+      isActive: true,
+      category: 'auth',
+      version: 1,
     };
 
     const result = EmailTemplateMapper.toResponse(output);

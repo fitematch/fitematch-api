@@ -6,9 +6,10 @@ import { TestEmailTemplateRequestDto } from '@src/modules/email-template/adapter
 describe('EmailTemplateRequestDto', () => {
   it('should validate required fields on update request', async () => {
     const dto = plainToInstance(UpdateEmailTemplateRequestDto, {
+      name: '',
       subject: '',
-      preheader: '',
       body: '',
+      isActive: true,
     });
 
     const errors = await validate(dto);

@@ -30,4 +30,7 @@ export const applicationStatusUpdatedEmailTemplate: DefaultEmailTemplateDefiniti
       commonEmailTemplateVariables.reason,
     ],
     isSystem: true,
+    isActive: true,
+    category: 'application',
+    version: 1,
   };

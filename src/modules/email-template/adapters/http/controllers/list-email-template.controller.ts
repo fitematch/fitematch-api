@@ -16,7 +16,7 @@ import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 
 @ApiTags('Email Template')
 @ApiBearerAuth('JWT')
-@Controller('email-template')
+@Controller('email-templates')
 export class ListEmailTemplateController {
   constructor(
     @Inject(LIST_EMAIL_TEMPLATE_USE_CASE)

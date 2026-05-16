@@ -16,7 +16,6 @@ describe('ResetEmailTemplateUseCase', () => {
 
   it('should ensure defaults and reset a template', async () => {
     const output = {
-      id: 'template-1',
       slug: 'activation-code',
       name: 'Activation Code',
       description: 'Activation email',
@@ -28,15 +27,18 @@ describe('ResetEmailTemplateUseCase', () => {
       defaultBody: '<p>Default body</p>',
       variables: [],
       isSystem: true,
+      isActive: true,
+      category: 'auth',
+      version: 1,
     };
 
     repository.ensureDefaults.mockResolvedValue();
     repository.reset.mockResolvedValue(output);
 
-    const result = await useCase.execute({ id: 'template-1' });
+    const result = await useCase.execute({ slug: 'activation-code' });
 
     expect(result).toEqual(output);
     expect(repository.ensureDefaults).toHaveBeenCalledTimes(1);
-    expect(repository.reset).toHaveBeenCalledWith({ id: 'template-1' });
+    expect(repository.reset).toHaveBeenCalledWith({ slug: 'activation-code' });
   });
 });

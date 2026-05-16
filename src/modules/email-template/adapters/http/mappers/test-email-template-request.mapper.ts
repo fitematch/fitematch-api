@@ -8,7 +8,7 @@ export class TestEmailTemplateRequestMapper {
     body: TestEmailTemplateRequestDto,
   ): TestEmailTemplateInputDto {
     return {
-      id: params.id,
+      slug: params.slug,
       email: body.email,
     };
   }

@@ -17,7 +17,6 @@ describe('ListEmailTemplateUseCase', () => {
   it('should ensure defaults and return the template list', async () => {
     const output = [
       {
-        id: 'template-1',
         slug: 'activation-code',
         name: 'Activation Code',
         description: 'Activation email',
@@ -29,6 +28,9 @@ describe('ListEmailTemplateUseCase', () => {
         defaultBody: '<p>Body</p>',
         variables: [],
         isSystem: true,
+        isActive: true,
+        category: 'auth',
+        version: 1,
       },
     ];
 

@@ -6,7 +6,7 @@ export class ResetEmailTemplateRequestMapper {
     params: ResetEmailTemplateParamsDto,
   ): ResetEmailTemplateInputDto {
     return {
-      id: params.id,
+      slug: params.slug,
     };
   }
 }

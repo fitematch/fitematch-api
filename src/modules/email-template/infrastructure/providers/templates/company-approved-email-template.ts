@@ -24,4 +24,7 @@ export const companyApprovedEmailTemplate: DefaultEmailTemplateDefinition = {
     commonEmailTemplateVariables.companyName,
   ],
   isSystem: true,
+  isActive: true,
+  category: 'company',
+  version: 1,
 };

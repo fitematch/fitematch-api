@@ -23,7 +23,6 @@ describe('TestEmailTemplateUseCase', () => {
   it('should send a rendered test email when the template exists', async () => {
     repository.ensureDefaults.mockResolvedValue();
     repository.read.mockResolvedValue({
-      id: 'template-1',
       slug: 'company-approved',
       name: 'Company Approved',
       description: 'Company approved email',
@@ -35,11 +34,14 @@ describe('TestEmailTemplateUseCase', () => {
       defaultBody: '<p>{{companyName}} - {{jobTitle}}</p>',
       variables: [],
       isSystem: true,
+      isActive: true,
+      category: 'company',
+      version: 1,
     });
     emailProvider.sendEmail.mockResolvedValue();
 
     const result = await useCase.execute({
-      id: 'template-1',
+      slug: 'company-approved',
       email: 'admin@email.com',
     });
 
@@ -48,7 +50,7 @@ describe('TestEmailTemplateUseCase', () => {
     });
     expect(repository.ensureDefaults).toHaveBeenCalledTimes(1);
     expect(repository.read).toHaveBeenCalledWith({
-      id: 'template-1',
+      slug: 'company-approved',
     });
     expect(emailProvider.sendEmail).toHaveBeenCalledWith({
       to: 'admin@email.com',
@@ -62,7 +64,7 @@ describe('TestEmailTemplateUseCase', () => {
     repository.read.mockResolvedValue(null);
 
     const result = await useCase.execute({
-      id: 'missing-template',
+      slug: 'missing-template',
       email: 'admin@email.com',
     });
 

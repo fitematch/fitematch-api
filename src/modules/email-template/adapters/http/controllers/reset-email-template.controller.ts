@@ -27,7 +27,7 @@ import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 
 @ApiTags('Email Template')
 @ApiBearerAuth('JWT')
-@Controller('email-template')
+@Controller('email-templates')
 export class ResetEmailTemplateController {
   constructor(
     @Inject(RESET_EMAIL_TEMPLATE_USE_CASE)
@@ -38,7 +38,7 @@ export class ResetEmailTemplateController {
     summary: 'Reset email template',
     description: 'Restores an email template to its default content.',
   })
-  @ApiParam({ name: 'id', type: String })
+  @ApiParam({ name: 'slug', type: String })
   @ApiOkResponse({
     description: 'Email template reset successfully.',
     type: EmailTemplateResponseDto,
@@ -48,7 +48,7 @@ export class ResetEmailTemplateController {
   })
   @UseGuards(JwtAuthGuard, AdminRoleGuard)
   @AdminRoles(AdminRoleEnum.ADMIN, AdminRoleEnum.SUPER_ADMIN)
-  @Post(':id/reset')
+  @Post(':slug/reset')
   async handle(
     @Param() params: ResetEmailTemplateParamsDto,
   ): Promise<EmailTemplateResponseDto> {

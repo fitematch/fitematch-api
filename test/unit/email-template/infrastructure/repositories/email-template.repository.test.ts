@@ -20,7 +20,6 @@ describe('EmailTemplateRepositories', () => {
           lean: jest.fn().mockReturnValue({
             exec: jest.fn().mockResolvedValue([
               {
-                _id: { toString: () => 'template-1' },
                 slug: 'activation-code',
                 name: 'Activation Code',
                 description: 'Activation email',
@@ -32,6 +31,9 @@ describe('EmailTemplateRepositories', () => {
                 defaultBody: '<p>Body</p>',
                 variables: [],
                 isSystem: true,
+                isActive: true,
+                category: 'auth',
+                version: 1,
               },
             ]),
           }),
@@ -45,16 +47,15 @@ describe('EmailTemplateRepositories', () => {
     const result = await repository.list();
 
     expect(model.bulkWrite).toHaveBeenCalledTimes(1);
-    expect(result[0]?.id).toBe('template-1');
+    expect(result[0]?.slug).toBe('activation-code');
   });
 
-  it('should read a template by id', async () => {
+  it('should read a template by slug', async () => {
     const model = {
       bulkWrite: jest.fn().mockResolvedValue(undefined),
-      findById: jest.fn().mockReturnValue({
+      findOne: jest.fn().mockReturnValue({
         lean: jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue({
-            _id: { toString: () => 'template-1' },
             slug: 'activation-code',
             name: 'Activation Code',
             description: 'Activation email',
@@ -66,6 +67,9 @@ describe('EmailTemplateRepositories', () => {
             defaultBody: '<p>Body</p>',
             variables: [],
             isSystem: true,
+            isActive: true,
+            category: 'auth',
+            version: 1,
           }),
         }),
       }),
@@ -74,19 +78,18 @@ describe('EmailTemplateRepositories', () => {
     const repository = new ReadEmailTemplateRepository(model as never);
 
     await repository.ensureDefaults();
-    const result = await repository.read({ id: 'template-1' });
+    const result = await repository.read({ slug: 'Activation-Code' });
 
-    expect(model.findById).toHaveBeenCalledWith('template-1');
-    expect(result?.id).toBe('template-1');
+    expect(model.findOne).toHaveBeenCalledWith({ slug: 'activation-code' });
+    expect(result?.slug).toBe('activation-code');
   });
 
-  it('should update a template by id', async () => {
+  it('should update a template by slug', async () => {
     const model = {
       bulkWrite: jest.fn().mockResolvedValue(undefined),
-      findByIdAndUpdate: jest.fn().mockReturnValue({
+      findOneAndUpdate: jest.fn().mockReturnValue({
         lean: jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue({
-            _id: { toString: () => 'template-1' },
             slug: 'activation-code',
             name: 'Activation Code',
             description: 'Activation email',
@@ -98,6 +101,9 @@ describe('EmailTemplateRepositories', () => {
             defaultBody: '<p>Body</p>',
             variables: [],
             isSystem: true,
+            isActive: true,
+            category: 'auth',
+            version: 1,
           }),
         }),
       }),
@@ -106,19 +112,27 @@ describe('EmailTemplateRepositories', () => {
     const repository = new UpdateEmailTemplateRepository(model as never);
 
     const result = await repository.update({
-      id: 'template-1',
+      slug: 'Activation-Code',
+      name: 'Activation Code',
+      description: 'Activation email',
       subject: 'Updated subject',
       preheader: 'Updated preheader',
       body: '<p>Updated body</p>',
+      isActive: true,
+      category: 'auth',
     });
 
-    expect(model.findByIdAndUpdate).toHaveBeenCalledWith(
-      'template-1',
+    expect(model.findOneAndUpdate).toHaveBeenCalledWith(
+      { slug: 'activation-code' },
       {
         $set: {
+          name: 'Activation Code',
+          description: 'Activation email',
           subject: 'Updated subject',
           preheader: 'Updated preheader',
           body: '<p>Updated body</p>',
+          isActive: true,
+          category: 'auth',
         },
       },
       { new: true },
@@ -130,9 +144,8 @@ describe('EmailTemplateRepositories', () => {
     const save = jest.fn().mockResolvedValue(undefined);
     const model = {
       bulkWrite: jest.fn().mockResolvedValue(undefined),
-      findById: jest.fn().mockReturnValue({
+      findOne: jest.fn().mockReturnValue({
         exec: jest.fn().mockResolvedValue({
-          _id: { toString: () => 'template-1' },
           slug: 'activation-code',
           name: 'Activation Code',
           description: 'Activation email',
@@ -144,6 +157,9 @@ describe('EmailTemplateRepositories', () => {
           defaultBody: '<p>Default body</p>',
           variables: [],
           isSystem: true,
+          isActive: true,
+          category: 'auth',
+          version: 1,
           save,
         }),
       }),
@@ -151,7 +167,7 @@ describe('EmailTemplateRepositories', () => {
 
     const repository = new ResetEmailTemplateRepository(model as never);
 
-    const result = await repository.reset({ id: 'template-1' });
+    const result = await repository.reset({ slug: 'activation-code' });
 
     expect(save).toHaveBeenCalledTimes(1);
     expect(result?.subject).toBe('Default subject');
@@ -162,10 +178,9 @@ describe('EmailTemplateRepositories', () => {
   it('should read a template for test sending', async () => {
     const model = {
       bulkWrite: jest.fn().mockResolvedValue(undefined),
-      findById: jest.fn().mockReturnValue({
+      findOne: jest.fn().mockReturnValue({
         lean: jest.fn().mockReturnValue({
           exec: jest.fn().mockResolvedValue({
-            _id: { toString: () => 'template-1' },
             slug: 'activation-code',
             name: 'Activation Code',
             description: 'Activation email',
@@ -177,6 +192,9 @@ describe('EmailTemplateRepositories', () => {
             defaultBody: '<p>Body</p>',
             variables: [],
             isSystem: true,
+            isActive: true,
+            category: 'auth',
+            version: 1,
           }),
         }),
       }),
@@ -184,7 +202,7 @@ describe('EmailTemplateRepositories', () => {
 
     const repository = new TestEmailTemplateRepository(model as never);
 
-    const result = await repository.read({ id: 'template-1' });
+    const result = await repository.read({ slug: 'activation-code' });
 
     expect(result?.slug).toBe('activation-code');
   });

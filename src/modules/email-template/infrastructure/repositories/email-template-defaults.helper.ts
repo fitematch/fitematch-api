@@ -10,7 +10,24 @@ export async function ensureDefaultEmailTemplates(
       updateOne: {
         filter: { slug: template.slug },
         update: {
-          $setOnInsert: template,
+          $setOnInsert: {
+            slug: template.slug,
+            subject: template.subject,
+            preheader: template.preheader,
+            body: template.body,
+          },
+          $set: {
+            name: template.name,
+            description: template.description,
+            defaultSubject: template.defaultSubject,
+            defaultPreheader: template.defaultPreheader,
+            defaultBody: template.defaultBody,
+            variables: template.variables,
+            isSystem: template.isSystem,
+            isActive: template.isActive,
+            category: template.category,
+            version: template.version,
+          },
         },
         upsert: true,
       },

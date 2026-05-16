@@ -25,4 +25,7 @@ export const applicationReceivedEmailTemplate: DefaultEmailTemplateDefinition =
       commonEmailTemplateVariables.jobTitle,
     ],
     isSystem: true,
+    isActive: true,
+    category: 'application',
+    version: 1,
   };

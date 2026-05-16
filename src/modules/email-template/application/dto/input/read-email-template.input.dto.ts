@@ -1,3 +1,3 @@
 export class ReadEmailTemplateInputDto {
-  id!: string;
+  slug!: string;
 }

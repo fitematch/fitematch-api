@@ -20,7 +20,7 @@ describe('TestEmailTemplateController', () => {
     });
 
     const result = await controller.handle(
-      { id: 'template-1' },
+      { slug: 'activation-code' },
       { email: 'admin@email.com' },
     );
 
@@ -28,7 +28,7 @@ describe('TestEmailTemplateController', () => {
       message: 'Test email sent successfully.',
     });
     expect(useCase.execute).toHaveBeenCalledWith({
-      id: 'template-1',
+      slug: 'activation-code',
       email: 'admin@email.com',
     });
   });
@@ -38,7 +38,7 @@ describe('TestEmailTemplateController', () => {
 
     await expect(
       controller.handle(
-        { id: 'missing-template' },
+        { slug: 'missing-template' },
         { email: 'admin@email.com' },
       ),
     ).rejects.toThrow(new NotFoundException('Email template not found.'));

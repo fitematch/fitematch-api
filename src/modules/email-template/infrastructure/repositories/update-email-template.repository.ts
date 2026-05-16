@@ -26,13 +26,17 @@ export class UpdateEmailTemplateRepository implements UpdateEmailTemplateReposit
     input: UpdateEmailTemplateInputDto,
   ): Promise<EmailTemplateOutputDto | null> {
     const template = await this.emailTemplateModel
-      .findByIdAndUpdate(
-        input.id,
+      .findOneAndUpdate(
+        { slug: input.slug.trim().toLowerCase() },
         {
           $set: {
+            name: input.name,
+            description: input.description,
             subject: input.subject,
             preheader: input.preheader,
             body: input.body,
+            isActive: input.isActive,
+            category: input.category,
           },
         },
         { new: true },

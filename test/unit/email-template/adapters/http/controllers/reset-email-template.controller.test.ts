@@ -16,7 +16,6 @@ describe('ResetEmailTemplateController', () => {
 
   it('should return the reset template', async () => {
     useCase.execute.mockResolvedValue({
-      id: 'template-1',
       slug: 'activation-code',
       name: 'Activation Code',
       description: 'Activation email',
@@ -28,19 +27,22 @@ describe('ResetEmailTemplateController', () => {
       defaultBody: '<p>Default body</p>',
       variables: [],
       isSystem: true,
+      isActive: true,
+      category: 'auth',
+      version: 1,
     });
 
-    const result = await controller.handle({ id: 'template-1' });
+    const result = await controller.handle({ slug: 'activation-code' });
 
     expect(result.subject).toBe('Default subject');
-    expect(useCase.execute).toHaveBeenCalledWith({ id: 'template-1' });
+    expect(useCase.execute).toHaveBeenCalledWith({ slug: 'activation-code' });
   });
 
   it('should throw not found when template does not exist', async () => {
     useCase.execute.mockResolvedValue(null);
 
-    await expect(controller.handle({ id: 'missing-template' })).rejects.toThrow(
-      new NotFoundException('Email template not found.'),
-    );
+    await expect(
+      controller.handle({ slug: 'missing-template' }),
+    ).rejects.toThrow(new NotFoundException('Email template not found.'));
   });
 });

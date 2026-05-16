@@ -1,4 +1,4 @@
 export class TestEmailTemplateInputDto {
-  id!: string;
+  slug!: string;
   email!: string;
 }

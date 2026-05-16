@@ -4,18 +4,20 @@ export interface EmailTemplateVariableEntity {
 }
 
 export interface EmailTemplateEntity {
-  id: string;
   slug: string;
   name: string;
-  description: string;
+  description?: string | null;
   subject: string;
-  preheader: string;
+  preheader?: string | null;
   body: string;
   defaultSubject: string;
-  defaultPreheader: string;
+  defaultPreheader?: string | null;
   defaultBody: string;
   variables: EmailTemplateVariableEntity[];
   isSystem: boolean;
+  isActive: boolean;
+  category?: string | null;
+  version: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

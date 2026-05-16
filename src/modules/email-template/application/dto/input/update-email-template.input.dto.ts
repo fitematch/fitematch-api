@@ -1,6 +1,10 @@
 export class UpdateEmailTemplateInputDto {
-  id!: string;
+  slug!: string;
+  name!: string;
+  description?: string | null;
   subject!: string;
-  preheader!: string;
+  preheader?: string | null;
   body!: string;
+  isActive!: boolean;
+  category?: string | null;
 }

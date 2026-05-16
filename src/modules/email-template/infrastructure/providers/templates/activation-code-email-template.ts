@@ -24,4 +24,7 @@ export const activationCodeEmailTemplate: DefaultEmailTemplateDefinition = {
     commonEmailTemplateVariables.activationCode,
   ],
   isSystem: true,
+  isActive: true,
+  category: 'auth',
+  version: 1,
 };

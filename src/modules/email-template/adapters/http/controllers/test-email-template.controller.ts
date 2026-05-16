@@ -29,7 +29,7 @@ import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 
 @ApiTags('Email Template')
 @ApiBearerAuth('JWT')
-@Controller('email-template')
+@Controller('email-templates')
 export class TestEmailTemplateController {
   constructor(
     @Inject(TEST_EMAIL_TEMPLATE_USE_CASE)
@@ -40,7 +40,7 @@ export class TestEmailTemplateController {
     summary: 'Send test email template',
     description: 'Renders a template with fake values and sends a test email.',
   })
-  @ApiParam({ name: 'id', type: String })
+  @ApiParam({ name: 'slug', type: String })
   @ApiOkResponse({
     description: 'Test email sent successfully.',
     type: TestEmailTemplateResponseDto,
@@ -50,7 +50,7 @@ export class TestEmailTemplateController {
   })
   @UseGuards(JwtAuthGuard, AdminRoleGuard)
   @AdminRoles(AdminRoleEnum.ADMIN, AdminRoleEnum.SUPER_ADMIN)
-  @Post(':id/test')
+  @Post(':slug/test')
   async handle(
     @Param() params: TestEmailTemplateParamsDto,
     @Body() body: TestEmailTemplateRequestDto,

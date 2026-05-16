@@ -6,7 +6,7 @@ export class ReadEmailTemplateRequestMapper {
     params: ReadEmailTemplateParamsDto,
   ): ReadEmailTemplateInputDto {
     return {
-      id: params.id,
+      slug: params.slug,
     };
   }
 }

@@ -27,4 +27,7 @@ export const jobRejectedEmailTemplate: DefaultEmailTemplateDefinition = {
     commonEmailTemplateVariables.reason,
   ],
   isSystem: true,
+  isActive: true,
+  category: 'job',
+  version: 1,
 };

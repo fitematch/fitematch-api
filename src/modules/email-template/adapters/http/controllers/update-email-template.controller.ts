@@ -29,7 +29,7 @@ import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 
 @ApiTags('Email Template')
 @ApiBearerAuth('JWT')
-@Controller('email-template')
+@Controller('email-templates')
 export class UpdateEmailTemplateController {
   constructor(
     @Inject(UPDATE_EMAIL_TEMPLATE_USE_CASE)
@@ -38,9 +38,10 @@ export class UpdateEmailTemplateController {
 
   @ApiOperation({
     summary: 'Update email template',
-    description: 'Updates subject, preheader and body of an email template.',
+    description:
+      'Updates editable fields of an email template identified by slug.',
   })
-  @ApiParam({ name: 'id', type: String })
+  @ApiParam({ name: 'slug', type: String })
   @ApiOkResponse({
     description: 'Email template updated successfully.',
     type: EmailTemplateResponseDto,
@@ -50,7 +51,7 @@ export class UpdateEmailTemplateController {
   })
   @UseGuards(JwtAuthGuard, AdminRoleGuard)
   @AdminRoles(AdminRoleEnum.ADMIN, AdminRoleEnum.SUPER_ADMIN)
-  @Patch(':id')
+  @Patch(':slug')
   async handle(
     @Param() params: UpdateEmailTemplateParamsDto,
     @Body() body: UpdateEmailTemplateRequestDto,

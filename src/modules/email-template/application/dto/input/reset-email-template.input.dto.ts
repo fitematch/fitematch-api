@@ -1,3 +1,3 @@
 export class ResetEmailTemplateInputDto {
-  id!: string;
+  slug!: string;
 }

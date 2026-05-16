@@ -25,7 +25,9 @@ export class ResetEmailTemplateRepository implements ResetEmailTemplateRepositor
   async reset(
     input: ResetEmailTemplateInputDto,
   ): Promise<EmailTemplateOutputDto | null> {
-    const template = await this.emailTemplateModel.findById(input.id).exec();
+    const template = await this.emailTemplateModel
+      .findOne({ slug: input.slug.trim().toLowerCase() })
+      .exec();
 
     if (!template) {
       return null;

@@ -10,22 +10,19 @@ export class EmailTemplateVariableResponseDto {
 
 export class EmailTemplateResponseDto {
   @ApiProperty()
-  id!: string;
-
-  @ApiProperty()
   slug!: string;
 
   @ApiProperty()
   name!: string;
 
-  @ApiProperty()
-  description!: string;
+  @ApiPropertyOptional({ nullable: true })
+  description?: string | null;
 
   @ApiProperty()
   subject!: string;
 
-  @ApiProperty()
-  preheader!: string;
+  @ApiPropertyOptional({ nullable: true })
+  preheader?: string | null;
 
   @ApiProperty()
   body!: string;
@@ -33,8 +30,8 @@ export class EmailTemplateResponseDto {
   @ApiProperty()
   defaultSubject!: string;
 
-  @ApiProperty()
-  defaultPreheader!: string;
+  @ApiPropertyOptional({ nullable: true })
+  defaultPreheader?: string | null;
 
   @ApiProperty()
   defaultBody!: string;
@@ -44,6 +41,15 @@ export class EmailTemplateResponseDto {
 
   @ApiProperty()
   isSystem!: boolean;
+
+  @ApiProperty()
+  isActive!: boolean;
+
+  @ApiPropertyOptional({ nullable: true })
+  category?: string | null;
+
+  @ApiProperty()
+  version!: number;
 
   @ApiPropertyOptional()
   createdAt?: Date;

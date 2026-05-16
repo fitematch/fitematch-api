@@ -1,19 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateEmailTemplateRequestDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  subject!: string;
+  name!: string;
+
+  @ApiProperty({ required: false, nullable: true })
+  @IsOptional()
+  @IsString()
+  description?: string | null;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
-  preheader!: string;
+  subject!: string;
+
+  @ApiProperty({ required: false, nullable: true })
+  @IsOptional()
+  @IsString()
+  preheader?: string | null;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   body!: string;
+
+  @ApiProperty()
+  @IsBoolean()
+  isActive!: boolean;
+
+  @ApiProperty({ required: false, nullable: true })
+  @IsOptional()
+  @IsString()
+  category?: string | null;
 }
