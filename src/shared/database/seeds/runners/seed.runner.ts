@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import type { ClientSession, Connection, Model } from 'mongoose';
+import type { Connection, Model } from 'mongoose';
 import { DATABASE_LOCK_MANAGER } from '@src/shared/database/contracts/database.tokens';
 import type { DatabaseRunResultDto } from '@src/shared/database/dto/database-run-result.dto';
 import type { DatabaseLockManagerInterface } from '@src/shared/database/locks/contracts/database-lock-manager.interface';
@@ -56,32 +56,21 @@ export class SeedRunner implements SeedRunnerInterface {
         }
 
         const seed = this.loadSeed(file.absolutePath);
-        const session = await this.connection.startSession();
 
-        try {
-          await this.runWithSession(session, async () => {
-            this.logger.log(`Running seed: ${seed.name}`);
+        this.logger.log(`Running seed: ${seed.name}`);
 
-            await seed.run({
-              connection: this.connection,
-              logger: this.logger,
-              session,
-            });
+        await seed.run({
+          connection: this.connection,
+          logger: this.logger,
+        });
 
-            await this.seedModel.create(
-              [
-                {
-                  name: seed.name,
-                  checksum: file.checksum,
-                  executedAt: new Date(),
-                },
-              ],
-              { session },
-            );
-          });
-        } finally {
-          await session.endSession();
-        }
+        await this.seedModel.create([
+          {
+            name: seed.name,
+            checksum: file.checksum,
+            executedAt: new Date(),
+          },
+        ]);
 
         processedNames.push(seed.name);
         this.logger.log(`Seed completed: ${seed.name}`);
@@ -91,15 +80,6 @@ export class SeedRunner implements SeedRunnerInterface {
         processedNames,
         skippedNames,
       };
-    });
-  }
-
-  private async runWithSession(
-    session: ClientSession,
-    callback: () => Promise<void>,
-  ): Promise<void> {
-    await session.withTransaction(async () => {
-      await callback();
     });
   }
 

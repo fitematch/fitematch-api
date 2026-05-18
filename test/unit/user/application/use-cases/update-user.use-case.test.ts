@@ -11,11 +11,11 @@ describe('UpdateUserUseCase', () => {
   beforeEach(() => {
     updateUserRepository = {
       update: jest.fn(),
-    } as jest.Mocked<UpdateUserRepositoryInterface>;
+    };
     encryptUtils = {
       encryptPassword: jest.fn(),
       comparePassword: jest.fn(),
-    } as unknown as jest.Mocked<EncryptUtils>;
+    };
 
     useCase = new UpdateUserUseCase(updateUserRepository, encryptUtils);
   });

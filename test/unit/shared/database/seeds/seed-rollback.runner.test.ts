@@ -16,14 +16,8 @@ describe('SeedRollbackRunner', () => {
       run: jest.fn(),
       rollback: jest.fn().mockResolvedValue(undefined),
     };
-    const session = {
-      withTransaction: jest.fn().mockImplementation((callback) => {
-        return callback() as Promise<unknown>;
-      }),
-      endSession: jest.fn().mockResolvedValue(undefined),
-    };
     const connection = {
-      startSession: jest.fn().mockResolvedValue(session),
+      startSession: jest.fn(),
     };
     const seedModel = {
       findOne: jest.fn().mockReturnValue({
@@ -48,19 +42,16 @@ describe('SeedRollbackRunner', () => {
       lockManager,
     );
 
-    jest.spyOn(runner as any, 'loadSeed').mockReturnValue(seed as never);
+    jest.spyOn(runner as any, 'loadSeed').mockReturnValue(seed);
 
     const result = await runner.run();
 
+    expect(connection.startSession).not.toHaveBeenCalled();
     expect(seed.rollback).toHaveBeenCalledWith({
       connection,
       logger: expect.any(Logger),
-      session,
     });
-    expect(seedModel.deleteOne).toHaveBeenCalledWith(
-      { name: seed.name },
-      { session },
-    );
+    expect(seedModel.deleteOne).toHaveBeenCalledWith({ name: seed.name });
     expect(result.processedNames).toEqual([seed.name]);
   });
 
@@ -92,7 +83,7 @@ describe('SeedRollbackRunner', () => {
     jest.spyOn(runner as any, 'loadSeed').mockReturnValue({
       name: '202605140001_email_templates.seed.ts',
       run: jest.fn(),
-    } as never);
+    });
 
     const result = await runner.run();
 

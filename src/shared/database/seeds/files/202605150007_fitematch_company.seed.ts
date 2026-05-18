@@ -51,7 +51,7 @@ const seed: SeedInterface = {
             isVerified: true,
           },
           media: {
-            logoUrl: '/public/images/logo/fitematch.png',
+            logoUrl: '/images/logo/fitematch.png',
           },
           status: CompanyStatusEnum.ACTIVE,
           approval: {

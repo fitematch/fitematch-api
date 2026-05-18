@@ -33,7 +33,7 @@ const companies = [
       isVerified: true,
     },
     media: {
-      logoUrl: 'https://placehold.co/240x240/0f766e/ffffff?text=Caicara+Fit',
+      logoUrl: '/images/logo/caicara-fit.png',
     },
     status: CompanyStatusEnum.ACTIVE,
   },
@@ -64,7 +64,7 @@ const companies = [
       isVerified: true,
     },
     media: {
-      logoUrl: 'https://placehold.co/240x240/2563eb/ffffff?text=Inspire',
+      logoUrl: '/images/logo/inspire.png',
     },
     status: CompanyStatusEnum.ACTIVE,
   },
@@ -95,7 +95,7 @@ const companies = [
       isVerified: true,
     },
     media: {
-      logoUrl: 'https://placehold.co/240x240/1f2937/ffffff?text=Iron+Force',
+      logoUrl: '/images/logo/iron-force.png',
     },
     status: CompanyStatusEnum.ACTIVE,
   },
@@ -126,7 +126,7 @@ const companies = [
       isVerified: true,
     },
     media: {
-      logoUrl: 'https://placehold.co/240x240/0ea5e9/ffffff?text=Nexo',
+      logoUrl: '/images/logo/nexo.png',
     },
     status: CompanyStatusEnum.ACTIVE,
   },
@@ -157,7 +157,7 @@ const companies = [
       isVerified: true,
     },
     media: {
-      logoUrl: 'https://placehold.co/240x240/0891b2/ffffff?text=Ocian',
+      logoUrl: '/images/logo/ocian.png',
     },
     status: CompanyStatusEnum.ACTIVE,
   },
@@ -188,7 +188,38 @@ const companies = [
       isVerified: true,
     },
     media: {
-      logoUrl: 'https://placehold.co/240x240/65a30d/ffffff?text=Serenity',
+      logoUrl: '/images/logo/serenity.png',
+    },
+    status: CompanyStatusEnum.ACTIVE,
+  },
+  {
+    slug: 'arena',
+    tradeName: 'Arena',
+    legalName: 'Arena Fitness Club LTDA',
+    contacts: {
+      email: 'contato@arenafitnessclub.com.br',
+      website: 'https://www.arenafitnessclub.com.br/',
+      phone: {
+        country: '55',
+        number: '1130457788',
+        isWhatsapp: true,
+      },
+      address: {
+        street: 'Rua Gomes de Carvalho',
+        number: '1507',
+        neighborhood: 'Vila Olimpia',
+        city: 'Sao Paulo',
+        state: 'SP',
+        country: 'Brasil',
+        zipCode: '04547005',
+      },
+    },
+    documents: {
+      cnpj: '52345678000195',
+      isVerified: true,
+    },
+    media: {
+      logoUrl: '/images/logo/arena.png',
     },
     status: CompanyStatusEnum.ACTIVE,
   },

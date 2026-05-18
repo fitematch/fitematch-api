@@ -57,26 +57,14 @@ export class SeedRollbackRunner implements SeedRollbackRunnerInterface {
         };
       }
 
-      const session = await this.connection.startSession();
+      this.logger.log(`Rolling back seed: ${seed.name}`);
 
-      try {
-        await session.withTransaction(async () => {
-          this.logger.log(`Rolling back seed: ${seed.name}`);
+      await seed.rollback?.({
+        connection: this.connection,
+        logger: this.logger,
+      });
 
-          await seed.rollback?.({
-            connection: this.connection,
-            logger: this.logger,
-            session,
-          });
-
-          await this.seedModel.deleteOne(
-            { name: latestSeed.name },
-            { session },
-          );
-        });
-      } finally {
-        await session.endSession();
-      }
+      await this.seedModel.deleteOne({ name: latestSeed.name });
 
       this.logger.log(`Seed rollback completed: ${seed.name}`);
 

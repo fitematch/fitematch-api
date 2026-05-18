@@ -16,14 +16,8 @@ describe('SeedRunner', () => {
       name: '202605140001_email_templates.seed.ts',
       run: jest.fn().mockResolvedValue(undefined),
     };
-    const session = {
-      withTransaction: jest.fn().mockImplementation((callback) => {
-        return callback() as Promise<unknown>;
-      }),
-      endSession: jest.fn().mockResolvedValue(undefined),
-    };
     const connection = {
-      startSession: jest.fn().mockResolvedValue(session),
+      startSession: jest.fn(),
     };
     const seedModel = {
       find: jest.fn().mockReturnValue({
@@ -51,26 +45,22 @@ describe('SeedRunner', () => {
         absolutePath: '/tmp/seed.ts',
       },
     ]);
-    jest.spyOn(runner as any, 'loadSeed').mockReturnValue(seed as never);
+    jest.spyOn(runner as any, 'loadSeed').mockReturnValue(seed);
 
     const result = await runner.run();
 
-    expect(connection.startSession).toHaveBeenCalledTimes(1);
+    expect(connection.startSession).not.toHaveBeenCalled();
     expect(seed.run).toHaveBeenCalledWith({
       connection,
       logger: expect.any(Logger),
-      session,
     });
-    expect(seedModel.create).toHaveBeenCalledWith(
-      [
-        {
-          name: seed.name,
-          checksum: 'checksum-1',
-          executedAt: expect.any(Date),
-        },
-      ],
-      { session },
-    );
+    expect(seedModel.create).toHaveBeenCalledWith([
+      {
+        name: seed.name,
+        checksum: 'checksum-1',
+        executedAt: expect.any(Date),
+      },
+    ]);
     expect(result.processedNames).toEqual([seed.name]);
   });
 

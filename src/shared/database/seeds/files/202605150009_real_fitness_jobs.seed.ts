@@ -439,6 +439,10 @@ const companyPlans: CompanyJobPlan[] = [
     companySlug: 'serenity',
     categories: ['pilates', 'ioga', 'personal-trainer', 'fit-dance'],
   },
+  {
+    companySlug: 'arena',
+    categories: ['judo', 'jiu-jitsu', 'muay-thai'],
+  },
 ];
 
 const buildDescription = (

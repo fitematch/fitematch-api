@@ -51,6 +51,9 @@ async function bootstrap() {
       prefix: configService.get<string>('LOCAL_STORAGE_PUBLIC_URL', '/uploads'),
     },
   );
+  app.useStaticAssets(path.join(process.cwd(), 'public/images'), {
+    prefix: '/images',
+  });
   app.useGlobalPipes(new ValidationPipe());
   app.useGlobalFilters(new ApplicationExceptionFilter());
   const port = configService.get<number>('api.port', 3000);

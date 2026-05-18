@@ -4,6 +4,15 @@ const migration: MigrationInterface = {
   name: '202605140001_create_email_templates.migration.ts',
 
   async up({ connection, logger }) {
+    const collectionExists = await connection.db
+      ?.listCollections({ name: 'email_templates' })
+      .hasNext();
+
+    if (!collectionExists) {
+      await connection.createCollection('email_templates');
+      logger.log('Collection created: email_templates');
+    }
+
     const emailTemplateCollection = connection.collection('email_templates');
     const indexes = await emailTemplateCollection.indexes();
     const slugIndex = indexes.find((index) => {
