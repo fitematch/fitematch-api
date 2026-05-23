@@ -3,6 +3,11 @@ import {
   type CompanyDocument,
 } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import { CompanyStatusEnum } from '@src/modules/company/domain/enums/company-status.enum';
+import {
+  UserSchema,
+  type UserDocument,
+} from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
+import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import type { SeedInterface } from '@src/shared/database/seeds/contracts/seed.interface';
 
 const companies = [
@@ -230,6 +235,7 @@ const seed: SeedInterface = {
 
   async run({ connection, logger, session }) {
     const companyModel = connection.model<CompanyDocument>(CompanySchema.name);
+    const userModel = connection.model<UserDocument>(UserSchema.name);
 
     await Promise.all(
       companies.map((company) =>
@@ -259,6 +265,48 @@ const seed: SeedInterface = {
       ),
     );
 
+    const arena = await companyModel
+      .findOne({ slug: 'arena' }, { _id: 1 })
+      .session(session ?? null)
+      .lean()
+      .exec();
+
+    if (arena) {
+      await userModel.updateOne(
+        {
+          email: 'leon@fitematch.com.br',
+          productRole: ProductRoleEnum.RECRUITER,
+        },
+        {
+          $set: {
+            'recruiterProfile.companyId': arena._id.toString(),
+          },
+        },
+        { session },
+      );
+    }
+
+    const serenity = await companyModel
+      .findOne({ slug: 'serenity' }, { _id: 1 })
+      .session(session ?? null)
+      .lean()
+      .exec();
+
+    if (serenity) {
+      await userModel.updateOne(
+        {
+          email: 'jill@fitematch.com.br',
+          productRole: ProductRoleEnum.RECRUITER,
+        },
+        {
+          $set: {
+            'recruiterProfile.companyId': serenity._id.toString(),
+          },
+        },
+        { session },
+      );
+    }
+
     logger.log(
       `Real fitness companies seed ensured ${companies.length} active companies.`,
     );
@@ -266,6 +314,13 @@ const seed: SeedInterface = {
 
   async rollback({ connection, logger, session }) {
     const companyModel = connection.model<CompanyDocument>(CompanySchema.name);
+    const userModel = connection.model<UserDocument>(UserSchema.name);
+
+    await userModel.updateMany(
+      { email: { $in: ['leon@fitematch.com.br', 'jill@fitematch.com.br'] } },
+      { $unset: { 'recruiterProfile.companyId': '' } },
+      { session },
+    );
 
     await companyModel
       .deleteMany(

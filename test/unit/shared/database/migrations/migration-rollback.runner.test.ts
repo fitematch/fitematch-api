@@ -43,9 +43,7 @@ describe('MigrationRollbackRunner', () => {
       lockManager,
     );
 
-    jest
-      .spyOn(runner as any, 'loadMigration')
-      .mockReturnValue(migration as never);
+    jest.spyOn(runner as any, 'loadMigration').mockReturnValue(migration);
 
     const result = await runner.run();
 

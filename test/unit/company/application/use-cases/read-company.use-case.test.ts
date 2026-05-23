@@ -9,7 +9,7 @@ describe('ReadCompanyUseCase', () => {
   beforeEach(() => {
     readCompanyRepository = {
       read: jest.fn(),
-    } as jest.Mocked<ReadCompanyRepositoryInterface>;
+    };
 
     useCase = new ReadCompanyUseCase(readCompanyRepository);
   });

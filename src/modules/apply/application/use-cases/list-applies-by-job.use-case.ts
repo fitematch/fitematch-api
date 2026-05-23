@@ -14,6 +14,7 @@ import { READ_JOB_REPOSITORY } from '@src/modules/job/application/contracts/toke
 import type { ReadJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/read-job.repository.interface';
 import { READ_USER_REPOSITORY } from '@src/modules/user/application/contracts/tokens/user.tokens';
 import type { ReadUserRepositoryInterface } from '@src/modules/user/application/contracts/repositories/read-user.repository.interface';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 @Injectable()
 export class ListAppliesByJobUseCase implements ListAppliesByJobUseCaseInterface {
@@ -26,6 +27,8 @@ export class ListAppliesByJobUseCase implements ListAppliesByJobUseCaseInterface
 
     @Inject(READ_USER_REPOSITORY)
     private readonly readUserRepository: ReadUserRepositoryInterface,
+
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   async execute(
@@ -39,10 +42,12 @@ export class ListAppliesByJobUseCase implements ListAppliesByJobUseCaseInterface
       throw new NotFoundException('Job not found!');
     }
 
-    if (
-      !input.recruiterCompanyId ||
-      job.companyId !== input.recruiterCompanyId
-    ) {
+    const hasAccess = await this.companyMembershipService.userHasCompanyAccess(
+      input.userId,
+      job.companyId,
+    );
+
+    if (!hasAccess) {
       throw new ForbiddenException(
         'You are not allowed to list applies for this job!',
       );

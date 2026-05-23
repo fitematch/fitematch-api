@@ -10,4 +10,5 @@ export interface AuthUserPayload {
     companyId?: string;
     position?: string;
   };
+  activeCompanyId?: string;
 }

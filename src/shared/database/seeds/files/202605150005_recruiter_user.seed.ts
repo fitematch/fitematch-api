@@ -7,7 +7,8 @@ import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enu
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 import type { SeedInterface } from '@src/shared/database/seeds/contracts/seed.interface';
 
-const RECRUITER_EMAIL = 'recruiter@fitematch.com.br';
+const LEON_EMAIL = 'leon@fitematch.com.br';
+const JILL_EMAIL = 'jill@fitematch.com.br';
 const RECRUITER_PASSWORD = 'password123';
 
 const seed: SeedInterface = {
@@ -18,11 +19,11 @@ const seed: SeedInterface = {
     const passwordHash = await bcrypt.hash(RECRUITER_PASSWORD, 10);
 
     await userModel.updateOne(
-      { email: RECRUITER_EMAIL },
+      { email: LEON_EMAIL },
       {
         $set: {
           name: 'Leon Kenedy',
-          email: RECRUITER_EMAIL,
+          email: LEON_EMAIL,
           password: passwordHash,
           birthday: new Date('1977-01-01T00:00:00.000Z'),
           status: UserStatusEnum.ACTIVE,
@@ -35,23 +36,56 @@ const seed: SeedInterface = {
       },
     );
 
-    logger.log(`Recruiter user seed ensured user "${RECRUITER_EMAIL}".`);
+    await userModel.updateOne(
+      { email: JILL_EMAIL },
+      {
+        $set: {
+          name: 'Jill Valentine',
+          email: JILL_EMAIL,
+          password: passwordHash,
+          birthday: new Date('1974-01-01T00:00:00.000Z'),
+          status: UserStatusEnum.ACTIVE,
+          productRole: ProductRoleEnum.RECRUITER,
+        },
+      },
+      {
+        upsert: true,
+        session,
+      },
+    );
+
+    logger.log(
+      `Recruiter user seed ensured users "${LEON_EMAIL}" and "${JILL_EMAIL}".`,
+    );
   },
 
   async rollback({ connection, logger, session }) {
     const userModel = connection.model<UserDocument>(UserSchema.name);
 
-    await userModel
-      .deleteOne(
-        {
-          email: RECRUITER_EMAIL,
-          productRole: ProductRoleEnum.RECRUITER,
-        },
-        { session },
-      )
-      .exec();
+    await Promise.all([
+      userModel
+        .deleteOne(
+          {
+            email: LEON_EMAIL,
+            productRole: ProductRoleEnum.RECRUITER,
+          },
+          { session },
+        )
+        .exec(),
+      userModel
+        .deleteOne(
+          {
+            email: JILL_EMAIL,
+            productRole: ProductRoleEnum.RECRUITER,
+          },
+          { session },
+        )
+        .exec(),
+    ]);
 
-    logger.log(`Recruiter user seed rollback removed "${RECRUITER_EMAIL}".`);
+    logger.log(
+      `Recruiter user seed rollback removed "${LEON_EMAIL}" and "${JILL_EMAIL}".`,
+    );
   },
 };
 

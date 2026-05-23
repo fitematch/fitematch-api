@@ -17,7 +17,7 @@ describe('ListMyJobsUseCase', () => {
     listMyJobsRepository = {
       findRecruiterCompanyId: jest.fn(),
       findByCompanyId: jest.fn(),
-    } as jest.Mocked<ListMyJobsRepository>;
+    };
 
     useCase = new ListMyJobsUseCase(listMyJobsRepository);
   });

@@ -8,7 +8,7 @@ describe('DashboardSummaryController', () => {
   beforeEach(() => {
     dashboardSummaryUseCase = {
       execute: jest.fn(),
-    } as jest.Mocked<DashboardSummaryUseCaseInterface>;
+    };
 
     controller = new DashboardSummaryController(dashboardSummaryUseCase);
   });

@@ -8,6 +8,7 @@ import { CompanySchema } from '@src/modules/company/infrastructure/database/mong
 import { UserSchema } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
 import { CompanyStatusEnum } from '@src/modules/company/domain/enums/company-status.enum';
 import { CnpjUtils } from '@src/shared/utils/cnpj.utils';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 @Injectable()
 export class CreateMyCompanyRepository implements CreateMyCompanyRepositoryInterface {
@@ -19,6 +20,8 @@ export class CreateMyCompanyRepository implements CreateMyCompanyRepositoryInter
 
     @InjectModel(UserSchema.name)
     private readonly userModel: Model<UserSchema>,
+
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   async existsBySlug(slug: string): Promise<boolean> {
@@ -37,6 +40,13 @@ export class CreateMyCompanyRepository implements CreateMyCompanyRepositoryInter
   }
 
   async existsByCreatedByUserId(userId: string): Promise<boolean> {
+    const activeCompanyId =
+      await this.companyMembershipService.getUserActiveCompanyId(userId);
+
+    if (activeCompanyId) {
+      return true;
+    }
+
     const company = await this.companyModel
       .findOne({ 'audit.createdByUserId': userId })
       .lean()
@@ -67,6 +77,11 @@ export class CreateMyCompanyRepository implements CreateMyCompanyRepositoryInter
 
     const createdCompany = createdCompanyDocument.toObject();
     const createdCompanyId = createdCompany._id.toString();
+
+    await this.companyMembershipService.ensureOwnerMembership(
+      input.userId,
+      createdCompanyId,
+    );
 
     await this.userModel
       .findByIdAndUpdate(

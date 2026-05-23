@@ -9,7 +9,7 @@ describe('ResetEmailTemplateController', () => {
   beforeEach(() => {
     useCase = {
       execute: jest.fn(),
-    } as jest.Mocked<ResetEmailTemplateUseCaseInterface>;
+    };
 
     controller = new ResetEmailTemplateController(useCase);
   });

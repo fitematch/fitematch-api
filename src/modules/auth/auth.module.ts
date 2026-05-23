@@ -18,6 +18,7 @@ import {
   CompanySchema,
   CompanySchemaFactory,
 } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
+import { CompanyModule } from '@src/modules/company/company.module';
 import { SignUpController } from '@src/modules/auth/adapters/http/controllers/sign-up.controller';
 import { SignInController } from '@src/modules/auth/adapters/http/controllers/sign-in.controller';
 import { GetMeController } from '@src/modules/auth/adapters/http/controllers/get-me.controller';
@@ -46,6 +47,7 @@ const importedControllers = [
 @Module({
   imports: [
     JwtModule.register({}),
+    CompanyModule,
     MongooseModule.forFeature([
       {
         name: ActivationCodeSchema.name,

@@ -37,8 +37,10 @@ import { CreateMyCompanyUseCase } from '@src/modules/company/application/use-cas
 import { CreateMyCompanyRepository } from '@src/modules/company/infrastructure/repositories/create-my-company.repository';
 import { UpdateMyCompanyUseCase } from '@src/modules/company/application/use-cases/update-my-company.use-case';
 import { UpdateMyCompanyRepository } from '@src/modules/company/infrastructure/repositories/update-my-company.repository';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 export const companyProviders: Provider[] = [
+  CompanyMembershipService,
   {
     provide: LIST_COMPANY_USE_CASE,
     useClass: ListCompanyUseCase,

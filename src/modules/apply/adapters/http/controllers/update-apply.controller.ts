@@ -48,6 +48,7 @@ export class UpdateApplyController {
   ): Promise<UpdateApplyResponseDto> {
     const output = await this.updateApplyUseCase.execute({
       _id: applyId,
+      userId: user.id,
       status: body.status,
       productRole: user.productRole,
       recruiterCompanyId: user.recruiterProfile?.companyId,

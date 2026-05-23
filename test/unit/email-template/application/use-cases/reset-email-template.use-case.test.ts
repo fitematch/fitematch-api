@@ -9,7 +9,7 @@ describe('ResetEmailTemplateUseCase', () => {
     repository = {
       ensureDefaults: jest.fn(),
       reset: jest.fn(),
-    } as jest.Mocked<ResetEmailTemplateRepositoryInterface>;
+    };
 
     useCase = new ResetEmailTemplateUseCase(repository);
   });

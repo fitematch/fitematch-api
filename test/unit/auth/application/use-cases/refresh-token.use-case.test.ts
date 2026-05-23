@@ -18,24 +18,24 @@ describe('RefreshTokenUseCase', () => {
   beforeEach(() => {
     refreshTokenRepository = {
       findById: jest.fn(),
-    } as jest.Mocked<RefreshTokenRepositoryInterface>;
+    };
     sessionRepository = {
       create: jest.fn(),
       findValidByUserId: jest.fn(),
       findValidByHash: jest.fn(),
       revokeById: jest.fn(),
       revokeAllByUserId: jest.fn(),
-    } as jest.Mocked<SessionRepositoryInterface>;
+    };
     hashService = {
       hash: jest.fn(),
       compare: jest.fn(),
-    } as jest.Mocked<HashServiceInterface>;
+    };
     tokenService = {
       generateAccessToken: jest.fn(),
       generateRefreshToken: jest.fn(),
       verifyRefreshToken: jest.fn(),
       getRefreshTokenExpiresAt: jest.fn(),
-    } as jest.Mocked<TokenServiceInterface>;
+    };
 
     useCase = new RefreshTokenUseCase(
       refreshTokenRepository,

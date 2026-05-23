@@ -8,7 +8,7 @@ describe('ListEmailTemplateController', () => {
   beforeEach(() => {
     useCase = {
       execute: jest.fn(),
-    } as jest.Mocked<ListEmailTemplateUseCaseInterface>;
+    };
 
     controller = new ListEmailTemplateController(useCase);
   });

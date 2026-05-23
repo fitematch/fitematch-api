@@ -9,7 +9,7 @@ describe('ReadEmailTemplateController', () => {
   beforeEach(() => {
     useCase = {
       execute: jest.fn(),
-    } as jest.Mocked<ReadEmailTemplateUseCaseInterface>;
+    };
 
     controller = new ReadEmailTemplateController(useCase);
   });

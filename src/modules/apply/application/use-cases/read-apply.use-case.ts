@@ -13,6 +13,7 @@ import type { ReadApplyOutputDto } from '@src/modules/apply/application/dto/outp
 import { READ_JOB_REPOSITORY } from '@src/modules/job/application/contracts/tokens/job.tokens';
 import type { ReadJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/read-job.repository.interface';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 @Injectable()
 export class ReadApplyUseCase implements ReadApplyUseCaseInterface {
@@ -22,6 +23,8 @@ export class ReadApplyUseCase implements ReadApplyUseCaseInterface {
 
     @Inject(READ_JOB_REPOSITORY)
     private readonly readJobRepository: ReadJobRepositoryInterface,
+
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   async execute(input: ReadApplyInputDto): Promise<ReadApplyOutputDto> {
@@ -48,10 +51,13 @@ export class ReadApplyUseCase implements ReadApplyUseCaseInterface {
         throw new NotFoundException('Job not found.');
       }
 
-      if (
-        !input.recruiterCompanyId ||
-        job.companyId !== input.recruiterCompanyId
-      ) {
+      const hasAccess =
+        await this.companyMembershipService.userHasCompanyAccess(
+          input.userId,
+          job.companyId,
+        );
+
+      if (!hasAccess) {
         throw new ForbiddenException('You are not allowed to read this apply!');
       }
 

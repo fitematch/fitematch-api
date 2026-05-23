@@ -12,6 +12,7 @@ import {
 import type { LeanUser } from '@src/modules/user/infrastructure/database/types/user-lean.type';
 import type { GetMeRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/get-me.repository.interface';
 import type { GetMeOutputDto } from '@src/modules/auth/application/dto/output/get-me.output.dto';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 @Injectable()
 export class GetMeRepository implements GetMeRepositoryInterface {
@@ -20,6 +21,7 @@ export class GetMeRepository implements GetMeRepositoryInterface {
     private readonly userModel: Model<UserDocument>,
     @InjectModel(CompanySchema.name)
     private readonly companyModel: Model<CompanyDocument>,
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   public async findById(id: string): Promise<GetMeOutputDto | null> {
@@ -31,13 +33,13 @@ export class GetMeRepository implements GetMeRepositoryInterface {
       return null;
     }
 
-    const timestamps = user as typeof user & {
-      createdAt?: Date;
-      updatedAt?: Date;
-    };
-    const companyTradeName = user.recruiterProfile?.companyId
+    const activeCompanyId =
+      await this.companyMembershipService.getUserActiveCompanyId(
+        user._id.toString(),
+      );
+    const companyTradeName = activeCompanyId
       ? await this.companyModel
-          .findById(user.recruiterProfile.companyId)
+          .findById(activeCompanyId)
           .select('tradeName')
           .lean()
           .exec()
@@ -55,14 +57,15 @@ export class GetMeRepository implements GetMeRepositoryInterface {
       recruiterProfile: user.recruiterProfile
         ? {
             ...user.recruiterProfile,
+            companyId: activeCompanyId ?? user.recruiterProfile.companyId,
             tradeName: companyTradeName,
           }
         : undefined,
       productRole: user.productRole,
       adminRole: user.adminRole,
       status: user.status,
-      createdAt: timestamps.createdAt,
-      updatedAt: timestamps.updatedAt,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
   }
 }

@@ -15,18 +15,18 @@ describe('ActivateAccountUseCase', () => {
     activateAccountRepository = {
       findByEmail: jest.fn(),
       activateUser: jest.fn(),
-    } as jest.Mocked<ActivateAccountRepositoryInterface>;
+    };
     activationCodeRepository = {
       create: jest.fn(),
       invalidateActiveCodes: jest.fn(),
       findActiveCodeByUserIdAndType: jest.fn(),
       incrementAttempts: jest.fn(),
       markAsUsed: jest.fn(),
-    } as jest.Mocked<ActivationCodeRepositoryInterface>;
+    };
     hashService = {
       hash: jest.fn(),
       compare: jest.fn(),
-    } as jest.Mocked<HashServiceInterface>;
+    };
 
     useCase = new ActivateAccountUseCase(
       activateAccountRepository,

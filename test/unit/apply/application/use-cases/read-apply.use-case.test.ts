@@ -5,11 +5,13 @@ import type { ReadApplyRepositoryInterface } from '@src/modules/apply/applicatio
 import { ApplicationStatusEnum } from '@src/modules/apply/domain/enums/application-status.enum';
 import type { ReadJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/read-job.repository.interface';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
+import type { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 describe('ReadApplyUseCase', () => {
   let useCase: ReadApplyUseCase;
   let readApplyRepository: jest.Mocked<ReadApplyRepositoryInterface>;
   let readJobRepository: jest.Mocked<ReadJobRepositoryInterface>;
+  let companyMembershipService: jest.Mocked<CompanyMembershipService>;
 
   const existingApply = {
     _id: 'apply-id-1',
@@ -35,13 +37,21 @@ describe('ReadApplyUseCase', () => {
   beforeEach(() => {
     readApplyRepository = {
       read: jest.fn(),
-    } as jest.Mocked<ReadApplyRepositoryInterface>;
+    };
 
     readJobRepository = {
       read: jest.fn(),
-    } as jest.Mocked<ReadJobRepositoryInterface>;
+    };
 
-    useCase = new ReadApplyUseCase(readApplyRepository, readJobRepository);
+    companyMembershipService = {
+      userHasCompanyAccess: jest.fn(),
+    } as unknown as jest.Mocked<CompanyMembershipService>;
+
+    useCase = new ReadApplyUseCase(
+      readApplyRepository,
+      readJobRepository,
+      companyMembershipService,
+    );
   });
 
   it('returns the application for the owning candidate', async () => {
@@ -70,6 +80,7 @@ describe('ReadApplyUseCase', () => {
 
     readApplyRepository.read.mockResolvedValue(existingApply);
     readJobRepository.read.mockResolvedValue(existingJob as never);
+    companyMembershipService.userHasCompanyAccess.mockResolvedValue(true);
 
     const result = await useCase.execute(input);
 
@@ -129,6 +140,7 @@ describe('ReadApplyUseCase', () => {
       ...existingJob,
       companyId: 'other-company-id',
     } as never);
+    companyMembershipService.userHasCompanyAccess.mockResolvedValue(false);
 
     await expect(useCase.execute(input)).rejects.toThrow(ForbiddenException);
   });
@@ -142,6 +154,7 @@ describe('ReadApplyUseCase', () => {
 
     readApplyRepository.read.mockResolvedValue(existingApply);
     readJobRepository.read.mockResolvedValue(existingJob as never);
+    companyMembershipService.userHasCompanyAccess.mockResolvedValue(false);
 
     await expect(useCase.execute(input)).rejects.toThrow(ForbiddenException);
   });

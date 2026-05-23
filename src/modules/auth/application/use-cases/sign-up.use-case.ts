@@ -6,6 +6,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
+import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 import {
   HASH_SERVICE,
   SIGN_UP_REPOSITORY,
@@ -61,7 +62,7 @@ export class SignUpUseCase implements SignUpUseCaseInterface {
     const createdUser = await this.signUpRepository.create({
       ...input,
       password: hashedPassword,
-      status: 'pending',
+      status: UserStatusEnum.PENDING,
     });
 
     await this.activationCodeRepository.invalidateActiveCodes(

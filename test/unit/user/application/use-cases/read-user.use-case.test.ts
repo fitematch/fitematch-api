@@ -11,7 +11,7 @@ describe('ReadUserUseCase', () => {
   beforeEach(() => {
     readUserRepository = {
       read: jest.fn(),
-    } as jest.Mocked<ReadUserRepositoryInterface>;
+    };
 
     useCase = new ReadUserUseCase(readUserRepository);
   });

@@ -5,10 +5,10 @@ import {
   JobSchema,
   type JobDocument,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
-import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
-import { UserSchema } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
 import type { DeleteMyJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/delete-my-job.repository.interface';
 import type { DeleteMyJobInputDto } from '@src/modules/job/application/dto/input/delete-my-job.input.dto';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
+import { CompanyMembershipRoleEnum } from '@src/modules/company/domain/enums/company-membership-role.enum';
 
 @Injectable()
 export class DeleteMyJobRepository implements DeleteMyJobRepositoryInterface {
@@ -16,38 +16,29 @@ export class DeleteMyJobRepository implements DeleteMyJobRepositoryInterface {
     @InjectModel(JobSchema.name)
     private readonly jobModel: Model<JobDocument>,
 
-    @InjectModel(CompanySchema.name)
-    private readonly companyModel: Model<CompanySchema>,
-
-    @InjectModel(UserSchema.name)
-    private readonly userModel: Model<UserSchema>,
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   async findRecruiterCompanyId(userId: string): Promise<string | null> {
-    const user = await this.userModel.findById(userId).lean().exec();
+    const companyId =
+      await this.companyMembershipService.getUserActiveCompanyId(userId);
 
-    if (user?.recruiterProfile?.companyId) {
-      return user.recruiterProfile.companyId;
-    }
-
-    const company = await this.companyModel
-      .findOne({ 'audit.createdByUserId': userId }, { _id: 1 })
-      .lean()
-      .exec();
-
-    if (!company) {
+    if (!companyId) {
       return null;
     }
 
-    const companyId = company._id.toString();
+    const canManageJobs =
+      await this.companyMembershipService.userHasCompanyRole(
+        userId,
+        companyId,
+        [
+          CompanyMembershipRoleEnum.OWNER,
+          CompanyMembershipRoleEnum.ADMIN,
+          CompanyMembershipRoleEnum.RECRUITER,
+        ],
+      );
 
-    await this.userModel
-      .findByIdAndUpdate(userId, {
-        $set: { 'recruiterProfile.companyId': companyId },
-      })
-      .exec();
-
-    return companyId;
+    return canManageJobs ? companyId : null;
   }
 
   async delete(

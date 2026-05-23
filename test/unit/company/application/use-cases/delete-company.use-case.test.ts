@@ -13,7 +13,7 @@ describe('DeleteCompanyUseCase', () => {
   beforeEach(() => {
     deleteCompanyRepository = {
       delete: jest.fn(),
-    } as jest.Mocked<DeleteCompanyRepositoryInterface>;
+    };
 
     useCase = new DeleteCompanyUseCase(deleteCompanyRepository);
   });

@@ -17,11 +17,11 @@ describe('ListJobUseCase', () => {
   beforeEach(() => {
     listJobRepository = {
       list: jest.fn(),
-    } as jest.Mocked<ListJobRepositoryInterface>;
+    };
 
     listJobCompaniesRepository = {
       findByIds: jest.fn(),
-    } as jest.Mocked<ListJobCompaniesRepository>;
+    };
 
     useCase = new ListJobUseCase(listJobRepository, listJobCompaniesRepository);
   });
@@ -236,7 +236,7 @@ describe('ListJobUseCase', () => {
             status: 'ACTIVE' as never,
             createdAt,
             updatedAt,
-          } as never,
+          },
         ]);
 
         const result = await useCase.execute(input);

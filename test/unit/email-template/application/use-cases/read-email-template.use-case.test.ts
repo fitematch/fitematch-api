@@ -9,7 +9,7 @@ describe('ReadEmailTemplateUseCase', () => {
     repository = {
       ensureDefaults: jest.fn(),
       read: jest.fn(),
-    } as jest.Mocked<ReadEmailTemplateRepositoryInterface>;
+    };
 
     useCase = new ReadEmailTemplateUseCase(repository);
   });

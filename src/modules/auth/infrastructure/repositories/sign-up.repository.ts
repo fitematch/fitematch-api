@@ -8,6 +8,7 @@ import {
 import type { SignUpRepositoryInterface } from '@src/modules/auth/application/contracts/repositories/sign-up.repository.interface';
 import type { SignUpInputDto } from '@src/modules/auth/application/dto/input/sign-up.input.dto';
 import type { SignUpOutputDto } from '@src/modules/auth/application/dto/output/sign-up.output.dto';
+import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 
 @Injectable()
 export class SignUpRepository implements SignUpRepositoryInterface {
@@ -23,7 +24,7 @@ export class SignUpRepository implements SignUpRepositoryInterface {
   }
 
   async create(
-    input: SignUpInputDto & { password: string; status: string },
+    input: SignUpInputDto & { password: string; status: UserStatusEnum },
   ): Promise<SignUpOutputDto> {
     const createdUser = await this.userModel.create({
       name: input.name,
@@ -34,18 +35,19 @@ export class SignUpRepository implements SignUpRepositoryInterface {
       status: input.status,
     });
 
-    const timestamps = createdUser as unknown as {
+    const user = createdUser.toObject();
+    const timestamps = user as typeof user & {
       createdAt?: Date;
       updatedAt?: Date;
     };
 
     return {
-      id: createdUser._id.toString(),
-      name: createdUser.name,
-      email: createdUser.email,
-      birthday: createdUser.birthday.toISOString().split('T')[0],
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      birthday: user.birthday.toISOString().split('T')[0],
       productRole: input.productRole,
-      status: createdUser.status,
+      status: user.status,
       createdAt: timestamps.createdAt,
       updatedAt: timestamps.updatedAt,
     };

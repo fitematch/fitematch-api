@@ -15,7 +15,7 @@ describe('DeleteMyJobUseCase', () => {
     repository = {
       findRecruiterCompanyId: jest.fn().mockResolvedValue('company-1'),
       delete: jest.fn(),
-    } as jest.Mocked<DeleteMyJobRepositoryInterface>;
+    };
 
     useCase = new DeleteMyJobUseCase(repository);
   });

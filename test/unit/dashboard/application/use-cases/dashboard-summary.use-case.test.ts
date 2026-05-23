@@ -8,7 +8,7 @@ describe('DashboardSummaryUseCase', () => {
   beforeEach(() => {
     dashboardSummaryRepository = {
       summary: jest.fn(),
-    } as jest.Mocked<DashboardSummaryRepositoryInterface>;
+    };
 
     useCase = new DashboardSummaryUseCase(dashboardSummaryRepository);
   });

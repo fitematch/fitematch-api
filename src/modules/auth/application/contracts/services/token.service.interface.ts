@@ -8,6 +8,7 @@ export interface AccessTokenPayload {
     companyId?: string;
     position?: string;
   };
+  activeCompanyId?: string;
   permissions?: string[];
 }
 

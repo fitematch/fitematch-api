@@ -8,7 +8,7 @@ describe('ListAuthSessionsUseCase', () => {
   beforeEach(() => {
     repository = {
       findByUserId: jest.fn(),
-    } as jest.Mocked<ListAuthSessionsRepository>;
+    };
 
     useCase = new ListAuthSessionsUseCase(repository);
   });

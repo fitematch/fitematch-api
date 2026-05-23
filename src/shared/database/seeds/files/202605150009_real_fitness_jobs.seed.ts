@@ -8,6 +8,10 @@ import {
   JobSchema,
   type JobDocument,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
+import {
+  UserSchema,
+  type UserDocument,
+} from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
 import type { SeedInterface } from '@src/shared/database/seeds/contracts/seed.interface';
 import { EducationLevelEnum } from '@src/shared/domain/enums/education-level.enum';
 import { LanguagesEnum } from '@src/shared/domain/enums/languages.enum';
@@ -471,6 +475,7 @@ const buildJobDocument = (
   },
   categoryKey: CategoryKey,
   index: number,
+  recruiterId?: string,
 ) => {
   const category = categoryDefinitions[categoryKey];
   const title = category.title;
@@ -481,6 +486,7 @@ const buildJobDocument = (
   return {
     slug,
     companyId: company._id.toString(),
+    recruiterId,
     title,
     normalizedTitle: SlugUtils.generate(title),
     description: buildDescription(company.tradeName, city, category),
@@ -539,6 +545,7 @@ const seed: SeedInterface = {
   async run({ connection, logger, session }) {
     const companyModel = connection.model<CompanyDocument>(CompanySchema.name);
     const jobModel = connection.model<JobDocument>(JobSchema.name);
+    const userModel = connection.model<UserDocument>(UserSchema.name);
 
     const companies = await companyModel
       .find(
@@ -563,6 +570,19 @@ const seed: SeedInterface = {
       companies.map((company) => [company.slug, company]),
     );
 
+    const [leon, jill] = await Promise.all([
+      userModel
+        .findOne({ email: 'leon@fitematch.com.br' })
+        .session(session ?? null)
+        .lean()
+        .exec(),
+      userModel
+        .findOne({ email: 'jill@fitematch.com.br' })
+        .session(session ?? null)
+        .lean()
+        .exec(),
+    ]);
+
     const missingCompanies = companyPlans
       .map((plan) => plan.companySlug)
       .filter((companySlug) => !companiesBySlug.has(companySlug));
@@ -580,8 +600,12 @@ const seed: SeedInterface = {
         return [];
       }
 
+      let recruiterId: string | undefined;
+      if (company.slug === 'arena') recruiterId = leon?._id.toString();
+      if (company.slug === 'serenity') recruiterId = jill?._id.toString();
+
       return plan.categories.map((categoryKey, index) =>
-        buildJobDocument(company, categoryKey, index),
+        buildJobDocument(company, categoryKey, index, recruiterId),
       );
     });
 
@@ -592,6 +616,7 @@ const seed: SeedInterface = {
           {
             $set: {
               companyId: job.companyId,
+              recruiterId: job.recruiterId,
               title: job.title,
               normalizedTitle: job.normalizedTitle,
               description: job.description,

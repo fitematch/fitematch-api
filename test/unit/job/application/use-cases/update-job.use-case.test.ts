@@ -87,13 +87,13 @@ describe('UpdateJobUseCase', () => {
     updateJobRepository = {
       readById: jest.fn(),
       update: jest.fn(),
-    } as jest.Mocked<UpdateJobRepositoryInterface>;
+    };
 
     useCase = new UpdateJobUseCase(updateJobRepository);
   });
 
   it('returns the updated job when recruiter owns it', async () => {
-    updateJobRepository.readById.mockResolvedValue(existingJob as never);
+    updateJobRepository.readById.mockResolvedValue(existingJob);
     updateJobRepository.update.mockResolvedValue(updatedJob);
 
     const result = await useCase.execute(input);
@@ -125,14 +125,14 @@ describe('UpdateJobUseCase', () => {
     updateJobRepository.readById.mockResolvedValue({
       ...existingJob,
       companyId: 'other-company-id',
-    } as never);
+    });
 
     await expect(useCase.execute(input)).rejects.toThrow(ForbiddenException);
     expect(updateJobRepository.update).not.toHaveBeenCalled();
   });
 
   it('throws when update returns null', async () => {
-    updateJobRepository.readById.mockResolvedValue(existingJob as never);
+    updateJobRepository.readById.mockResolvedValue(existingJob);
     updateJobRepository.update.mockResolvedValue(null);
 
     await expect(useCase.execute(input)).rejects.toThrow(NotFoundException);

@@ -23,7 +23,7 @@ describe('CreateJobUseCase', () => {
       existsBySlug: jest.fn().mockResolvedValue(false),
       existsDuplicate: jest.fn().mockResolvedValue(false),
       create: jest.fn(),
-    } as jest.Mocked<CreateJobRepositoryInterface>;
+    };
 
     useCase = new CreateJobUseCase(createJobRepository);
   });

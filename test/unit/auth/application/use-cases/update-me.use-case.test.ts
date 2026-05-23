@@ -11,7 +11,7 @@ describe('UpdateMeUseCase', () => {
   beforeEach(() => {
     updateMeRepository = {
       update: jest.fn(),
-    } as jest.Mocked<UpdateMeRepositoryInterface>;
+    };
 
     useCase = new UpdateMeUseCase(updateMeRepository);
   });

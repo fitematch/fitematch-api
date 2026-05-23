@@ -13,7 +13,7 @@ describe('GetMeUseCase', () => {
   beforeEach(() => {
     getMeRepository = {
       findById: jest.fn(),
-    } as jest.Mocked<GetMeRepositoryInterface>;
+    };
 
     useCase = new GetMeUseCase(getMeRepository);
   });

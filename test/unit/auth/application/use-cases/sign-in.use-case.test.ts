@@ -11,6 +11,7 @@ import { AdminRoleEnum } from '@src/modules/user/domain/enums/admin-role.enum';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
 import { UserStatusEnum } from '@src/modules/user/domain/enums/user-status.enum';
 import { PermissionEnum } from '@src/shared/domain/enums/permission.enum';
+import type { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 describe('SignInUseCase', () => {
   let useCase: SignInUseCase;
@@ -18,34 +19,39 @@ describe('SignInUseCase', () => {
   let sessionRepository: jest.Mocked<SessionRepositoryInterface>;
   let hashService: jest.Mocked<HashServiceInterface>;
   let tokenService: jest.Mocked<TokenServiceInterface>;
+  let companyMembershipService: jest.Mocked<CompanyMembershipService>;
 
   beforeEach(() => {
     signInRepository = {
       findByEmail: jest.fn(),
-    } as jest.Mocked<SignInRepositoryInterface>;
+    };
     sessionRepository = {
       create: jest.fn(),
       findValidByUserId: jest.fn(),
       findValidByHash: jest.fn(),
       revokeById: jest.fn(),
       revokeAllByUserId: jest.fn(),
-    } as jest.Mocked<SessionRepositoryInterface>;
+    };
     hashService = {
       hash: jest.fn(),
       compare: jest.fn(),
-    } as jest.Mocked<HashServiceInterface>;
+    };
     tokenService = {
       generateAccessToken: jest.fn(),
       generateRefreshToken: jest.fn(),
       verifyRefreshToken: jest.fn(),
       getRefreshTokenExpiresAt: jest.fn(),
-    } as jest.Mocked<TokenServiceInterface>;
+    };
+    companyMembershipService = {
+      getUserActiveCompanyId: jest.fn(),
+    } as unknown as jest.Mocked<CompanyMembershipService>;
 
     useCase = new SignInUseCase(
       signInRepository,
       sessionRepository,
       hashService,
       tokenService,
+      companyMembershipService,
     );
   });
 
@@ -74,6 +80,7 @@ describe('SignInUseCase', () => {
 
         signInRepository.findByEmail.mockResolvedValue(user);
         hashService.compare.mockResolvedValue(true);
+        companyMembershipService.getUserActiveCompanyId.mockResolvedValue(null);
         tokenService.generateAccessToken.mockResolvedValue('access-token');
         tokenService.generateRefreshToken.mockResolvedValue('refresh-token');
         hashService.hash.mockResolvedValue('hashed-refresh-token');
@@ -101,6 +108,7 @@ describe('SignInUseCase', () => {
           productRole: user.productRole,
           adminRole: user.adminRole,
           recruiterProfile: undefined,
+          activeCompanyId: undefined,
           permissions: user.permissions,
         };
 
@@ -212,6 +220,7 @@ describe('SignInUseCase', () => {
 
         signInRepository.findByEmail.mockResolvedValue(user);
         hashService.compare.mockResolvedValue(true);
+        companyMembershipService.getUserActiveCompanyId.mockResolvedValue(null);
         tokenService.generateAccessToken.mockRejectedValue(
           new Error('Token service error'),
         );
@@ -226,6 +235,7 @@ describe('SignInUseCase', () => {
           productRole: user.productRole,
           adminRole: undefined,
           recruiterProfile: undefined,
+          activeCompanyId: undefined,
           permissions: undefined,
         });
         expect(sessionRepository.create).not.toHaveBeenCalled();

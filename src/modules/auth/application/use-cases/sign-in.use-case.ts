@@ -15,6 +15,7 @@ import type {
 } from '@src/modules/auth/application/contracts/services/token.service.interface';
 import { SignInInputDto } from '@src/modules/auth/application/dto/input/sign-in.input.dto';
 import { SignInOutputDto } from '@src/modules/auth/application/dto/output/sign-in.output.dto';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 @Injectable()
 export class SignInUseCase implements SignInUseCaseInterface {
@@ -27,6 +28,7 @@ export class SignInUseCase implements SignInUseCaseInterface {
     private readonly hashService: HashServiceInterface,
     @Inject(TOKEN_SERVICE)
     private readonly tokenService: TokenServiceInterface,
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   public async execute(input: SignInInputDto): Promise<SignInOutputDto> {
@@ -45,6 +47,10 @@ export class SignInUseCase implements SignInUseCaseInterface {
       throw new UnauthorizedException('Invalid credentials.');
     }
 
+    const activeCompanyId = user.productRole
+      ? await this.companyMembershipService.getUserActiveCompanyId(user.id)
+      : undefined;
+
     const accessPayload: AccessTokenPayload = {
       sub: user.id,
       id: user.id,
@@ -53,10 +59,12 @@ export class SignInUseCase implements SignInUseCaseInterface {
       adminRole: user.adminRole,
       recruiterProfile: user.recruiterProfile
         ? {
-            companyId: user.recruiterProfile.companyId,
+            companyId:
+              activeCompanyId ?? user.recruiterProfile.companyId ?? undefined,
             position: user.recruiterProfile.position,
           }
         : undefined,
+      activeCompanyId: activeCompanyId ?? undefined,
       permissions: user.permissions,
     };
 

@@ -79,6 +79,7 @@ export class CompanySchema {
   approval?: CompanyApprovalEntity;
 
   @Prop({
+    type: String,
     required: true,
     enum: Object.values(CompanyStatusEnum),
   })

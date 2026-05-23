@@ -39,6 +39,7 @@ export class ListAppliesByJobController {
   ): Promise<ListAppliesByJobResponseDto[]> {
     const output = await this.listAppliesByJobUseCase.execute({
       jobId,
+      userId: user.id,
       recruiterCompanyId: user.recruiterProfile?.companyId,
     });
 

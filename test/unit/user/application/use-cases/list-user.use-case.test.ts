@@ -8,7 +8,7 @@ describe('ListUserUseCase', () => {
   beforeEach(() => {
     listUserRepository = {
       list: jest.fn(),
-    } as jest.Mocked<ListUserRepositoryInterface>;
+    };
     useCase = new ListUserUseCase(listUserRepository);
   });
 

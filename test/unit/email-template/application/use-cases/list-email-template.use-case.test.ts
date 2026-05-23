@@ -9,7 +9,7 @@ describe('ListEmailTemplateUseCase', () => {
     repository = {
       ensureDefaults: jest.fn(),
       list: jest.fn(),
-    } as jest.Mocked<ListEmailTemplateRepositoryInterface>;
+    };
 
     useCase = new ListEmailTemplateUseCase(repository);
   });

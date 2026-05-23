@@ -11,11 +11,11 @@ describe('TestEmailTemplateUseCase', () => {
     repository = {
       ensureDefaults: jest.fn(),
       read: jest.fn(),
-    } as jest.Mocked<TestEmailTemplateRepositoryInterface>;
+    };
     emailProvider = {
       sendActivationCode: jest.fn(),
       sendEmail: jest.fn(),
-    } as jest.Mocked<EmailProviderInterface>;
+    };
 
     useCase = new TestEmailTemplateUseCase(repository, emailProvider);
   });

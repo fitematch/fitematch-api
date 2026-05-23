@@ -11,11 +11,11 @@ describe('CreateUserUseCase', () => {
   beforeEach(() => {
     createUserRepository = {
       create: jest.fn(),
-    } as jest.Mocked<CreateUserRepositoryInterface>;
+    };
     encryptUtils = {
       encryptPassword: jest.fn(),
       comparePassword: jest.fn(),
-    } as unknown as jest.Mocked<EncryptUtils>;
+    };
     useCase = new CreateUserUseCase(createUserRepository, encryptUtils);
   });
 

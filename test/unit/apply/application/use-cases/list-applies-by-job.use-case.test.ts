@@ -5,12 +5,14 @@ import type { ListAppliesByJobRepository } from '@src/modules/apply/application/
 import { ApplicationStatusEnum } from '@src/modules/apply/domain/enums/application-status.enum';
 import type { ReadJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/read-job.repository.interface';
 import type { ReadUserRepositoryInterface } from '@src/modules/user/application/contracts/repositories/read-user.repository.interface';
+import type { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 describe('ListAppliesByJobUseCase', () => {
   let useCase: ListAppliesByJobUseCase;
   let listAppliesByJobRepository: jest.Mocked<ListAppliesByJobRepository>;
   let readJobRepository: jest.Mocked<ReadJobRepositoryInterface>;
   let readUserRepository: jest.Mocked<ReadUserRepositoryInterface>;
+  let companyMembershipService: jest.Mocked<CompanyMembershipService>;
 
   const applies = [
     {
@@ -34,20 +36,25 @@ describe('ListAppliesByJobUseCase', () => {
   beforeEach(() => {
     listAppliesByJobRepository = {
       findByJobId: jest.fn(),
-    } as jest.Mocked<ListAppliesByJobRepository>;
+    };
 
     readJobRepository = {
       read: jest.fn(),
-    } as jest.Mocked<ReadJobRepositoryInterface>;
+    };
 
     readUserRepository = {
       read: jest.fn(),
-    } as jest.Mocked<ReadUserRepositoryInterface>;
+    };
+
+    companyMembershipService = {
+      userHasCompanyAccess: jest.fn(),
+    } as unknown as jest.Mocked<CompanyMembershipService>;
 
     useCase = new ListAppliesByJobUseCase(
       listAppliesByJobRepository,
       readJobRepository,
       readUserRepository,
+      companyMembershipService,
     );
   });
 
@@ -56,6 +63,7 @@ describe('ListAppliesByJobUseCase', () => {
       _id: 'job-id-1',
       companyId: 'company-id-1',
     } as never);
+    companyMembershipService.userHasCompanyAccess.mockResolvedValue(true);
     listAppliesByJobRepository.findByJobId.mockResolvedValue(applies);
     readUserRepository.read
       .mockResolvedValueOnce({
@@ -81,6 +89,7 @@ describe('ListAppliesByJobUseCase', () => {
 
     const result = await useCase.execute({
       jobId: 'job-id-1',
+      userId: 'recruiter-id-1',
       recruiterCompanyId: 'company-id-1',
     });
 
@@ -130,6 +139,7 @@ describe('ListAppliesByJobUseCase', () => {
     await expect(
       useCase.execute({
         jobId: 'missing-job-id',
+        userId: 'recruiter-id-1',
         recruiterCompanyId: 'company-id-1',
       }),
     ).rejects.toThrow(NotFoundException);
@@ -143,10 +153,12 @@ describe('ListAppliesByJobUseCase', () => {
       _id: 'job-id-1',
       companyId: 'other-company-id',
     } as never);
+    companyMembershipService.userHasCompanyAccess.mockResolvedValue(false);
 
     await expect(
       useCase.execute({
         jobId: 'job-id-1',
+        userId: 'recruiter-id-1',
         recruiterCompanyId: 'company-id-1',
       }),
     ).rejects.toThrow(ForbiddenException);

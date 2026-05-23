@@ -3,6 +3,7 @@ import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enu
 
 export class UpdateApplyInputDto {
   _id!: string;
+  userId?: string;
   status?: ApplicationStatusEnum;
   productRole!: ProductRoleEnum;
   recruiterCompanyId?: string;

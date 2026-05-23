@@ -3,6 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { applyProviders } from '@src/modules/apply/infrastructure/providers/apply.providers';
 import { JobModule } from '@src/modules/job/job.module';
 import { UserModule } from '@src/modules/user/user.module';
+import { CompanyModule } from '@src/modules/company/company.module';
 import {
   ApplySchema,
   ApplySchemaFactory,
@@ -29,6 +30,7 @@ const importedControllers = [
   imports: [
     JobModule,
     UserModule,
+    CompanyModule,
     MongooseModule.forFeature([
       {
         name: ApplySchema.name,

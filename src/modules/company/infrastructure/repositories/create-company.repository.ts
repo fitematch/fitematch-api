@@ -7,6 +7,7 @@ import type { CreateCompanyOutputDto } from '@src/modules/company/application/dt
 import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import { CnpjUtils } from '@src/shared/utils/cnpj.utils';
 import { SlugUtils } from '@src/shared/utils/slug.utils';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 @Injectable()
 export class CreateCompanyRepository implements CreateCompanyRepositoryInterface {
@@ -15,6 +16,8 @@ export class CreateCompanyRepository implements CreateCompanyRepositoryInterface
   constructor(
     @InjectModel(CompanySchema.name)
     private readonly companyModel: Model<CompanySchema>,
+
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   async existsBySlug(slug: string): Promise<boolean> {
@@ -50,9 +53,17 @@ export class CreateCompanyRepository implements CreateCompanyRepositoryInterface
       status: input.status,
     });
     const createdCompany = createdCompanyDocument.toObject();
+    const createdCompanyId = createdCompany._id.toString();
+
+    if (createdCompany.audit?.createdByUserId) {
+      await this.companyMembershipService.ensureOwnerMembership(
+        createdCompany.audit.createdByUserId,
+        createdCompanyId,
+      );
+    }
 
     return {
-      _id: createdCompany._id.toString(),
+      _id: createdCompanyId,
       slug: createdCompany.slug,
       tradeName: createdCompany.tradeName,
       legalName: createdCompany.legalName,

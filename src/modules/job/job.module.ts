@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { jobProviders } from '@src/modules/job/infrastructure/providers/job.providers';
+import { CompanyModule } from '@src/modules/company/company.module';
 import {
   JobSchema,
   JobSchemaFactory,
@@ -37,6 +38,7 @@ const importedControllers = [
 
 @Module({
   imports: [
+    CompanyModule,
     MongooseModule.forFeature([
       {
         name: JobSchema.name,

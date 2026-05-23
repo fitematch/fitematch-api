@@ -11,6 +11,7 @@ export class UpdateApplyRequestMapper {
   ): UpdateApplyInputDto {
     return {
       _id: params.applyId,
+      userId: user.id,
       status: body.status,
       productRole: user.productRole,
       recruiterCompanyId: user.recruiterProfile?.companyId,

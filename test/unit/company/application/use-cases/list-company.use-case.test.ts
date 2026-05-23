@@ -9,7 +9,7 @@ describe('ListCompanyUseCase', () => {
   beforeEach(() => {
     listCompanyRepository = {
       list: jest.fn(),
-    } as jest.Mocked<ListCompanyRepositoryInterface>;
+    };
 
     useCase = new ListCompanyUseCase(listCompanyRepository);
   });

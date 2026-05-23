@@ -159,10 +159,10 @@ class CandidateMediaSchema {
 
 @Schema({ _id: false })
 class DiversitySchema {
-  @Prop({ enum: Object.values(GenderIdentityEnum) })
+  @Prop({ type: String, enum: Object.values(GenderIdentityEnum) })
   genderIdentity?: GenderIdentityEnum;
 
-  @Prop({ enum: Object.values(SexualOrientationEnum) })
+  @Prop({ type: String, enum: Object.values(SexualOrientationEnum) })
   sexualOrientation?: SexualOrientationEnum;
 }
 
@@ -177,22 +177,22 @@ class PhysicalAttributesSchema {
 
 @Schema({ _id: false })
 class UniformSchema {
-  @Prop({ enum: Object.values(ClothingSizeEnum) })
+  @Prop({ type: String, enum: Object.values(ClothingSizeEnum) })
   tShirtSize?: ClothingSizeEnum;
 
-  @Prop({ enum: Object.values(ClothingSizeEnum) })
+  @Prop({ type: String, enum: Object.values(ClothingSizeEnum) })
   jacketSize?: ClothingSizeEnum;
 
-  @Prop({ enum: Object.values(ClothingSizeEnum) })
+  @Prop({ type: String, enum: Object.values(ClothingSizeEnum) })
   shortSize?: ClothingSizeEnum;
 
-  @Prop({ enum: Object.values(ClothingSizeEnum) })
+  @Prop({ type: String, enum: Object.values(ClothingSizeEnum) })
   pantsSize?: ClothingSizeEnum;
 
   @Prop()
   shoeSize?: number;
 
-  @Prop({ enum: Object.values(ShoesSizeUnitEnum) })
+  @Prop({ type: String, enum: Object.values(ShoesSizeUnitEnum) })
   shoeSizeUnit?: ShoesSizeUnitEnum;
 }
 
@@ -210,7 +210,7 @@ class EducationSchema {
   @Prop()
   endYear?: number;
 
-  @Prop({ enum: Object.values(CourseTypeEnum) })
+  @Prop({ type: String, enum: Object.values(CourseTypeEnum) })
   courseType?: CourseTypeEnum;
 
   @Prop()
@@ -246,7 +246,7 @@ class CandidateProfileSchema {
   @Prop({ type: CandidateMediaSchema })
   media?: CandidateMediaSchema;
 
-  @Prop({ enum: Object.values(EthnicityTypeEnum) })
+  @Prop({ type: String, enum: Object.values(EthnicityTypeEnum) })
   ethnicity?: EthnicityTypeEnum;
 
   @Prop({ type: DiversitySchema })
@@ -304,16 +304,19 @@ export class UserSchema {
   recruiterProfile?: RecruiterProfileSchema;
 
   @Prop({
+    type: String,
     enum: Object.values(ProductRoleEnum),
   })
   productRole?: ProductRoleEnum;
 
   @Prop({
+    type: String,
     enum: Object.values(AdminRoleEnum),
   })
   adminRole?: AdminRoleEnum;
 
   @Prop({
+    type: String,
     enum: Object.values(UserStatusEnum),
     default: UserStatusEnum.PENDING,
     required: true,

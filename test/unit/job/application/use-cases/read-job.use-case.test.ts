@@ -17,11 +17,11 @@ describe('ReadJobUseCase', () => {
   beforeEach(() => {
     readJobRepository = {
       read: jest.fn(),
-    } as jest.Mocked<ReadJobRepositoryInterface>;
+    };
 
     listJobCompaniesRepository = {
       findByIds: jest.fn(),
-    } as jest.Mocked<ListJobCompaniesRepository>;
+    };
 
     useCase = new ReadJobUseCase(readJobRepository, listJobCompaniesRepository);
   });
@@ -118,7 +118,7 @@ describe('ReadJobUseCase', () => {
             status: 'ACTIVE' as never,
             createdAt: new Date('2026-04-18T04:24:41.570Z'),
             updatedAt: new Date('2026-04-18T05:24:41.570Z'),
-          } as never,
+          },
         ]);
 
         readJobRepository.read.mockResolvedValue(output);

@@ -14,7 +14,7 @@ describe('GetMeController', () => {
   beforeEach(() => {
     getMeUseCase = {
       execute: jest.fn(),
-    } as jest.Mocked<GetMeUseCaseInterface>;
+    };
 
     controller = new GetMeController(getMeUseCase);
   });

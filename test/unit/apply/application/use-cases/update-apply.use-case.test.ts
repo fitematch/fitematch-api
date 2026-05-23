@@ -5,14 +5,17 @@ import type { UpdateApplyRepositoryInterface } from '@src/modules/apply/applicat
 import { ApplicationStatusEnum } from '@src/modules/apply/domain/enums/application-status.enum';
 import type { ReadJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/read-job.repository.interface';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
+import type { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 describe('UpdateApplyUseCase', () => {
   let useCase: UpdateApplyUseCase;
   let updateApplyRepository: jest.Mocked<UpdateApplyRepositoryInterface>;
   let readJobRepository: jest.Mocked<ReadJobRepositoryInterface>;
+  let companyMembershipService: jest.Mocked<CompanyMembershipService>;
 
   const input = {
     _id: 'apply-id-1',
+    userId: 'recruiter-id-1',
     status: ApplicationStatusEnum.SHORTLISTED,
     productRole: ProductRoleEnum.RECRUITER,
     recruiterCompanyId: 'company-id-1',
@@ -48,18 +51,27 @@ describe('UpdateApplyUseCase', () => {
     updateApplyRepository = {
       readById: jest.fn(),
       update: jest.fn(),
-    } as jest.Mocked<UpdateApplyRepositoryInterface>;
+    };
 
     readJobRepository = {
       read: jest.fn(),
-    } as jest.Mocked<ReadJobRepositoryInterface>;
+    };
 
-    useCase = new UpdateApplyUseCase(updateApplyRepository, readJobRepository);
+    companyMembershipService = {
+      userHasCompanyRole: jest.fn(),
+    } as unknown as jest.Mocked<CompanyMembershipService>;
+
+    useCase = new UpdateApplyUseCase(
+      updateApplyRepository,
+      readJobRepository,
+      companyMembershipService,
+    );
   });
 
   it('returns the updated application when recruiter owns the job', async () => {
-    updateApplyRepository.readById.mockResolvedValue(existingApply as never);
+    updateApplyRepository.readById.mockResolvedValue(existingApply);
     readJobRepository.read.mockResolvedValue(existingJob as never);
+    companyMembershipService.userHasCompanyRole.mockResolvedValue(true);
     updateApplyRepository.update.mockResolvedValue(updatedApply);
 
     const result = await useCase.execute(input);
@@ -78,7 +90,7 @@ describe('UpdateApplyUseCase', () => {
   });
 
   it('throws when the job does not exist', async () => {
-    updateApplyRepository.readById.mockResolvedValue(existingApply as never);
+    updateApplyRepository.readById.mockResolvedValue(existingApply);
     readJobRepository.read.mockResolvedValue(null);
 
     await expect(useCase.execute(input)).rejects.toThrow(NotFoundException);
@@ -86,11 +98,12 @@ describe('UpdateApplyUseCase', () => {
   });
 
   it('throws when recruiter does not own the job', async () => {
-    updateApplyRepository.readById.mockResolvedValue(existingApply as never);
+    updateApplyRepository.readById.mockResolvedValue(existingApply);
     readJobRepository.read.mockResolvedValue({
       ...existingJob,
       companyId: 'other-company-id',
     } as never);
+    companyMembershipService.userHasCompanyRole.mockResolvedValue(false);
 
     await expect(useCase.execute(input)).rejects.toThrow(ForbiddenException);
     expect(updateApplyRepository.update).not.toHaveBeenCalled();
@@ -108,8 +121,9 @@ describe('UpdateApplyUseCase', () => {
   });
 
   it('throws when recruiter company id is missing', async () => {
-    updateApplyRepository.readById.mockResolvedValue(existingApply as never);
+    updateApplyRepository.readById.mockResolvedValue(existingApply);
     readJobRepository.read.mockResolvedValue(existingJob as never);
+    companyMembershipService.userHasCompanyRole.mockResolvedValue(false);
 
     await expect(
       useCase.execute({
@@ -122,8 +136,9 @@ describe('UpdateApplyUseCase', () => {
   });
 
   it('throws when update returns null', async () => {
-    updateApplyRepository.readById.mockResolvedValue(existingApply as never);
+    updateApplyRepository.readById.mockResolvedValue(existingApply);
     readJobRepository.read.mockResolvedValue(existingJob as never);
+    companyMembershipService.userHasCompanyRole.mockResolvedValue(true);
     updateApplyRepository.update.mockResolvedValue(null);
 
     await expect(useCase.execute(input)).rejects.toThrow(NotFoundException);

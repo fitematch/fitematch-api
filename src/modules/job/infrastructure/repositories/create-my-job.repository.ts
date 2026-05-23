@@ -10,8 +10,9 @@ import {
   type JobDocument,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
 import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
-import { UserSchema } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
 import { SlugUtils } from '@src/shared/utils/slug.utils';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
+import { CompanyMembershipRoleEnum } from '@src/modules/company/domain/enums/company-membership-role.enum';
 
 type CreatedJobPlain = Omit<CreateMyJobOutputDto, '_id'> & {
   _id: { toString(): string };
@@ -26,64 +27,35 @@ export class CreateMyJobRepository implements CreateMyJobRepositoryInterface {
     @InjectModel(CompanySchema.name)
     private readonly companyModel: Model<CompanySchema>,
 
-    @InjectModel(UserSchema.name)
-    private readonly userModel: Model<UserSchema>,
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   async findRecruiterCompanyId(
     userId: string,
     requestedCompanyId?: string,
   ): Promise<string | null> {
-    const user = await this.userModel.findById(userId).lean().exec();
+    const companyId =
+      await this.companyMembershipService.getUserActiveCompanyId(
+        userId,
+        requestedCompanyId,
+      );
 
-    if (requestedCompanyId) {
-      const ownsCompany =
-        user?.recruiterProfile?.companyId === requestedCompanyId ||
-        !!(await this.companyModel
-          .findOne({
-            _id: requestedCompanyId,
-            'audit.createdByUserId': userId,
-          })
-          .lean()
-          .exec());
-
-      if (!ownsCompany) {
-        return null;
-      }
-
-      if (user?.recruiterProfile?.companyId !== requestedCompanyId) {
-        await this.userModel
-          .findByIdAndUpdate(userId, {
-            $set: { 'recruiterProfile.companyId': requestedCompanyId },
-          })
-          .exec();
-      }
-
-      return requestedCompanyId;
-    }
-
-    if (user?.recruiterProfile?.companyId) {
-      return user.recruiterProfile.companyId;
-    }
-
-    const company = await this.companyModel
-      .findOne({ 'audit.createdByUserId': userId }, { _id: 1 })
-      .lean()
-      .exec();
-
-    if (!company) {
+    if (!companyId) {
       return null;
     }
 
-    const resolvedCompanyId = company._id.toString();
+    const canManageJobs =
+      await this.companyMembershipService.userHasCompanyRole(
+        userId,
+        companyId,
+        [
+          CompanyMembershipRoleEnum.OWNER,
+          CompanyMembershipRoleEnum.ADMIN,
+          CompanyMembershipRoleEnum.RECRUITER,
+        ],
+      );
 
-    await this.userModel
-      .findByIdAndUpdate(userId, {
-        $set: { 'recruiterProfile.companyId': resolvedCompanyId },
-      })
-      .exec();
-
-    return resolvedCompanyId;
+    return canManageJobs ? companyId : null;
   }
 
   async findCompanySlugContext(companyId: string): Promise<{

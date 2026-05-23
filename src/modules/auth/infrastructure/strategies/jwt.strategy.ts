@@ -16,6 +16,7 @@ interface JwtPayload {
     companyId?: string;
     position?: string;
   };
+  activeCompanyId?: string;
 }
 
 function getJwtSecret(): string {
@@ -50,6 +51,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       productRole: payload.productRole,
       adminRole: payload.adminRole,
       recruiterProfile: payload.recruiterProfile,
+      activeCompanyId:
+        payload.activeCompanyId ?? payload.recruiterProfile?.companyId,
     };
   }
 }

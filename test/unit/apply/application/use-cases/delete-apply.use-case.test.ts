@@ -26,7 +26,7 @@ describe('DeleteApplyUseCase', () => {
     deleteApplyRepository = {
       readById: jest.fn(),
       delete: jest.fn(),
-    } as jest.Mocked<DeleteApplyRepositoryInterface>;
+    };
 
     useCase = new DeleteApplyUseCase(deleteApplyRepository);
   });

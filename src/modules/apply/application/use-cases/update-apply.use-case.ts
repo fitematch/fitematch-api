@@ -13,6 +13,8 @@ import type { UpdateApplyOutputDto } from '@src/modules/apply/application/dto/ou
 import { READ_JOB_REPOSITORY } from '@src/modules/job/application/contracts/tokens/job.tokens';
 import type { ReadJobRepositoryInterface } from '@src/modules/job/application/contracts/repositories/read-job.repository.interface';
 import { ProductRoleEnum } from '@src/modules/user/domain/enums/product-role.enum';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
+import { CompanyMembershipRoleEnum } from '@src/modules/company/domain/enums/company-membership-role.enum';
 
 @Injectable()
 export class UpdateApplyUseCase implements UpdateApplyUseCaseInterface {
@@ -22,6 +24,8 @@ export class UpdateApplyUseCase implements UpdateApplyUseCaseInterface {
 
     @Inject(READ_JOB_REPOSITORY)
     private readonly readJobRepository: ReadJobRepositoryInterface,
+
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   async execute(input: UpdateApplyInputDto): Promise<UpdateApplyOutputDto> {
@@ -43,10 +47,19 @@ export class UpdateApplyUseCase implements UpdateApplyUseCaseInterface {
       throw new NotFoundException('Job not found!');
     }
 
-    if (
-      !input.recruiterCompanyId ||
-      job.companyId !== input.recruiterCompanyId
-    ) {
+    const canManageApplies =
+      input.userId &&
+      (await this.companyMembershipService.userHasCompanyRole(
+        input.userId,
+        job.companyId,
+        [
+          CompanyMembershipRoleEnum.OWNER,
+          CompanyMembershipRoleEnum.ADMIN,
+          CompanyMembershipRoleEnum.RECRUITER,
+        ],
+      ));
+
+    if (!canManageApplies) {
       throw new ForbiddenException('You are not allowed to update this apply!');
     }
 

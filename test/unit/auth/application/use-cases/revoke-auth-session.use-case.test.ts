@@ -10,7 +10,7 @@ describe('RevokeAuthSessionUseCase', () => {
     repository = {
       findById: jest.fn(),
       revokeById: jest.fn(),
-    } as jest.Mocked<RevokeAuthSessionRepository>;
+    };
 
     useCase = new RevokeAuthSessionUseCase(repository);
   });

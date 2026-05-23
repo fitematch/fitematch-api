@@ -11,7 +11,7 @@ describe('CreateApplyUseCase', () => {
     createApplyRepository = {
       existsByJobIdAndUserId: jest.fn(),
       create: jest.fn(),
-    } as jest.Mocked<CreateApplyRepositoryInterface>;
+    };
 
     useCase = new CreateApplyUseCase(createApplyRepository);
   });

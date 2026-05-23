@@ -6,6 +6,10 @@ import {
   CompanySchemaFactory,
 } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import {
+  CompanyMembershipSchema,
+  CompanyMembershipSchemaFactory,
+} from '@src/modules/company/infrastructure/database/mongoose/schemas/company-membership.schema';
+import {
   UserSchema,
   UserSchemaFactory,
 } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
@@ -37,6 +41,10 @@ const importedControllers = [
       {
         name: CompanySchema.name,
         schema: CompanySchemaFactory,
+      },
+      {
+        name: CompanyMembershipSchema.name,
+        schema: CompanyMembershipSchemaFactory,
       },
       {
         name: UserSchema.name,

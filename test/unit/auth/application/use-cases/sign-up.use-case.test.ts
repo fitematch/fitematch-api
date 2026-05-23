@@ -20,22 +20,22 @@ describe('SignUpUseCase', () => {
     signUpRepository = {
       existsByEmail: jest.fn(),
       create: jest.fn(),
-    } as jest.Mocked<SignUpRepositoryInterface>;
+    };
     activationCodeRepository = {
       create: jest.fn(),
       invalidateActiveCodes: jest.fn(),
       findActiveCodeByUserIdAndType: jest.fn(),
       incrementAttempts: jest.fn(),
       markAsUsed: jest.fn(),
-    } as jest.Mocked<ActivationCodeRepositoryInterface>;
+    };
     hashService = {
       hash: jest.fn(),
       compare: jest.fn(),
-    } as jest.Mocked<HashServiceInterface>;
+    };
     emailProvider = {
       sendActivationCode: jest.fn(),
       sendEmail: jest.fn(),
-    } as jest.Mocked<EmailProviderInterface>;
+    };
 
     useCase = new SignUpUseCase(
       signUpRepository,

@@ -9,7 +9,7 @@ describe('UpdateEmailTemplateUseCase', () => {
     repository = {
       ensureDefaults: jest.fn(),
       update: jest.fn(),
-    } as jest.Mocked<UpdateEmailTemplateRepositoryInterface>;
+    };
 
     useCase = new UpdateEmailTemplateUseCase(repository);
   });

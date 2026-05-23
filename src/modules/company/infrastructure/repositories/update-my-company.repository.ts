@@ -6,6 +6,8 @@ import type { UpdateMyCompanyInputDto } from '@src/modules/company/application/d
 import type { UpdateMyCompanyOutputDto } from '@src/modules/company/application/dto/output/update-my-company.output.dto';
 import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import { CnpjUtils } from '@src/shared/utils/cnpj.utils';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
+import { CompanyMembershipRoleEnum } from '@src/modules/company/domain/enums/company-membership-role.enum';
 
 @Injectable()
 export class UpdateMyCompanyRepository implements UpdateMyCompanyRepositoryInterface {
@@ -14,15 +16,35 @@ export class UpdateMyCompanyRepository implements UpdateMyCompanyRepositoryInter
   constructor(
     @InjectModel(CompanySchema.name)
     private readonly companyModel: Model<CompanySchema>,
+
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   async update(
     input: UpdateMyCompanyInputDto,
   ): Promise<UpdateMyCompanyOutputDto | null> {
+    const companyId =
+      await this.companyMembershipService.getUserActiveCompanyId(input.userId);
+
+    if (!companyId) {
+      return null;
+    }
+
+    const canManageCompany =
+      await this.companyMembershipService.userHasCompanyRole(
+        input.userId,
+        companyId,
+        [CompanyMembershipRoleEnum.OWNER, CompanyMembershipRoleEnum.ADMIN],
+      );
+
+    if (!canManageCompany) {
+      return null;
+    }
+
     const updatedCompany = await this.companyModel
       .findOneAndUpdate(
         {
-          'audit.createdByUserId': input.userId,
+          _id: companyId,
         },
         {
           ...(input.slug !== undefined && { slug: input.slug }),

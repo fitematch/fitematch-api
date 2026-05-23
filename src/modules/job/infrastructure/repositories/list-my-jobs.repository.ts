@@ -4,13 +4,12 @@ import type { Model } from 'mongoose';
 
 import type { ListMyJobsRepository as ListMyJobsRepositoryContract } from '@src/modules/job/application/contracts/repositories/list-my-jobs.repository';
 import type { JobEntity } from '@src/modules/job/domain/entities/job.entity';
-import { CompanySchema } from '@src/modules/company/infrastructure/database/mongoose/schemas/company.schema';
 import {
   JobSchema,
   JobDocument,
 } from '@src/modules/job/infrastructure/database/mongoose/schemas/job.schema';
-import { UserSchema } from '@src/modules/user/infrastructure/database/mongoose/schemas/user.schema';
 import { JobDatabaseMapper } from '@src/modules/job/infrastructure/database/mapper/job-database.mapper';
+import { CompanyMembershipService } from '@src/modules/company/infrastructure/services/company-membership.service';
 
 @Injectable()
 export class ListMyJobsRepository implements ListMyJobsRepositoryContract {
@@ -18,38 +17,11 @@ export class ListMyJobsRepository implements ListMyJobsRepositoryContract {
     @InjectModel(JobSchema.name)
     private readonly jobModel: Model<JobDocument>,
 
-    @InjectModel(CompanySchema.name)
-    private readonly companyModel: Model<CompanySchema>,
-
-    @InjectModel(UserSchema.name)
-    private readonly userModel: Model<UserSchema>,
+    private readonly companyMembershipService: CompanyMembershipService,
   ) {}
 
   async findRecruiterCompanyId(userId: string): Promise<string | null> {
-    const user = await this.userModel.findById(userId).lean().exec();
-
-    if (user?.recruiterProfile?.companyId) {
-      return user.recruiterProfile.companyId;
-    }
-
-    const company = await this.companyModel
-      .findOne({ 'audit.createdByUserId': userId }, { _id: 1 })
-      .lean()
-      .exec();
-
-    if (!company) {
-      return null;
-    }
-
-    const companyId = company._id.toString();
-
-    await this.userModel
-      .findByIdAndUpdate(userId, {
-        $set: { 'recruiterProfile.companyId': companyId },
-      })
-      .exec();
-
-    return companyId;
+    return this.companyMembershipService.getUserActiveCompanyId(userId);
   }
 
   async findByCompanyId(companyId: string): Promise<JobEntity[]> {

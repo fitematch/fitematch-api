@@ -10,7 +10,7 @@ describe('ListApplyUseCase', () => {
     listApplyRepository = {
       list: jest.fn(),
       findByUserId: jest.fn(),
-    } as jest.Mocked<ListApplyRepositoryInterface>;
+    };
 
     useCase = new ListApplyUseCase(listApplyRepository);
   });

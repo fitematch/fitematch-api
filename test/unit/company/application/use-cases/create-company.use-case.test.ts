@@ -11,7 +11,7 @@ describe('CreateCompanyUseCase', () => {
       existsBySlug: jest.fn().mockResolvedValue(false),
       existsByCnpj: jest.fn().mockResolvedValue(false),
       create: jest.fn(),
-    } as jest.Mocked<CreateCompanyRepositoryInterface>;
+    };
 
     useCase = new CreateCompanyUseCase(createCompanyRepository);
   });

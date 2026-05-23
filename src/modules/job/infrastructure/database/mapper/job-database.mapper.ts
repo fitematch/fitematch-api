@@ -1,5 +1,4 @@
 import type {
-  BenefitsEntity,
   JobEntity,
   RequirementsEntity,
 } from '@src/modules/job/domain/entities/job.entity';
@@ -15,7 +14,7 @@ export class JobDatabaseMapper {
       description: document.description,
       slots: document.slots,
       requirements: document.requirements as RequirementsEntity | undefined,
-      benefits: document.benefits as BenefitsEntity | undefined,
+      benefits: document.benefits,
       media: document.media,
       contractType: document.contractType,
       status: document.status,

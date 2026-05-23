@@ -9,7 +9,7 @@ describe('ListMyAppliesUseCase', () => {
   beforeEach(() => {
     listMyAppliesRepository = {
       findByUserId: jest.fn(),
-    } as jest.Mocked<ListMyAppliesRepository>;
+    };
 
     useCase = new ListMyAppliesUseCase(listMyAppliesRepository);
   });

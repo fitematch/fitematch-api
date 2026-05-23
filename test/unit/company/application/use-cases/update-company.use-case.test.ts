@@ -9,7 +9,7 @@ describe('UpdateCompanyUseCase', () => {
   beforeEach(() => {
     updateCompanyRepository = {
       update: jest.fn(),
-    } as jest.Mocked<UpdateCompanyRepositoryInterface>;
+    };
 
     useCase = new UpdateCompanyUseCase(updateCompanyRepository);
   });

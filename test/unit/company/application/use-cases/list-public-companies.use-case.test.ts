@@ -9,7 +9,7 @@ describe('ListPublicCompaniesUseCase', () => {
   beforeEach(() => {
     repository = {
       findPublicActiveCompanies: jest.fn(),
-    } as jest.Mocked<ListPublicCompaniesRepository>;
+    };
 
     useCase = new ListPublicCompaniesUseCase(repository);
   });

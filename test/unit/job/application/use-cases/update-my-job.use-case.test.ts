@@ -34,7 +34,7 @@ describe('UpdateMyJobUseCase', () => {
     repository = {
       findRecruiterCompanyId: jest.fn().mockResolvedValue('company-1'),
       update: jest.fn(),
-    } as jest.Mocked<UpdateMyJobRepositoryInterface>;
+    };
 
     useCase = new UpdateMyJobUseCase(repository);
   });
