@@ -1,5 +1,8 @@
 import {
   Controller,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   UploadedFile,
   UseGuards,
@@ -53,13 +56,26 @@ export class UploadCandidateResumeController {
   })
   @UseGuards(JwtAuthGuard, ProductRoleGuard)
   @ProductRoles(ProductRoleEnum.CANDIDATE)
-  @UseInterceptors(
-    FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 } }),
-  )
+  @UseInterceptors(FileInterceptor('file'))
   @Post('candidate-resume')
   async handle(
     @CurrentUser() user: AuthUserPayload,
-    @UploadedFile() file?: UploadedFileInterface,
+    @UploadedFile(
+      new ParseFilePipe({
+        fileIsRequired: true,
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 10 * 1024 * 1024, // Limite estrito de 10MB para currículos
+            message:
+              'O tamanho do currículo excede o limite máximo permitido de 10MB.',
+          }),
+          new FileTypeValidator({
+            fileType: 'application/pdf', // Garante que só passa PDF puro na API
+          }),
+        ],
+      }),
+    )
+    file: UploadedFileInterface,
   ): Promise<UploadFileResponseDto> {
     return this.uploadFileService.execute({
       file,

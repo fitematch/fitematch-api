@@ -1,5 +1,8 @@
 import {
   Controller,
+  FileTypeValidator,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   UploadedFile,
   UseGuards,
@@ -47,6 +50,11 @@ const IMAGE_EXTENSIONS = [
   '.avif',
 ];
 
+const IMAGE_MIME_TYPES_REGEX = new RegExp(
+  `(${IMAGE_MIME_TYPES.join('|')})$`,
+  'i',
+);
+
 @ApiTags('Upload')
 @ApiBearerAuth('JWT')
 @Controller('upload')
@@ -73,13 +81,26 @@ export class UploadJobCoverController {
   })
   @UseGuards(JwtAuthGuard, ProductRoleGuard)
   @ProductRoles(ProductRoleEnum.RECRUITER)
-  @UseInterceptors(
-    FileInterceptor('file', { limits: { fileSize: 5 * 1024 * 1024 } }),
-  )
+  @UseInterceptors(FileInterceptor('file'))
   @Post('job-cover')
   async handle(
     @CurrentUser() user: AuthUserPayload,
-    @UploadedFile() file?: UploadedFileInterface,
+    @UploadedFile(
+      new ParseFilePipe({
+        fileIsRequired: true,
+        validators: [
+          new MaxFileSizeValidator({
+            maxSize: 5 * 1024 * 1024,
+            message:
+              'O tamanho da imagem excede o limite máximo permitido de 5MB.',
+          }),
+          new FileTypeValidator({
+            fileType: IMAGE_MIME_TYPES_REGEX,
+          }),
+        ],
+      }),
+    )
+    file: UploadedFileInterface,
   ): Promise<UploadFileResponseDto> {
     return this.uploadFileService.execute({
       file,

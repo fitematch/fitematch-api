@@ -28,6 +28,7 @@ const importedModules = [
     ConfigModule.forRoot({
       load: [apiConfig],
       isGlobal: true,
+      envFilePath: '.env',
     }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
